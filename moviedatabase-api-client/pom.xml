@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>maven-parent</artifactId>
+		<groupId>com.github.abhijitsarkar</groupId>
+		<version>1.0</version>
+		<relativePath>../maven-parent</relativePath>
+	</parent>
+	<artifactId>moviedatabase-api-client</artifactId>
+	<packaging>jar</packaging>
+	<name>moviedatabase-api-client</name>
+	<url>https://github.com/abhijitsarkar/java/tree/master/imdb-api-client</url>
+	<properties>
+		<project.dep.springVersion>3.2.1.RELEASE</project.dep.springVersion>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${project.dep.springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${project.dep.springVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.2.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${project.dep.springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.12</version>
+		</dependency>
+	</dependencies>
+</project>
