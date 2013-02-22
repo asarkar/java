@@ -59,7 +59,7 @@ public class ClientFactoryTest {
 		assertNotNull(deanClatworthyClient);
 		assertTrue(deanClatworthyClient instanceof DeanClatworthyClient);
 		assertEquals("http://www.omdbapi.com", theOmdbApiClient.getEndpoint());
-		assertEquals("http://www.deanclatworthy.com/imdb",
+		assertEquals("http://deanclatworthy.com/imdb",
 				deanClatworthyClient.getEndpoint());
 	}
 }

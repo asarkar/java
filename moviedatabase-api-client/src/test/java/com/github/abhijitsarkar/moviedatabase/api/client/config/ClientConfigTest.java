@@ -67,7 +67,7 @@ public class ClientConfigTest extends AbstractContextAwareTest {
 	public void testDeanClatworthyClient() {
 		assertNotNull(deanClatworthyClient);
 		assertTrue(deanClatworthyClient instanceof DeanClatworthyClient);
-		assertEquals("http://www.deanclatworthy.com/imdb",
+		assertEquals("http://deanclatworthy.com/imdb",
 				deanClatworthyClient.getEndpoint());
 	}
 
