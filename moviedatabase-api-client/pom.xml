@@ -10,7 +10,7 @@
 	<artifactId>moviedatabase-api-client</artifactId>
 	<packaging>jar</packaging>
 	<name>moviedatabase-api-client</name>
-	<url>https://github.com/abhijitsarkar/java/tree/master/imdb-api-client</url>
+	<url>https://github.com/abhijitsarkar/java/tree/master/moviedatabase-api-client</url>
 	<properties>
 		<project.dep.springVersion>3.2.1.RELEASE</project.dep.springVersion>
 	</properties>
