@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, the original author or authors.
+/* Copyright (c) 2013, the original author or authors.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see http://www.gnu.org/licenses. */
 
-package com.github.abhijitsarkar.apiclient.http;
+package com.github.abhijitsarkar.moviedatabase.api.client.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,40 +36,40 @@ import org.springframework.http.client.ClientHttpResponse;
  * 
  */
 public class HttpRequestInterceptor implements ClientHttpRequestInterceptor {
-    private static final Logger logger = Logger
-	    .getLogger(HttpRequestInterceptor.class);
+	private static final Logger logger = Logger
+			.getLogger(HttpRequestInterceptor.class);
 
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body,
-	    ClientHttpRequestExecution execution) throws IOException {
-	logger.debug("Request headers:");
-	logHeaders(request.getHeaders());
+	public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+			ClientHttpRequestExecution execution) throws IOException {
+		logger.debug("Request headers:");
+		logHeaders(request.getHeaders());
 
-	logger.debug("Request URI: " + request.getURI());
-	logger.debug("Request method: " + request.getMethod());
+		logger.debug("Request URI: " + request.getURI());
+		logger.debug("Request method: " + request.getMethod());
 
-	ClientHttpResponse response = execution.execute(request, body);
+		ClientHttpResponse response = execution.execute(request, body);
 
-	logger.debug("Response headers:");
-	logHeaders(response.getHeaders());
+		logger.debug("Response headers:");
+		logHeaders(response.getHeaders());
 
-	BufferedReader br = new BufferedReader(new InputStreamReader(
-		response.getBody()));
-	String line = null;
-	StringBuilder buffer = new StringBuilder();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				response.getBody()));
+		String line = null;
+		StringBuilder buffer = new StringBuilder();
 
-	while ((line = br.readLine()) != null)
-	    buffer.append(line);
+		while ((line = br.readLine()) != null)
+			buffer.append(line);
 
-	logger.debug("Server response: " + buffer);
+		logger.debug("Server response: " + buffer);
 
-	return response;
-    }
-
-    private void logHeaders(HttpHeaders headers) {
-	Set<Map.Entry<String, List<String>>> entries = headers.entrySet();
-	for (Map.Entry<String, List<String>> entry : entries) {
-	    logger.debug("[Key: " + entry.getKey() + ", Value: "
-		    + entry.getValue() + "]");
+		return response;
 	}
-    }
+
+	private void logHeaders(HttpHeaders headers) {
+		Set<Map.Entry<String, List<String>>> entries = headers.entrySet();
+		for (Map.Entry<String, List<String>> entry : entries) {
+			logger.debug("[Key: " + entry.getKey() + ", Value: "
+					+ entry.getValue() + "]");
+		}
+	}
 }

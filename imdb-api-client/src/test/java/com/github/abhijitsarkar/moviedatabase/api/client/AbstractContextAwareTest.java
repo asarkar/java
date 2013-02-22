@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, the original author or authors.
+/* Copyright (c) 2013, the original author or authors.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,18 +12,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see http://www.gnu.org/licenses. */
 
-package com.github.abhijitsarkar.apiclient;
+package com.github.abhijitsarkar.moviedatabase.api.client;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.github.abhijitsarkar.apiclient.config.ClientConfig;
+import com.github.abhijitsarkar.moviedatabase.api.client.config.ClientConfig;
 
 /**
  * 
  * @author Abhijit Sarkar
- *
+ * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { ClientConfig.class })

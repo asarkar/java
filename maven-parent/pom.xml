@@ -6,6 +6,7 @@
 	<version>1.0</version>
 	<packaging>pom</packaging>
 	<name>Maven Parent Project</name>
+	<url>https://github.com/abhijitsarkar/java/tree/master/maven-parent</url>
 	<description>Maven parent project containing common settings</description>
 	<dependencies>
 		<dependency>

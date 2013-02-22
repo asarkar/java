@@ -12,6 +12,7 @@
 	<version>3.0</version>
 	<packaging>pom</packaging>
 	<name>Movie Manager</name>
+	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager</url>
 	<description>Movie manager parent project</description>
 	<modules>
 		<module>movie-manager-common</module>

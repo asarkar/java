@@ -11,6 +11,7 @@
 	<artifactId>movie-manager-domain</artifactId>
 	<name>movie-manager-domain</name>
 	<version>1.1</version>
+	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager/movie-manager-domain</url>
 	<description>Movie Manager Domain Project</description>
 	<profiles>
 		<profile>

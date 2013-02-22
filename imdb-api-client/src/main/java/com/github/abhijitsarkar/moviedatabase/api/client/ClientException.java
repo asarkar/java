@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, the original author or authors.
+/* Copyright (c) 2013, the original author or authors.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,13 +12,30 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see http://www.gnu.org/licenses. */
 
-package com.github.abhijitsarkar.apiclient;
+package com.github.abhijitsarkar.moviedatabase.api.client;
 
 /**
+ * Superclass of all client exceptions.
  * 
  * @author Abhijit Sarkar
  */
-public enum ClientType {
-    THE_IMDB_API,
-    DEAN_CLATWORTHY;
+public class ClientException extends RuntimeException {
+
+	private static final long serialVersionUID = -4132078062267713355L;
+
+	public ClientException() {
+		super();
+	}
+
+	public ClientException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public ClientException(String message) {
+		super(message);
+	}
+
+	public ClientException(Throwable cause) {
+		super(cause);
+	}
 }

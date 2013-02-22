@@ -1,24 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.abhijitsarkar</groupId>
-	<artifactId>imdb-api-client</artifactId>
-	<version>1.0</version>
+	<parent>
+		<artifactId>maven-parent</artifactId>
+		<groupId>com.github.abhijitsarkar</groupId>
+		<version>1.0</version>
+		<relativePath>../maven-parent</relativePath>
+	</parent>
+	<artifactId>moviedatabase-api-client</artifactId>
 	<packaging>jar</packaging>
-	<name>imdb-api-client</name>
-	<url>https://github.com/abhijitsarkar/imdb-api-client</url>
+	<name>moviedatabase-api-client</name>
+	<url>https://github.com/abhijitsarkar/java/tree/master/imdb-api-client</url>
+	<properties>
+		<project.dep.springVersion>3.2.1.RELEASE</project.dep.springVersion>
+	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -44,50 +40,7 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.3</version>
+			<version>1.9.12</version>
 		</dependency>
 	</dependencies>
-	<properties>
-		<project.build.sourceLevel>1.5</project.build.sourceLevel>
-		<project.build.targetLevel>1.5</project.build.targetLevel>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.dep.springVersion>3.1.0.RELEASE</project.dep.springVersion>
-	</properties>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>${project.build.sourceLevel}</source>
-					<target>${project.build.targetLevel}</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<showDeprecation>true</showDeprecation>
-					<showWarnings>true</showWarnings>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<disableXmlReport>true</disableXmlReport>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.8</version>
-			</plugin>
-		</plugins>
-	</build>
 </project>

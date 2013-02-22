@@ -11,5 +11,6 @@
 	<artifactId>movie-manager-common</artifactId>
 	<name>movie-manager-common</name>
 	<version>1.0</version>
+	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager/movie-manager-common</url>
 	<description>Movie Manager Common Project</description>
 </project>

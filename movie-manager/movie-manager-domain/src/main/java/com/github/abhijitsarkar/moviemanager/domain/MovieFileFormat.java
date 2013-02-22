@@ -7,9 +7,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "movieFileFormat")
 @XmlEnum
 public enum MovieFileFormat {
-    @XmlEnumValue("avi")AVI,
-    @XmlEnumValue("mkv")MKV,
-    @XmlEnumValue("mp4")MP4,
-    @XmlEnumValue("divx")DIVX,
-    @XmlEnumValue("mov")MOV;
+	@XmlEnumValue("avi")
+	AVI, @XmlEnumValue("mkv")
+	MKV, @XmlEnumValue("mp4")
+	MP4, @XmlEnumValue("divx")
+	DIVX, @XmlEnumValue("mov")
+	MOV;
 }

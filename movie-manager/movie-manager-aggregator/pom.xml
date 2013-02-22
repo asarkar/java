@@ -10,6 +10,7 @@
 	<packaging>pom</packaging>
 	<name>movie-manager-aggregator</name>
 	<version>1.0</version>
+	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager/movie-manager-aggregator</url>
 	<description>Movie Manager Aggregator Project</description>
 
 	<build>

@@ -1,11 +1,12 @@
-IMDB API Client (January 2012)
+MovieDatabase API Client (January 2013)
 ---------------------------------------
 
-This is a release of IMDB API Client, a Java client to various IMDB APIs.
+This is a release of MovieDatabase API Client, a Java client to various 
+online movie database APIs.
 This particular copy of the software is released under the version 3 of the 
 GNU General Public License. 
 
-Copyright (c) 2012, the original author or authors.
+Copyright (c) 2013, the original author or authors.
 
 License information can be found in the COPYING file.
 

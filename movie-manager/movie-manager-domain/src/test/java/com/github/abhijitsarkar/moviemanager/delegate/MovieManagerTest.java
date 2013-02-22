@@ -13,13 +13,6 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.SortedSet;
 
-import com.github.abhijitsarkar.moviemanager.delegate.MovieManager;
-import com.github.abhijitsarkar.moviemanager.domain.Genre;
-import com.github.abhijitsarkar.moviemanager.domain.Movie;
-import com.github.abhijitsarkar.moviemanager.domain.Summary;
-import com.github.abhijitsarkar.moviemanager.service.MovieService;
-import com.github.abhijitsarkar.moviemanager.service.mock.MovieServiceMock;
-
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -28,137 +21,143 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.github.abhijitsarkar.moviemanager.domain.Genre;
+import com.github.abhijitsarkar.moviemanager.domain.Movie;
+import com.github.abhijitsarkar.moviemanager.domain.Summary;
+import com.github.abhijitsarkar.moviemanager.service.MovieService;
+import com.github.abhijitsarkar.moviemanager.service.mock.MovieServiceMock;
+
 public class MovieManagerTest {
 
-    private static MovieService movieService = new MovieServiceMock();
-    private static SortedSet<Movie> movieSet;
-    private static final String OUTPUT_FILE = "MovieManagerTestOutput.xlsx";
-    private static File outputFile;
-    private static Map<Genre, SortedSet<Movie>> movieSetGroupedByGenre;
-    private static Summary summary;
+	private static MovieService movieService = new MovieServiceMock();
+	private static SortedSet<Movie> movieSet;
+	private static final String OUTPUT_FILE = "MovieManagerTestOutput.xlsx";
+	private static File outputFile;
+	private static Map<Genre, SortedSet<Movie>> movieSetGroupedByGenre;
+	private static Summary summary;
 
-    @BeforeClass
-    public static void oneTimeSetUp() throws Exception {
-	outputFile = new File(OUTPUT_FILE);
+	@BeforeClass
+	public static void oneTimeSetUp() throws Exception {
+		outputFile = new File(OUTPUT_FILE);
 
-	assertNotNull(outputFile);
+		assertNotNull(outputFile);
 
-	new MovieManager(new File("ignore.xlsx"), outputFile);
-	movieSet = movieService.getMovieSet(null);
+		new MovieManager(new File("ignore.xlsx"), outputFile);
+		movieSet = movieService.getMovieSet(null);
 
-	movieSetGroupedByGenre = movieService.groupMovieSetByGenre(movieSet);
-	summary = movieService.getSummary(movieSetGroupedByGenre);
-    }
-
-    @AfterClass
-    public static void oneTimeTearDown() {
-	movieService = null;
-	movieSet = null;
-
-	if (outputFile.exists()) {
-	    outputFile.delete();
+		movieSetGroupedByGenre = movieService.groupMovieSetByGenre(movieSet);
+		summary = movieService.getSummary(movieSetGroupedByGenre);
 	}
-    }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testValidateUnreadableDirectory() throws FileNotFoundException {
-	MovieManager.validateFile(new File("src/test/resources/unreadable"));
-    }
+	@AfterClass
+	public static void oneTimeTearDown() {
+		movieService = null;
+		movieSet = null;
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testValidateUnacceptableFileExtension()
-	    throws FileNotFoundException {
-	MovieManager.validateFile(new File(
-		"src/test/resources/invalid_extension.txt"));
-    }
-
-    @Test
-    public void testValidateGood() {
-	try {
-	    MovieManager.validateFile(new File("src/test/resources"));
-	    MovieManager.validateFile(new File(
-		    "src/test/resources/valid_extension.xlsx"));
-	} catch (Exception ex) {
-	    fail("Should not have been here.");
+		if (outputFile.exists()) {
+			outputFile.delete();
+		}
 	}
-    }
 
-    @Test
-    public void testCreateSummarySheet() throws Exception {
-	final String SUMMARY = "Summary";
-	final String MOVIE_COUNT = "Movie Count";
-	final String SOAP_COUNT = "Soap Count";
-	final String SIZE = "Size";
+	@Test(expected = IllegalArgumentException.class)
+	public void testValidateUnreadableDirectory() throws FileNotFoundException {
+		MovieManager.validateFile(new File("src/test/resources/unreadable"));
+	}
 
-	Sheet summarySheet = null;
-	Row row = null;
+	@Test(expected = IllegalArgumentException.class)
+	public void testValidateUnacceptableFileExtension()
+			throws FileNotFoundException {
+		MovieManager.validateFile(new File(
+				"src/test/resources/invalid_extension.txt"));
+	}
 
-	MovieManager.createSummarySheet(summary);
+	@Test
+	public void testValidateGood() {
+		try {
+			MovieManager.validateFile(new File("src/test/resources"));
+			MovieManager.validateFile(new File(
+					"src/test/resources/valid_extension.xlsx"));
+		} catch (Exception ex) {
+			fail("Should not have been here.");
+		}
+	}
 
-	InputStream input = new FileInputStream(outputFile);
+	@Test
+	public void testCreateSummarySheet() throws Exception {
+		final String SUMMARY = "Summary";
+		final String MOVIE_COUNT = "Movie Count";
+		final String SOAP_COUNT = "Soap Count";
+		final String SIZE = "Size";
 
-	Workbook wb = WorkbookFactory.create(input);
+		Sheet summarySheet = null;
+		Row row = null;
 
-	summarySheet = wb.getSheet(SUMMARY);
-	assertNotNull(summarySheet);
+		MovieManager.createSummarySheet(summary);
 
-	row = summarySheet.getRow(0);
-	assertEquals(summarySheet.getMergedRegion(0).getFirstRow(), 0);
-	assertEquals(summarySheet.getMergedRegion(0).getLastRow(), 0);
-	assertEquals(summarySheet.getMergedRegion(0).getFirstColumn(), 0);
-	assertEquals(summarySheet.getMergedRegion(0).getLastColumn(), 2);
-	assertEquals(row.getCell(0).getStringCellValue(), SUMMARY);
+		InputStream input = new FileInputStream(outputFile);
 
-	row = summarySheet.getRow(1);
-	assertEquals(row.getCell(0).getStringCellValue(), MOVIE_COUNT);
-	assertEquals(row.getCell(1).getStringCellValue(), SOAP_COUNT);
-	assertEquals(row.getCell(2).getStringCellValue(), SIZE);
+		Workbook wb = WorkbookFactory.create(input);
 
-	input.close();
-    }
+		summarySheet = wb.getSheet(SUMMARY);
+		assertNotNull(summarySheet);
 
-    @Test
-    public void testCreateGenreSheets() throws Exception {
-	Sheet genreSheet = null;
-	Row row = null;
+		row = summarySheet.getRow(0);
+		assertEquals(summarySheet.getMergedRegion(0).getFirstRow(), 0);
+		assertEquals(summarySheet.getMergedRegion(0).getLastRow(), 0);
+		assertEquals(summarySheet.getMergedRegion(0).getFirstColumn(), 0);
+		assertEquals(summarySheet.getMergedRegion(0).getLastColumn(), 2);
+		assertEquals(row.getCell(0).getStringCellValue(), SUMMARY);
 
-	MovieManager.createGenreSheet(movieService.filterMovieSetByGenre(
-		movieSet, ACTION_AND_ADVENTURE), ACTION_AND_ADVENTURE);
-	// movieSetGroupedByGenre.get(ACTION_AND_ADVENTURE),
-	// ACTION_AND_ADVENTURE);
+		row = summarySheet.getRow(1);
+		assertEquals(row.getCell(0).getStringCellValue(), MOVIE_COUNT);
+		assertEquals(row.getCell(1).getStringCellValue(), SOAP_COUNT);
+		assertEquals(row.getCell(2).getStringCellValue(), SIZE);
 
-	MovieManager.createGenreSheet(
-		movieService.filterMovieSetByGenre(movieSet, HORROR), HORROR);
+		input.close();
+	}
 
-	InputStream input = new FileInputStream(outputFile);
+	@Test
+	public void testCreateGenreSheets() throws Exception {
+		Sheet genreSheet = null;
+		Row row = null;
 
-	Workbook wb = WorkbookFactory.create(input);
+		MovieManager.createGenreSheet(movieService.filterMovieSetByGenre(
+				movieSet, ACTION_AND_ADVENTURE), ACTION_AND_ADVENTURE);
+		// movieSetGroupedByGenre.get(ACTION_AND_ADVENTURE),
+		// ACTION_AND_ADVENTURE);
 
-	genreSheet = wb.getSheet(ACTION_AND_ADVENTURE.toString());
-	assertNotNull(genreSheet);
+		MovieManager.createGenreSheet(
+				movieService.filterMovieSetByGenre(movieSet, HORROR), HORROR);
 
-	row = genreSheet.getRow(1);
-	assertEquals(row.getCell(0).getStringCellValue(), "3-10 To Yuma.mkv");
+		InputStream input = new FileInputStream(outputFile);
 
-	row = genreSheet.getRow(3);
-	assertEquals(row.getCell(0).getStringCellValue(), "Casino Royal.mkv");
+		Workbook wb = WorkbookFactory.create(input);
 
-	// MovieManager.createGenreSheet(movieSetGroupedByGenre.get(HORROR),
-	// HORROR);
+		genreSheet = wb.getSheet(ACTION_AND_ADVENTURE.toString());
+		assertNotNull(genreSheet);
 
-	genreSheet = wb.getSheet(HORROR.toString());
-	assertNotNull(genreSheet);
+		row = genreSheet.getRow(1);
+		assertEquals(row.getCell(0).getStringCellValue(), "3-10 To Yuma.mkv");
 
-	row = genreSheet.getRow(1);
-	assertEquals(row.getCell(0).getStringCellValue(), "I Saw The Devil.mkv");
-	assertEquals(row.getCell(3).getStringCellValue(),
-		"I Saw The Devil (2010)");
+		row = genreSheet.getRow(3);
+		assertEquals(row.getCell(0).getStringCellValue(), "Casino Royal.mkv");
 
-	row = genreSheet.getRow(2);
-	assertEquals(row.getCell(0).getStringCellValue(), "Inferno.mkv");
-	assertEquals(row.getCell(3).getStringCellValue(),
-		"The Three Mothers Trilogy");
+		// MovieManager.createGenreSheet(movieSetGroupedByGenre.get(HORROR),
+		// HORROR);
 
-	input.close();
-    }
+		genreSheet = wb.getSheet(HORROR.toString());
+		assertNotNull(genreSheet);
+
+		row = genreSheet.getRow(1);
+		assertEquals(row.getCell(0).getStringCellValue(), "I Saw The Devil.mkv");
+		assertEquals(row.getCell(3).getStringCellValue(),
+				"I Saw The Devil (2010)");
+
+		row = genreSheet.getRow(2);
+		assertEquals(row.getCell(0).getStringCellValue(), "Inferno.mkv");
+		assertEquals(row.getCell(3).getStringCellValue(),
+				"The Three Mothers Trilogy");
+
+		input.close();
+	}
 }

@@ -12,9 +12,6 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.abhijitsarkar.bingo.businesslogic.BingoNumberCaller;
-import com.github.abhijitsarkar.bingo.businesslogic.NoMoreBingoNumbersException;
-
 public class BingoNumberCallerTest {
 
 	private BingoNumberCaller generator = null;

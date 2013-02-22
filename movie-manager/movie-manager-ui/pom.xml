@@ -10,6 +10,7 @@
 	</parent>
 	<artifactId>movie-manager-ui</artifactId>
 	<name>movie-manager-ui</name>
+	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager/movie-manager-ui</url>
 	<description>Movie Maneger UI Project</description>
 
 	<dependencies>

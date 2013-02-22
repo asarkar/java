@@ -23,99 +23,99 @@ import com.github.abhijitsarkar.moviemanager.ui.AnimatedFrame;
 
 public class MovieReportCreatorTask extends SwingWorker<Void, List<Object>> {
 
-    public MovieReportCreatorTask(JButton createButton, File inputDir,
-	    File outputFile, JLabel messageLabel) {
-	this.createButton = createButton;
-	this.messageLabel = messageLabel;
-	this.w = SwingUtilities.windowForComponent(createButton);
+	public MovieReportCreatorTask(JButton createButton, File inputDir,
+			File outputFile, JLabel messageLabel) {
+		this.createButton = createButton;
+		this.messageLabel = messageLabel;
+		this.w = SwingUtilities.windowForComponent(createButton);
 
-	animator = new AnimatedFrame(w);
+		animator = new AnimatedFrame(w);
 
-	try {
-	    movieManager = new MovieManager(inputDir, outputFile);
-	} catch (Exception ex) {
-	    this.ex = ex;
-	    this.cancel(true);
-	}
-    }
-
-    @Override
-    protected Void doInBackground() {
-	// List<Object> chunks = new ArrayList<Object>();
-
-	sleepForSomeTime(1000L);
-
-	try {
-	    w.setEnabled(false);
-	    animator.setVisible(true);
-
-	    Map<Genre, SortedSet<Movie>> movieSetGroupedByGenre = MovieManager
-		    .getMovieSetGroupedByGenre();
-	    Summary summary = MovieManager.getSummary(movieSetGroupedByGenre);
-
-	    MovieManager.createSummarySheet(summary);
-
-	    for (Genre genre : Genre.values()) {
-		// chunks.add(movieSetGroupedByGenre.get(genre));
-		// chunks.add(genre);
-
-		// publish(chunks);
-
-		MovieManager.createGenreSheet(
-			movieSetGroupedByGenre.get(genre), genre);
-	    }
-
-	    sleepForSomeTime(1000L);
-	} catch (Exception ex) {
-	    this.ex = ex;
-	    this.cancel(true);
+		try {
+			movieManager = new MovieManager(inputDir, outputFile);
+		} catch (Exception ex) {
+			this.ex = ex;
+			this.cancel(true);
+		}
 	}
 
-	return null;
-    }
+	@Override
+	protected Void doInBackground() {
+		// List<Object> chunks = new ArrayList<Object>();
 
-    @Override
-    public void done() {
-	String message = null;
+		sleepForSomeTime(1000L);
 
-	if (!isCancelled()) {
-	    message = "Successfully created the requested report.";
-	    cleanup(true, createButton, messageLabel, message, message);
-	} else {
-	    cleanup(false, createButton, messageLabel, ex.getMessage(), null,
-		    ex);
+		try {
+			w.setEnabled(false);
+			animator.setVisible(true);
+
+			Map<Genre, SortedSet<Movie>> movieSetGroupedByGenre = MovieManager
+					.getMovieSetGroupedByGenre();
+			Summary summary = MovieManager.getSummary(movieSetGroupedByGenre);
+
+			MovieManager.createSummarySheet(summary);
+
+			for (Genre genre : Genre.values()) {
+				// chunks.add(movieSetGroupedByGenre.get(genre));
+				// chunks.add(genre);
+
+				// publish(chunks);
+
+				MovieManager.createGenreSheet(
+						movieSetGroupedByGenre.get(genre), genre);
+			}
+
+			sleepForSomeTime(1000L);
+		} catch (Exception ex) {
+			this.ex = ex;
+			this.cancel(true);
+		}
+
+		return null;
 	}
 
-	animator.setVisible(false);
-	animator.dispose();
+	@Override
+	public void done() {
+		String message = null;
 
-	w.setEnabled(true);
-	w.toFront();
-    }
+		if (!isCancelled()) {
+			message = "Successfully created the requested report.";
+			cleanup(true, createButton, messageLabel, message, message);
+		} else {
+			cleanup(false, createButton, messageLabel, ex.getMessage(), null,
+					ex);
+		}
 
-    // @Override
-    // @SuppressWarnings("unchecked")
-    // protected void process(List<List<Object>> chunks) {
-    // SortedSet<Movie> filteredMovieSetByGenre = null;
-    // Genre genre = null;
-    //
-    // for (List<Object> chunk : chunks) {
-    // filteredMovieSetByGenre = (SortedSet<Movie>) (chunk.get(0));
-    // genre = (Genre) (chunk.get(1));
-    //
-    // try {
-    // MovieManager.createGenreSheet(filteredMovieSetByGenre, genre);
-    // } catch (Exception ex) {
-    // this.ex = ex;
-    // this.cancel(true);
-    // }
-    // }
-    // }
-    private JButton createButton;
-    @SuppressWarnings("unused")
-    private MovieManager movieManager;
-    private JLabel messageLabel;
-    private Exception ex = null;
-    private JFrame animator = null;
-    private Window w = null;
+		animator.setVisible(false);
+		animator.dispose();
+
+		w.setEnabled(true);
+		w.toFront();
+	}
+
+	// @Override
+	// @SuppressWarnings("unchecked")
+	// protected void process(List<List<Object>> chunks) {
+	// SortedSet<Movie> filteredMovieSetByGenre = null;
+	// Genre genre = null;
+	//
+	// for (List<Object> chunk : chunks) {
+	// filteredMovieSetByGenre = (SortedSet<Movie>) (chunk.get(0));
+	// genre = (Genre) (chunk.get(1));
+	//
+	// try {
+	// MovieManager.createGenreSheet(filteredMovieSetByGenre, genre);
+	// } catch (Exception ex) {
+	// this.ex = ex;
+	// this.cancel(true);
+	// }
+	// }
+	// }
+	private JButton createButton;
+	@SuppressWarnings("unused")
+	private MovieManager movieManager;
+	private JLabel messageLabel;
+	private Exception ex = null;
+	private JFrame animator = null;
+	private Window w = null;
 }

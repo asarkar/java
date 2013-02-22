@@ -10,20 +10,20 @@ import com.github.abhijitsarkar.moviemanager.domain.Movie;
 import com.github.abhijitsarkar.moviemanager.domain.Summary;
 
 public interface MovieService {
-    public abstract SortedSet<Movie> getMovieSet(String path)
-	    throws IOException;
+	public abstract SortedSet<Movie> getMovieSet(String path)
+			throws IOException;
 
-    public abstract SortedSet<Movie> filterMovieSetByGenre(
-	    SortedSet<Movie> movieSet, Genre genre);
+	public abstract SortedSet<Movie> filterMovieSetByGenre(
+			SortedSet<Movie> movieSet, Genre genre);
 
-    public abstract Map<Genre, SortedSet<Movie>> groupMovieSetByGenre(
-	    SortedSet<Movie> movieSet);
+	public abstract Map<Genre, SortedSet<Movie>> groupMovieSetByGenre(
+			SortedSet<Movie> movieSet);
 
-    public abstract GenreSummary getSummaryByGenre(
-	    SortedSet<Movie> movieSetFilteredByGenre, Genre genre);
+	public abstract GenreSummary getSummaryByGenre(
+			SortedSet<Movie> movieSetFilteredByGenre, Genre genre);
 
-    public abstract Summary getSummary(
-	    Map<Genre, SortedSet<Movie>> movieSetGroupedByGenre);
-	
+	public abstract Summary getSummary(
+			Map<Genre, SortedSet<Movie>> movieSetGroupedByGenre);
+
 	public String getMovieDirectory();
 }

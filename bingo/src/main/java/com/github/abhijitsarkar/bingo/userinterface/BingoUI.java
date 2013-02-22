@@ -10,7 +10,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import com.github.abhijitsarkar.bingo.businesslogic.BingoNumberCaller;
 import com.github.abhijitsarkar.bingo.businesslogic.NoMoreBingoNumbersException;
 
-
 /**
  * The user interface. It has 2 tabs, one for calling out the Bingo numbers,
  * other for displaying which numbers have been called so far in the game
