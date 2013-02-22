@@ -69,8 +69,6 @@ public class TheOmdbApiClientTest extends AbstractContextAwareTest {
 				theOmdbApiStyleMovie);
 		assertEquals("Wrong IMDB Id", "tt0117731",
 				theOmdbApiStyleMovie.getImdbId());
-		assertEquals("Wrong IMDB Id", "tt0117731",
-				theOmdbApiStyleMovie.getImdbId());
 		assertEquals("Wrong title", "Star Trek: First Contact",
 				theOmdbApiStyleMovie.getTitle());
 		assertEquals("Wrong release year", 1996, theOmdbApiStyleMovie.getYear());
