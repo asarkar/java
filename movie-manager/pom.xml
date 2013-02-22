@@ -1,0 +1,69 @@
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>maven-parent</artifactId>
+		<groupId>com.github.abhijitsarkar</groupId>
+		<version>1.0</version>
+		<relativePath>../maven-parent</relativePath>
+	</parent>
+	<artifactId>movie-manager</artifactId>
+	<version>3.0</version>
+	<packaging>pom</packaging>
+	<name>Movie Manager</name>
+	<description>Movie manager parent project</description>
+	<modules>
+		<module>movie-manager-common</module>
+		<module>movie-manager-domain</module>
+		<module>movie-manager-ui</module>
+		<module>movie-manager-aggregator</module>
+	</modules>
+
+	<properties>
+		<poi.version>3.9</poi.version>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-schemas</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.abhijitsarkar</groupId>
+				<artifactId>movie-manager-common</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.abhijitsarkar</groupId>
+				<artifactId>movie-manager-domain</artifactId>
+				<version>1.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

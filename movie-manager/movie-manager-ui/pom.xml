@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>movie-manager</artifactId>
+		<groupId>com.github.abhijitsarkar</groupId>
+		<version>3.0</version>
+	</parent>
+	<artifactId>movie-manager-ui</artifactId>
+	<name>movie-manager-ui</name>
+	<description>Movie Maneger UI Project</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.abhijitsarkar</groupId>
+			<artifactId>movie-manager-domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.abhijitsarkar</groupId>
+			<artifactId>movie-manager-common</artifactId>
+		</dependency>
+	</dependencies>
+</project>
