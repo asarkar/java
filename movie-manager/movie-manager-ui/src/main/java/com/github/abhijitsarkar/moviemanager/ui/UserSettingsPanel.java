@@ -15,14 +15,13 @@ import static com.github.abhijitsarkar.moviemanager.ui.util.UIUtil.createImageIc
 import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 
-import com.github.abhijitsarkar.moviemanager.ui.util.ConfigManager;
 import com.github.abhijitsarkar.moviemanager.ui.util.Image;
+import com.github.abhijitsarkar.moviemanager.util.ConfigManager;
 
 /**
  * 
@@ -38,30 +37,18 @@ public class UserSettingsPanel extends javax.swing.JPanel {
 
 		initComponents();
 
-		try {
-			Properties prop = ConfigManager.getConfigProperties();
-			String userSettingsIO = prop
-					.getProperty(ConfigManager.USER_SETTINGS_IO_KEY);
+		String userSettingsIO = ConfigManager.getUserSettingsIO();
 
-			if (ConfigManager.USER_SETTINGS_IO_NO_PREF_VALUE
-					.equals(userSettingsIO)) {
-				noPreferenceRadioButton.setSelected(true);
-			} else if (ConfigManager.USER_SETTINGS_IO_START_WITH_VALUE
-					.equals(userSettingsIO)) {
-				alwaysStartWithRadioButton.setSelected(true);
+		if (ConfigManager.USER_SETTINGS_IO_NO_PREF_VALUE.equals(userSettingsIO)) {
+			noPreferenceRadioButton.setSelected(true);
+		} else if (ConfigManager.USER_SETTINGS_IO_START_WITH_VALUE
+				.equals(userSettingsIO)) {
+			alwaysStartWithRadioButton.setSelected(true);
 
-				alwaysStartWithField
-						.setText(prop
-								.getProperty(ConfigManager.USER_SETTINGS_IO_START_WITH_KEY));
-			} else {
-				rememberLastRadioButton.setSelected(true);
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-
-			JOptionPane.showMessageDialog(null,
-					"Could not retrieve user preferences.", "Warning",
-					JOptionPane.WARNING_MESSAGE);
+			alwaysStartWithField.setText(ConfigManager
+					.getUserSettingsIOStartWith());
+		} else {
+			rememberLastRadioButton.setSelected(true);
 		}
 	}
 
@@ -241,23 +228,21 @@ public class UserSettingsPanel extends javax.swing.JPanel {
 
 	private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveButtonActionPerformed
 		try {
-			Properties prop = ConfigManager.getConfigProperties();
-
 			if (noPreferenceRadioButton.isSelected()) {
-				prop.put(ConfigManager.USER_SETTINGS_IO_KEY,
-						ConfigManager.USER_SETTINGS_IO_NO_PREF_VALUE);
+				ConfigManager
+						.setUserSettingsIO(ConfigManager.USER_SETTINGS_IO_NO_PREF_VALUE);
 			} else if (alwaysStartWithRadioButton.isSelected()) {
-				prop.put(ConfigManager.USER_SETTINGS_IO_KEY,
-						ConfigManager.USER_SETTINGS_IO_START_WITH_VALUE);
+				ConfigManager
+						.setUserSettingsIO(ConfigManager.USER_SETTINGS_IO_START_WITH_VALUE);
 
-				prop.put(ConfigManager.USER_SETTINGS_IO_START_WITH_KEY,
-						alwaysStartWithField.getText());
+				ConfigManager.setUserSettingsIOStartWith(alwaysStartWithField
+						.getText());
 			} else {
-				prop.put(ConfigManager.USER_SETTINGS_IO_KEY,
-						ConfigManager.USER_SETTINGS_IO_RMBR_LAST_VALUE);
+				ConfigManager
+						.setUserSettingsIO(ConfigManager.USER_SETTINGS_IO_RMBR_LAST_VALUE);
 			}
 
-			ConfigManager.setConfigProperties(prop);
+			ConfigManager.flush();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this,

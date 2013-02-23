@@ -5,25 +5,18 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 public class MovieManagerLogger {
-	private static Logger logger = null;
 	private static String CONFIG_FILE_PATH = "/log4j.properties";
 
-	private MovieManagerLogger() {
-		logger = Logger.getLogger(MovieManagerLogger.class);
-
+	static {
 		try {
-			PropertyConfigurator.configure(getClass().getResource(
-					CONFIG_FILE_PATH));
+			PropertyConfigurator.configure(MovieManagerLogger.class
+					.getResource(CONFIG_FILE_PATH));
 		} catch (Exception fnfe) {
 			BasicConfigurator.configure();
 		}
 	}
 
-	public static Logger getInstance() {
-		if (logger == null) {
-			new MovieManagerLogger();
-		}
-
-		return logger;
+	public static Logger getInstance(Class<?> clazz) {
+		return Logger.getLogger(clazz);
 	}
 }

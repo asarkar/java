@@ -7,7 +7,7 @@ import java.awt.Window;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,10 +16,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import com.github.abhijitsarkar.moviemanager.delegate.MovieManager;
-import com.github.abhijitsarkar.moviemanager.domain.Genre;
 import com.github.abhijitsarkar.moviemanager.domain.Movie;
 import com.github.abhijitsarkar.moviemanager.domain.Summary;
 import com.github.abhijitsarkar.moviemanager.ui.AnimatedFrame;
+import com.github.abhijitsarkar.moviemanager.util.ConfigManager;
 
 public class MovieReportCreatorTask extends SwingWorker<Void, List<Object>> {
 
@@ -49,13 +49,15 @@ public class MovieReportCreatorTask extends SwingWorker<Void, List<Object>> {
 			w.setEnabled(false);
 			animator.setVisible(true);
 
-			Map<Genre, SortedSet<Movie>> movieSetGroupedByGenre = MovieManager
+			Map<String, Set<Movie>> movieSetGroupedByGenre = MovieManager
 					.getMovieSetGroupedByGenre();
 			Summary summary = MovieManager.getSummary(movieSetGroupedByGenre);
 
 			MovieManager.createSummarySheet(summary);
+			
+			List<String> genreList = ConfigManager.getGenreList();
 
-			for (Genre genre : Genre.values()) {
+			for (String genre : genreList) {
 				// chunks.add(movieSetGroupedByGenre.get(genre));
 				// chunks.add(genre);
 

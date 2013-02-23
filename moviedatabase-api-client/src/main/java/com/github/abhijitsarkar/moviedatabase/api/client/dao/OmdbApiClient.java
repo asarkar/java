@@ -16,45 +16,43 @@ package com.github.abhijitsarkar.moviedatabase.api.client.dao;
 
 import java.util.Map;
 
-import com.github.abhijitsarkar.moviedatabase.api.client.ClientException;
-import com.github.abhijitsarkar.moviedatabase.api.client.domain.DeanClatworthyStyleMovie;
 import com.github.abhijitsarkar.moviedatabase.api.client.domain.Movie;
+import com.github.abhijitsarkar.moviedatabase.api.client.domain.OmdbApiStyleMovie;
 
 /**
- * Concrete Dean Clatworthy API client instance.
+ * Concrete OMDB API client instance.
  * 
  * @author Abhijit Sarkar
  * 
  */
-public class DeanClatworthyClient extends AbstractClient {
+public class OmdbApiClient extends AbstractClient {
 
-	public DeanClatworthyClient(String endpoint) {
+	public OmdbApiClient(String endpoint) {
 		super(endpoint);
 	}
 
 	public Movie getMovieInfoByTitleAndYear(String title, short year,
 			Map<String, String>... param) {
 		Map<String, String> queryParam = getQueryParam(param);
-		queryParam.put(getEnv().getProperty("deanclatworthyapi.title"), title);
-		queryParam.put(getEnv().getProperty("deanclatworthyapi.year"),
-				Short.toString(year));
+		queryParam.put(getEnv().getProperty("omdbapi.title"), title);
+		queryParam
+				.put(getEnv().getProperty("omdbapi.year"), Short.toString(year));
 
-		return getMovieInfoInternal(queryParam, DeanClatworthyStyleMovie.class);
+		return getMovieInfoInternal(queryParam, OmdbApiStyleMovie.class);
 	}
 
 	public Movie getMovieInfoByTitleOnly(String title,
 			Map<String, String>... param) {
 		Map<String, String> queryParam = getQueryParam(param);
-		queryParam.put(getEnv().getProperty("deanclatworthyapi.title"), title);
-		queryParam.put(getEnv().getProperty("deanclatworthyapi.yearguesing"),
-				Integer.toString(1));
+		queryParam.put(getEnv().getProperty("omdbapi.title"), title);
 
-		return getMovieInfoInternal(queryParam, DeanClatworthyStyleMovie.class);
+		return getMovieInfoInternal(queryParam, OmdbApiStyleMovie.class);
 	}
 
 	public Movie getMovieInfoById(String id, Map<String, String>... param) {
-		throw new ClientException(new UnsupportedOperationException(
-				"Dean Clatworthy API does not support searching by ID."));
-	}
+		Map<String, String> queryParam = getQueryParam(param);
+		queryParam.put(getEnv().getProperty("omdbapi.id"), id);
 
+		return getMovieInfoInternal(queryParam, OmdbApiStyleMovie.class);
+	}
 }

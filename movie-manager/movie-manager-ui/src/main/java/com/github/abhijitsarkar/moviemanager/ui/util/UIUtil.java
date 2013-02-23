@@ -27,7 +27,7 @@ import com.github.abhijitsarkar.moviemanager.util.logging.MovieManagerLogger;
  */
 public class UIUtil {
 
-	private static Logger logger = MovieManagerLogger.getInstance();
+	private static Logger logger = MovieManagerLogger.getInstance(UIUtil.class);
 	private static URL SUCCESS_SOUND = UIUtil.class.getResource(Sound.SUCCESS
 			.toString());
 	private static URL ERROR_SOUND = UIUtil.class.getResource(Sound.ERROR

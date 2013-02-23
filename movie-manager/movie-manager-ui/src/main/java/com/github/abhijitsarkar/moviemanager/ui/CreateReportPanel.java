@@ -13,6 +13,7 @@ package com.github.abhijitsarkar.moviemanager.ui;
 import static com.github.abhijitsarkar.moviemanager.ui.util.UIUtil.createImageIcon;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -20,8 +21,8 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.github.abhijitsarkar.moviemanager.ui.eventhandler.MovieReportCreatorTask;
-import com.github.abhijitsarkar.moviemanager.ui.util.ConfigManager;
 import com.github.abhijitsarkar.moviemanager.ui.util.Image;
+import com.github.abhijitsarkar.moviemanager.util.ConfigManager;
 
 /**
  * 
@@ -59,6 +60,14 @@ public class CreateReportPanel extends javax.swing.JPanel {
 		outputFileButton = new javax.swing.JButton(createImageIcon(Image.SAVE));
 		createButton = new javax.swing.JButton(createImageIcon(Image.DOIT));
 		closeButton = new javax.swing.JButton(createImageIcon(Image.CLOSE));
+		try {
+			lastOpenedInputDir = ConfigManager.getLastOpenedInputDir();
+			lastOpenedOutputDir = ConfigManager.getLastOpenedOutputDir();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "Warning",
+					JOptionPane.WARNING_MESSAGE);
+		}
 
 		headerPanel.setBorder(new javax.swing.border.SoftBevelBorder(
 				javax.swing.border.BevelBorder.RAISED));
@@ -345,8 +354,15 @@ public class CreateReportPanel extends javax.swing.JPanel {
 		}
 
 		if (proceed) {
-			ConfigManager.setLastOpenedInputDir(inputDir.getAbsolutePath());
-			ConfigManager.setLastOpenedOutputDir(outputFile.getParent());
+			try {
+				ConfigManager.setLastOpenedInputDir(inputDir.getAbsolutePath());
+				ConfigManager.setLastOpenedOutputDir(outputFile.getParent());
+
+				ConfigManager.flush();
+			} catch (IOException ex) {
+				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
 
 			createButton.setEnabled(false);
 
@@ -392,6 +408,6 @@ public class CreateReportPanel extends javax.swing.JPanel {
 	private JFrame frame;
 	private File inputDir;
 	private File outputFile;
-	private String lastOpenedInputDir = ConfigManager.getLastOpenedInputDir();
-	private String lastOpenedOutputDir = ConfigManager.getLastOpenedOutputDir();
+	private String lastOpenedInputDir;
+	private String lastOpenedOutputDir;
 }

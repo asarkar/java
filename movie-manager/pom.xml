@@ -16,9 +16,9 @@
 	<description>Movie manager parent project</description>
 	<modules>
 		<module>movie-manager-common</module>
-		<module>movie-manager-domain</module>
 		<module>movie-manager-ui</module>
 		<module>movie-manager-aggregator</module>
+		<module>movie-manager-businesslogic</module>
 	</modules>
 
 	<properties>
@@ -61,7 +61,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.github.abhijitsarkar</groupId>
-				<artifactId>movie-manager-domain</artifactId>
+				<artifactId>movie-manager-businesslogic</artifactId>
 				<version>1.1</version>
 			</dependency>
 		</dependencies>

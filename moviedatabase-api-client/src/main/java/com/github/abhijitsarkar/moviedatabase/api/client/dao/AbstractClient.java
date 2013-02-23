@@ -37,7 +37,7 @@ import com.github.abhijitsarkar.moviedatabase.api.client.domain.Movie;
 @PropertySource("classpath:/com/github/abhijitsarkar/moviedatabase/api/client/config/client.properties")
 public abstract class AbstractClient implements Client {
 	@Autowired
-	protected Environment env;
+	private Environment env;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -49,11 +49,15 @@ public abstract class AbstractClient implements Client {
 	/**
 	 * The resource endpoint. Set by each subclass.
 	 */
-	protected final String endpoint;
+	private final String endpoint;
 	private static final Logger logger = Logger.getLogger(AbstractClient.class);
 
 	public String getEndpoint() {
 		return endpoint;
+	}
+
+	public Environment getEnv() {
+		return env;
 	}
 
 	/**
@@ -102,6 +106,7 @@ public abstract class AbstractClient implements Client {
 
 		Set<String> keys = queryParams.keySet();
 
+		/* Check if the Uri template ends with a path separator; if not, add one. */
 		if (!(uriTemplate.codePointBefore(uriTemplate.length()) == uriPathSeparator))
 			uriTemplate.append(uriPathSeparator);
 
@@ -112,6 +117,7 @@ public abstract class AbstractClient implements Client {
 					.append(key).append(uriVariableEnd)
 					.append(uriVariableSeparator);
 
+		/* Delete the extra path separator at the end */
 		uriTemplate.deleteCharAt((uriTemplate.length() - 1));
 
 		logger.debug("Created URI template: " + uriTemplate);

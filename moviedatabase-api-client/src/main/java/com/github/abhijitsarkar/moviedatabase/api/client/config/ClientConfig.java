@@ -34,7 +34,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.github.abhijitsarkar.moviedatabase.api.client.dao.Client;
 import com.github.abhijitsarkar.moviedatabase.api.client.dao.DeanClatworthyClient;
-import com.github.abhijitsarkar.moviedatabase.api.client.dao.TheOmdbApiClient;
+import com.github.abhijitsarkar.moviedatabase.api.client.dao.OmdbApiClient;
 import com.github.abhijitsarkar.moviedatabase.api.client.http.HttpRequestInterceptor;
 
 /**
@@ -51,8 +51,8 @@ public abstract class ClientConfig {
 	private Environment env;
 
 	@Bean
-	Client theOmdbApiClient() {
-		return new TheOmdbApiClient(env.getProperty("theomdbapi.endpoint"));
+	Client omdbApiClient() {
+		return new OmdbApiClient(env.getProperty("omdbapi.endpoint"));
 	}
 
 	@Bean

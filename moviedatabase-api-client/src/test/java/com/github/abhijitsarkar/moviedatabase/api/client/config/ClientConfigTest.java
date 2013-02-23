@@ -33,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import com.github.abhijitsarkar.moviedatabase.api.client.AbstractContextAwareTest;
 import com.github.abhijitsarkar.moviedatabase.api.client.dao.Client;
 import com.github.abhijitsarkar.moviedatabase.api.client.dao.DeanClatworthyClient;
-import com.github.abhijitsarkar.moviedatabase.api.client.dao.TheOmdbApiClient;
+import com.github.abhijitsarkar.moviedatabase.api.client.dao.OmdbApiClient;
 
 /**
  * 
@@ -43,8 +43,8 @@ import com.github.abhijitsarkar.moviedatabase.api.client.dao.TheOmdbApiClient;
 public class ClientConfigTest extends AbstractContextAwareTest {
 
 	@Autowired
-	@Qualifier("theOmdbApiClient")
-	private Client theOmdbApiClient;
+	@Qualifier("omdbApiClient")
+	private Client omdbApiClient;
 
 	@Autowired
 	@Qualifier("deanClatworthyClient")
@@ -57,10 +57,10 @@ public class ClientConfigTest extends AbstractContextAwareTest {
 	private RestTemplate restTemplate;
 
 	@Test
-	public void testTheOmdbApiClient() {
-		assertNotNull(theOmdbApiClient);
-		assertTrue(theOmdbApiClient instanceof TheOmdbApiClient);
-		assertEquals("http://www.omdbapi.com", theOmdbApiClient.getEndpoint());
+	public void testOmdbApiClient() {
+		assertNotNull(omdbApiClient);
+		assertTrue(omdbApiClient instanceof OmdbApiClient);
+		assertEquals("http://www.omdbapi.com", omdbApiClient.getEndpoint());
 	}
 
 	@Test
@@ -74,12 +74,12 @@ public class ClientConfigTest extends AbstractContextAwareTest {
 	@Test
 	public void testEnvironment() {
 		assertNotNull(env);
-		assertTrue(env.containsProperty("theomdbapi.endpoint"));
-		assertTrue(env.containsProperty("theomdbapi.id"));
-		assertTrue(env.containsProperty("theomdbapi.title"));
-		assertTrue(env.containsProperty("theomdbapi.year"));
-		assertTrue(env.containsProperty("theomdbapi.mediatype"));
-		assertTrue(env.containsProperty("theomdbapi.plot"));
+		assertTrue(env.containsProperty("omdbapi.endpoint"));
+		assertTrue(env.containsProperty("omdbapi.id"));
+		assertTrue(env.containsProperty("omdbapi.title"));
+		assertTrue(env.containsProperty("omdbapi.year"));
+		assertTrue(env.containsProperty("omdbapi.mediatype"));
+		assertTrue(env.containsProperty("omdbapi.plot"));
 
 		assertTrue(env.containsProperty("deanclatworthyapi.endpoint"));
 		assertTrue(env.containsProperty("deanclatworthyapi.title"));

@@ -63,7 +63,7 @@ public class ClientFactory {
 		if (clients.get(type) == null) {
 			switch (type) {
 			case THE_OMDB_API:
-				clients.put(type, ctx.getBean("theOmdbApiClient", Client.class));
+				clients.put(type, ctx.getBean("omdbApiClient", Client.class));
 				break;
 			case DEAN_CLATWORTHY:
 				clients.put(type,

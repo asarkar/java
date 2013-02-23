@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.github.abhijitsarkar</groupId>
-			<artifactId>movie-manager-domain</artifactId>
+			<artifactId>movie-manager-businesslogic</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.github.abhijitsarkar</groupId>

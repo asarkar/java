@@ -51,14 +51,14 @@ public class ClientFactoryTest {
 
 	@Test
 	public void testClients() {
-		Client theOmdbApiClient = factory.getClient(ClientType.THE_OMDB_API);
+		Client omdbApiClient = factory.getClient(ClientType.THE_OMDB_API);
 		Client deanClatworthyClient = factory
 				.getClient(ClientType.DEAN_CLATWORTHY);
-		assertNotNull(theOmdbApiClient);
-		assertTrue(theOmdbApiClient instanceof TheOmdbApiClient);
+		assertNotNull(omdbApiClient);
+		assertTrue(omdbApiClient instanceof OmdbApiClient);
 		assertNotNull(deanClatworthyClient);
 		assertTrue(deanClatworthyClient instanceof DeanClatworthyClient);
-		assertEquals("http://www.omdbapi.com", theOmdbApiClient.getEndpoint());
+		assertEquals("http://www.omdbapi.com", omdbApiClient.getEndpoint());
 		assertEquals("http://deanclatworthy.com/imdb",
 				deanClatworthyClient.getEndpoint());
 	}
