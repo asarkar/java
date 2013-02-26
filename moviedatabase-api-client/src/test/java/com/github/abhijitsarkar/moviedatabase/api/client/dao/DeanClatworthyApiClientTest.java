@@ -51,9 +51,8 @@ public class DeanClatworthyApiClientTest extends AbstractContextAwareTest {
 				deanClatworthyApiStyleMovie);
 		assertEquals("Wrong IMDB Id", "tt0117731",
 				deanClatworthyApiStyleMovie.getImdbId());
-		/* currently the service is returning a blank title, probably a bug */
-		// assertEquals("Wrong title", "Star Trek",
-		// deanClatworthyApiStyleMovie.getTitle());
+		 assertEquals("Wrong title", "Star Trek: First Contact",
+		 deanClatworthyApiStyleMovie.getTitle());
 		assertEquals("Wrong release year", 1996,
 				deanClatworthyApiStyleMovie.getYear());
 		assertNotNull("Wrong genre", deanClatworthyApiStyleMovie.getGenre());
@@ -73,9 +72,8 @@ public class DeanClatworthyApiClientTest extends AbstractContextAwareTest {
 				.getMovieInfoByTitleOnly("Star Trek");
 		assertNotNull("At least one Star Trek movie should've been found",
 				deanClatworthyApiStyleMovie);
-		/* currently the service is returning a blank title, probably a bug */
-		// assertEquals("Wrong title", "Star Trek",
-		// deanClatworthyApiStyleMovie.getTitle());
+		assertEquals("Wrong title", "Star Trek Into Darkness",
+				deanClatworthyApiStyleMovie.getTitle());
 		assertEquals("Wrong release year", 2013,
 				deanClatworthyApiStyleMovie.getYear());
 		assertNotNull("Wrong genre", deanClatworthyApiStyleMovie.getGenre());
