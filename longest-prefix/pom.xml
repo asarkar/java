@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>edu.practice.abhijitsarkar.java</groupId>
+	<artifactId>longest-prefix</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>longest-prefix</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.encoding>UTF-8</project.build.encoding>
+		<project.build.sourceLevel>1.6</project.build.sourceLevel>
+		<project.build.targetLevel>1.6</project.build.targetLevel>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${project.build.sourceLevel}</source>
+					<target>${project.build.targetLevel}</target>
+					<encoding>${project.build.encoding}</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<encoding>${project.build.encoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
