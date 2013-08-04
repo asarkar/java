@@ -11,14 +11,14 @@
 		<moduleSet>
 			<useAllReactorProjects>true</useAllReactorProjects>
 			<includes>
-				<include>com.github.abhijitsarkar:movie-manager-core</include>
+				<include>name.abhijitsarkar:movie-manager-core</include>
 			</includes>
 			<binaries>
 				<unpack>true</unpack>
 				<dependencySets>
 					<dependencySet>
 						<excludes>
-							<exclude>com.github.abhijitsarkar:movie-manager-*</exclude>
+							<exclude>name.abhijitsarkar:movie-manager-*</exclude>
 						</excludes>
 						<unpack>false</unpack>
 						<scope>runtime</scope>
@@ -30,14 +30,14 @@
 		<moduleSet>
 			<useAllReactorProjects>true</useAllReactorProjects>
 			<includes>
-				<include>com.github.abhijitsarkar:movie-manager-domain</include>
+				<include>name.abhijitsarkar:movie-manager-domain</include>
 			</includes>
 			<binaries>
 				<unpack>false</unpack>
 				<dependencySets>
 					<dependencySet>
 						<excludes>
-							<exclude>com.github.abhijitsarkar:movie-manager-*</exclude>
+							<exclude>name.abhijitsarkar:movie-manager-*</exclude>
 						</excludes>
 						<unpack>false</unpack>
 						<scope>runtime</scope>
@@ -49,14 +49,14 @@
 		<moduleSet>
 			<useAllReactorProjects>true</useAllReactorProjects>
 			<includes>
-				<include>com.github.abhijitsarkar:movie-manager-ui</include>
+				<include>name.abhijitsarkar:movie-manager-ui</include>
 			</includes>
 			<binaries>
 				<unpack>true</unpack>
 				<dependencySets>
 					<dependencySet>
 						<excludes>
-							<exclude>com.github.abhijitsarkar:movie-manager-*</exclude>
+							<exclude>name.abhijitsarkar:movie-manager-*</exclude>
 						</excludes>
 						<unpack>false</unpack>
 						<scope>runtime</scope>

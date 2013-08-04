@@ -11,7 +11,7 @@
 		<moduleSet>
 			<useAllReactorProjects>true</useAllReactorProjects>
 			<includes>
-				<include>com.github.abhijitsarkar:movie-manager-*</include>
+				<include>name.abhijitsarkar:movie-manager-*</include>
 			</includes>
 			<binaries>
 				<dependencySets>

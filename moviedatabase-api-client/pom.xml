@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>maven-parent</artifactId>
-		<groupId>com.github.abhijitsarkar</groupId>
+		<groupId>name.abhijitsarkar</groupId>
 		<version>1.0</version>
 		<relativePath>../maven-parent</relativePath>
 	</parent>
 	<artifactId>moviedatabase-api-client</artifactId>
 	<packaging>jar</packaging>
 	<name>moviedatabase-api-client</name>
-	<url>https://github.com/abhijitsarkar/java/tree/master/moviedatabase-api-client</url>
+	<url>https://github.com/abhijitsarkar</url>
 	<properties>
 		<project.dep.springVersion>3.2.1.RELEASE</project.dep.springVersion>
 	</properties>

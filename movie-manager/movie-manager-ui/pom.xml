@@ -5,21 +5,21 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>movie-manager</artifactId>
-		<groupId>com.github.abhijitsarkar</groupId>
+		<groupId>name.abhijitsarkar</groupId>
 		<version>3.0</version>
 	</parent>
 	<artifactId>movie-manager-ui</artifactId>
 	<name>movie-manager-ui</name>
-	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager/movie-manager-ui</url>
+	<url>https://github.com/abhijitsarkar</url>
 	<description>Movie Maneger UI Project</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.github.abhijitsarkar</groupId>
+			<groupId>name.abhijitsarkar</groupId>
 			<artifactId>movie-manager-businesslogic</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.abhijitsarkar</groupId>
+			<groupId>name.abhijitsarkar</groupId>
 			<artifactId>movie-manager-common</artifactId>
 		</dependency>
 	</dependencies>

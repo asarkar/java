@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>maven-parent</artifactId>
-		<groupId>com.github.abhijitsarkar</groupId>
+		<groupId>name.abhijitsarkar</groupId>
 		<version>1.0</version>
 		<relativePath>../maven-parent</relativePath>
 	</parent>
@@ -11,6 +11,6 @@
 	<packaging>jar</packaging>
 
 	<name>bingo</name>
-	<url>https://github.com/abhijitsarkar/java/tree/master/bingo</url>
+	<url>https://github.com/abhijitsarkar</url>
 
 </project>

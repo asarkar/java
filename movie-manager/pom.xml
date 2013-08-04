@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>maven-parent</artifactId>
-		<groupId>com.github.abhijitsarkar</groupId>
+		<groupId>name.abhijitsarkar</groupId>
 		<version>1.0</version>
 		<relativePath>../maven-parent</relativePath>
 	</parent>
@@ -12,7 +12,7 @@
 	<version>3.0</version>
 	<packaging>pom</packaging>
 	<name>Movie Manager</name>
-	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager</url>
+	<url>https://github.com/abhijitsarkar</url>
 	<description>Movie manager parent project</description>
 	<modules>
 		<module>movie-manager-common</module>
@@ -55,12 +55,12 @@
 				<version>${poi.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.abhijitsarkar</groupId>
+				<groupId>name.abhijitsarkar</groupId>
 				<artifactId>movie-manager-common</artifactId>
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.abhijitsarkar</groupId>
+				<groupId>name.abhijitsarkar</groupId>
 				<artifactId>movie-manager-businesslogic</artifactId>
 				<version>1.1</version>
 			</dependency>

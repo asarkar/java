@@ -5,13 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>movie-manager</artifactId>
-		<groupId>com.github.abhijitsarkar</groupId>
+		<groupId>name.abhijitsarkar</groupId>
 		<version>3.0</version>
 	</parent>
 	<artifactId>movie-manager-businesslogic</artifactId>
 	<name>movie-manager-businesslogic</name>
 	<version>1.1</version>
-	<url>https://github.com/abhijitsarkar/java/tree/master/movie-manager/movie-manager-businesslogic</url>
+	<url>https://github.com/abhijitsarkar</url>
 	<description>Movie Manager Business Logic Project</description>
 	<profiles>
 		<profile>
@@ -61,7 +61,7 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.abhijitsarkar</groupId>
+			<groupId>name.abhijitsarkar</groupId>
 			<artifactId>movie-manager-common</artifactId>
 		</dependency>
 	</dependencies>

@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>edu.practice.abhijitsarkar.java</groupId>
+	<groupId>name.abhijitsarkar.learning</groupId>
 	<artifactId>longest-prefix</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>longest-prefix</name>
-	<url>http://maven.apache.org</url>
+	<url>https://github.com/abhijitsarkar</url>
 
 	<properties>
 		<project.build.encoding>UTF-8</project.build.encoding>
