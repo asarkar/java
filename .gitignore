@@ -2,3 +2,5 @@
 target
 bin
 *.log
+build
+.gradle

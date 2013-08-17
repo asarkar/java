@@ -1,0 +1,106 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = 'name.abhijitsarkar.learning.lucene'
+version = '1.0-SNAPSHOT'
+archivesBaseName = 'lucene-common'
+
+ext.javaVersion = '1.6'
+ext.projectEncoding = 'UTF-8'
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+archivesBaseName = 'lucene-common'
+
+tasks.withType(Compile) {
+  options.compilerArgs << '-deprecation'
+  options.encoding = projectEncoding
+}
+
+configurations {
+  providedCompile
+}
+
+sourceSets {
+  main.compileClasspath += configurations.providedCompile
+}
+
+javadoc {
+  classpath += configurations.providedCompile
+}
+
+eclipse {
+    classpath {
+        plusConfigurations += configurations.providedCompile
+    }
+}
+
+// maven-publish plugin configuration
+//publishing {
+//  publications {
+//    mavenJava(MavenPublication) {
+//        from components.java
+//    }
+//    repositories {
+//      mavenLocal()
+//    }
+//  }
+//}
+
+// maven plugin configuration
+//install {
+//    repositories {
+//     mavenInstaller {
+//       repository(url: "file:///Users/Abhijit/Repositories/maven")
+//     }
+//    }
+//}
+
+// jar customization, including creation of one-jar
+//jar {
+  //doFirst {
+    //into('lib') {
+    //  from configurations.runtime
+    //}
+    //manifest {
+ //    attributes(
+ //        "Main-Class" : "myMainClass",
+ //        "Class-Path" : configurations.runtime.collect { 'lib/' + it.getName() }.join(' ') 
+ //    )
+ //}
+    //from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+  //}
+//}
+
+repositories {
+  mavenCentral()
+}
+
+ext.luceneVersion = '4.0.0'
+
+dependencies {
+  compile group:'org.apache.lucene', name:'lucene-core', version:luceneVersion
+  compile group:'org.apache.lucene', name:'lucene-analyzers-common', version:luceneVersion
+  compile group:'org.apache.lucene', name:'lucene-queryparser', version:luceneVersion
+  compile group:'commons-cli', name:'commons-cli', version:1.2
+  
+  testCompile group:'junit', name:'junit', version:'4.11'
+}
+
+test {
+  include 'name/abhijitsarkar/**'
+
+  //makes the standard streams (err and out) visible at console when running tests
+  testLogging.showStandardStreams = true
+
+  //listening to test execution events
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+  onOutput { descriptor, event ->
+     logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
+  }
+}
+

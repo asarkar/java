@@ -1,0 +1,5 @@
+apply from: "../common/build.gradle"
+
+defaultTasks 'clean', 'test', 'jar'
+
+archivesBaseName = 'citation-combiner'

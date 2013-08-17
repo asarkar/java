@@ -1,0 +1,5 @@
+CUST_ID,CUST_NAME,CUST_PH_NUM,CUST_ADDR
+1,Stephanie Leung,555-555-5555,123 No Such St,Fantasyland,CA 99999
+2,Edward Kim,123-456-7890,456 No Such St,Fantasyland,CA 99999
+3,Jose Madriz,281-330-8004,789 No Such St,Fantasyland,CA 99999
+4,David Stork,408-555-0000,321 No Such St,Fantasyland,CA 99999

@@ -1,0 +1,83 @@
+//apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+group = 'name.abhijitsarkar.learning.cascading'
+version = '1.0'
+
+ext.javaVersion = '1.6'
+ext.projectEncoding = 'UTF-8'
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+tasks.withType(Compile) {
+  options.compilerArgs << '-deprecation'
+  options.encoding = projectEncoding
+}
+
+configurations {
+  providedCompile
+}
+
+sourceSets {
+  main.compileClasspath += configurations.providedCompile
+}
+
+javadoc {
+  classpath += configurations.providedCompile
+}
+
+eclipse {
+    classpath{
+        plusConfigurations += configurations.providedCompile
+    }
+}
+
+jar {
+  description = "Assembles a Hadoop ready jar file"
+  doFirst {
+    into('lib') {
+      from configurations.compile
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+  // Cascading repo, not in Maven Central
+  mavenRepo name: 'conjars', url: 'http://conjars.org/repo/'
+}
+
+ext.cascadingVersion = '2.1.2'
+ext.hadoopVersion = '1.1.2'
+
+dependencies {
+  compile group:'cascading', name:'cascading-core', version:cascadingVersion 
+  compile group:'cascading', name:'cascading-local', version:cascadingVersion
+  compile group:'cascading', name:'cascading-hadoop', version:cascadingVersion
+
+  providedCompile group:'org.apache.hadoop', name:'hadoop-core', version:hadoopVersion
+  
+  testCompile group:'cascading', name:'cascading-test', version:'2.0.8'
+  testCompile group:'org.apache.hadoop', name:'hadoop-test', version:hadoopVersion
+  testCompile group:'junit', name:'junit', version:'4.11'
+  
+  testRuntime group:'org.slf4j', name:'slf4j-nop', version:'1.6.2'
+}
+
+test {
+  include 'name/abhijitsarkar/**'
+
+  //makes the standard streams (err and out) visible at console when running tests
+  testLogging.showStandardStreams = true
+
+  //listening to test execution events
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+  onOutput { descriptor, event ->
+     logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
+  }
+}
+

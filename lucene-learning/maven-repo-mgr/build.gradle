@@ -1,0 +1,25 @@
+apply from: "../common/build.gradle"
+
+defaultTasks 'clean', 'test', 'assemble'
+
+archivesBaseName = 'maven-repo-mgr'
+version = '1.0-SNAPSHOT'
+
+configurations.all {
+    // check for dependency updates, that are identified as changing, every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+jar {
+  doFirst {
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+  }
+}
+
+repositories {
+  mavenLocal()
+}
+
+dependencies {
+  compile group:'name.abhijitsarkar.learning.lucene', name:'lucene-common', version:'1.0-SNAPSHOT', changing: true
+}
