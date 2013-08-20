@@ -26,9 +26,9 @@ public class IndexOptionsParser {
         doc.setRequired(true);
 
         options.addOption("h", "help", false, "Print this message");
-        options.addOption("id", "index", true,
+        options.addOption("i", "index", true,
                 "Index directory, default is current working directory");
-        options.addOption("i", "include", true,
+        options.addOption("in", "include", true,
                 "File extension to include in indexing, default is .txt");
         options.addOption(doc);
 

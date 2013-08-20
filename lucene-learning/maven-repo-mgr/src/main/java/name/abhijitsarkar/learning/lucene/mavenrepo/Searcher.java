@@ -8,11 +8,11 @@ import name.abhijitsarkar.learning.lucene.commandlineparser.SearchOptionsParser;
 import name.abhijitsarkar.learning.lucene.pagination.Window;
 
 import org.apache.commons.cli.ParseException;
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
+import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -29,12 +29,14 @@ import org.apache.lucene.util.Version;
  */
 public class Searcher {
     public static final void main(String[] args) throws ParseException,
-            IOException, org.apache.lucene.queryparser.classic.ParseException {
+            IOException, org.apache.lucene.queryparser.classic.ParseException,
+            QueryNodeException {
         new Searcher().search(args);
     }
 
     private void search(String[] args) throws ParseException, IOException,
-            org.apache.lucene.queryparser.classic.ParseException {
+            org.apache.lucene.queryparser.classic.ParseException,
+            QueryNodeException {
         final SearchOptionsParser parser = new SearchOptionsParser(args);
         final File indexDir = new File(parser.getIndexDir());
         /* The default search field is 'content' */
@@ -44,12 +46,13 @@ public class Searcher {
 
         final IndexReader reader = DirectoryReader.open(FSDirectory
                 .open(indexDir));
-        final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
         final IndexSearcher searcher = new IndexSearcher(reader);
 
-        QueryParser queryParser = new QueryParser(Version.LUCENE_40, field,
-                analyzer);
-        Query query = queryParser.parse(queryStr);
+        /* Using the new, recommended parser */
+        StandardQueryParser qpHelper = new StandardQueryParser(
+                new StandardAnalyzer(Version.LUCENE_40));
+        // config.setAllowLeadingWildcard(true);
+        Query query = qpHelper.parse(queryStr, field);
 
         searchDocs(searcher, query);
         reader.close();

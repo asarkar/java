@@ -22,7 +22,7 @@ public class IndexOptionsParserTest {
 
     @Test
     public void testWithShortIndexAndDocArgs() throws ParseException {
-        String[] args = new String[] { "-id",
+        String[] args = new String[] { "-i",
                 "learning/lucene/commandlineparser", "-d",
                 "learning/lucene/commandlineparser" };
         IndexOptionsParser parser = new IndexOptionsParser(args);

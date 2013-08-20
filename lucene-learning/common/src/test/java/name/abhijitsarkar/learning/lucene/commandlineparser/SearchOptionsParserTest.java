@@ -2,20 +2,13 @@ package name.abhijitsarkar.learning.lucene.commandlineparser;
 
 import java.io.File;
 
-import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.cli.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class SearchOptionsParserTest {
-	@Test(expected = MissingOptionException.class)
-	public void testWithNoArgs() throws ParseException {
-		String[] args = new String[] {};
-		new SearchOptionsParser(args);
-	}
-
 	@Test
-	public void testWithOnlyQuery() throws ParseException {
+	public void testNoArgs() throws ParseException {
 		String[] args = new String[] { "-q", "some query" };
 		SearchOptionsParser parser = new SearchOptionsParser(args);
 
