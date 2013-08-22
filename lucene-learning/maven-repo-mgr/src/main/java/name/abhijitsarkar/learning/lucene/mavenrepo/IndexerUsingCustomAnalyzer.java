@@ -26,13 +26,14 @@ import org.apache.lucene.util.Version;
 
 /**
  * This class creates a Lucene index. It uses {@link IndexOptionsParser
- * IndexOptionsParser} for parsing command line arguments.
+ * IndexOptionsParser} for parsing command line arguments. It also uses a custom
+ * analyzer for the 'groupAndArtifactId' field
  * 
  */
-public class Indexer {
+public class IndexerUsingCustomAnalyzer {
 
 	public static void main(String[] args) throws ParseException, IOException {
-		new Indexer().index(args);
+		new IndexerUsingCustomAnalyzer().index(args);
 	}
 
 	private void index(String[] args) throws ParseException, IOException {
@@ -53,6 +54,7 @@ public class Indexer {
 		writer.close();
 	}
 
+	@SuppressWarnings("resource")
 	private void indexDocs(IndexWriter writer, File file,
 			final FilenameFilter filenameFilter) throws IOException {
 		Reader reader = null;
@@ -104,6 +106,17 @@ public class Indexer {
 				 * searching for special characters will fail.
 				 */
 				doc.add(new TextField("content", reader));
+
+				/*
+				 * Per-field analyzers can also be set during IndexWriter
+				 * configuration but currently it throws
+				 * "IOException: Stream closed" during analysis. Passing the
+				 * TokenStream directly tells Lucene that this field is
+				 * pre-analyzed and it doesn't try to analyze it again
+				 */
+				doc.add(new TextField("groupAndArtifactId",
+						new MavenPOMAnalyzer(Version.LUCENE_40).tokenStream(
+								"groupAndArtifactId", reader)));
 
 				if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
 					/*

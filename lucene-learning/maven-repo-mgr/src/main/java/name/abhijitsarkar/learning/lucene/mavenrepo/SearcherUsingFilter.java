@@ -8,10 +8,14 @@ import name.abhijitsarkar.learning.lucene.util.SearchUtil;
 import org.apache.commons.cli.ParseException;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser;
+import org.apache.lucene.sandbox.queries.regex.RegexQuery;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.util.Version;
 
 /**
@@ -20,11 +24,11 @@ import org.apache.lucene.util.Version;
  * arguments.
  * 
  */
-public class Searcher {
+public class SearcherUsingFilter {
 	public static final void main(String[] args) throws ParseException,
 			IOException, org.apache.lucene.queryparser.classic.ParseException,
 			QueryNodeException {
-		new Searcher().search(args);
+		new SearcherUsingFilter().search(args);
 	}
 
 	private void search(String[] args) throws ParseException, IOException,
@@ -46,7 +50,11 @@ public class Searcher {
 		// config.setAllowLeadingWildcard(true);
 		Query query = qpHelper.parse(queryStr, field);
 
-		SearchUtil.searchDocs(searcher, null, query, 10);
+		final Query pathQuery = new RegexQuery(new Term("path", "(/.+)+"
+				+ query + "(/.+)+"));
+		final Filter filter = new QueryWrapperFilter(pathQuery);
+
+		SearchUtil.searchDocs(searcher, filter, query, 10);
 		reader.close();
 	}
 }

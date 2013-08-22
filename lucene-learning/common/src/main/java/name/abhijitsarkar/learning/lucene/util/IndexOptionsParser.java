@@ -1,4 +1,4 @@
-package name.abhijitsarkar.learning.lucene.commandlineparser;
+package name.abhijitsarkar.learning.lucene.util;
 
 import java.io.File;
 

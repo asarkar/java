@@ -1,4 +1,4 @@
-package name.abhijitsarkar.learning.lucene.pagination;
+package name.abhijitsarkar.learning.lucene.util;
 
 import java.io.IOException;
 

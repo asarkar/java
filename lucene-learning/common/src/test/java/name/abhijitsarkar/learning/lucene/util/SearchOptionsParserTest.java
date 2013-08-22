@@ -1,6 +1,8 @@
-package name.abhijitsarkar.learning.lucene.commandlineparser;
+package name.abhijitsarkar.learning.lucene.util;
 
 import java.io.File;
+
+import name.abhijitsarkar.learning.lucene.util.SearchOptionsParser;
 
 import org.apache.commons.cli.ParseException;
 import org.junit.Assert;
