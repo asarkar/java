@@ -2,13 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>name.abhijitsarkar.learning.webservices</groupId>
-		<artifactId>webservices-parent</artifactId>
+		<groupId>com.github.mkalin.jwsur2</groupId>
+		<artifactId>jwsur2-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.github.mkalin.jwsur2</groupId>
 	<artifactId>ch1</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>ch1</name>
 	<description>Java Web Services: Up and Running, 2e, chapter 1, practice code</description>
