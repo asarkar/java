@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>name.abhijitsarkar.learning.xml.jaxb</groupId>
+    <artifactId>jaxb-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>jaxb-basic</artifactId>
+  <name>jaxb-basic</name>
+
+  <description>
+    The Java Tutorials, Lesson: Introduction to JAXB, practice code  
+  </description>
+
+  <profiles>
+    <profile>
+      <id>jaxb-gen</id>
+      <build>
+        <defaultGoal>clean generate-sources</defaultGoal>
+        <plugins>
+          <plugin>
+            <groupId>org.jvnet.jaxb2.maven2</groupId>
+            <artifactId>maven-jaxb2-plugin</artifactId>
+            <configuration>
+              <forceRegenerate>true</forceRegenerate>
+            </configuration>
+            <executions>
+              <execution>
+                <id>modify-marshal-gen</id>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <generatePackage>name.abhijitsarkar.learning.xml.jaxb.basic.modifymarshal.generated</generatePackage>
+                  <schemaDirectory>src/main/resources/modify-marshal</schemaDirectory>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unmarshal-validate-gen</id>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+                <phase>generate-sources</phase>
+                <configuration>
+                  <generatePackage>name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate.generated</generatePackage>
+                  <schemaDirectory>src/main/resources/unmarshal-validate</schemaDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+            <executions> <execution> <id>modify-marshal-gen</id> <goals> <goal>exec</goal> </goals> 
+            <phase>generate-sources</phase> <configuration> <arguments combine.children="append"> 
+            <argument>-p</argument> <argument>name.abhijitsarkar.learning.xml.jaxb.basic.modifymarshal.generated</argument> 
+            <argument>src/main/resources/modify-marshal</argument> </arguments> </configuration> 
+            </execution> </executions> </plugin> -->
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

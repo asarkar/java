@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>name.abhijitsarkar</groupId>
+    <artifactId>maven-parent</artifactId>
+    <version>1.0</version>
+  </parent>
+
+  <groupId>name.abhijitsarkar.learning.xml.jaxb</groupId>
+  <artifactId>jaxb-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <name>jaxb-parent</name>
+
+  <description>
+    This project is intended to manage the dependencies and plugins for Web Services practice code
+  </description>
+
+  <properties>
+    <project.build.sourceLevel>1.7</project.build.sourceLevel>
+    <project.build.targetLevel>1.7</project.build.targetLevel>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Maven sets java.home property to JRE but we want JDK -->
+    <xjc.exec>${java.home}/../bin/xjc</xjc.exec>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <configuration>
+          <rules>
+            <requireJavaVersion>
+              <version>[1.7,)</version>
+            </requireJavaVersion>
+            <requireMavenVersion>
+              <!-- There is a bug in Maven 3.1 which now bundles Plexus that conflicts 
+                with Weld at runtime -->
+              <!-- https://java.net/jira/browse/GLASSFISH-20802 -->
+              <version>[3.0, 3.1)</version>
+              <message>There is a bug in Maven 3.1 - c.f. GLASSFISH-20802</message>
+            </requireMavenVersion>
+          </rules>
+        </configuration>
+        <executions>
+          <execution>
+            <id>enforce-versions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
+          <configuration>
+            <compilerVersion>${project.build.sourceLevel}</compilerVersion>
+            <source>${project.build.sourceLevel}</source>
+            <target>${project.build.targetLevel}</target>
+            <encoding>${project.build.sourceEncoding}</encoding>
+            <showDeprecation>true</showDeprecation>
+            <showWarnings>true</showWarnings>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.3.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.jvnet.jaxb2.maven2</groupId>
+          <artifactId>maven-jaxb2-plugin</artifactId>
+          <version>0.8.3</version>
+          <inherited>true</inherited>
+          <configuration>
+            <episodeFile>${project.basedir}/src/main/resources/META-INF/sun-jaxb.episode</episodeFile>
+            <forceRegenerate>true</forceRegenerate>
+            <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+            <extension>false</extension>
+            <specVersion>2.1</specVersion>
+            <strict>true</strict>
+          </configuration>
+        </plugin>
+        <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+          <version>1.2.1</version> <inherited>true</inherited> <configuration> <executable>${xjc.exec}</executable> 
+          <sourceRoot>${project.basedir}/src/main/java</sourceRoot> <arguments> <argument>-nv</argument> 
+          <argument>-d</argument> <argument>${project.basedir}/src/main/java</argument> <argument>-target</argument> 
+          <argument>2.1</argument> <argument>-encoding</argument> <argument>${project.build.sourceEncoding}</argument> 
+          </arguments> </configuration> </plugin> -->
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+</project>
