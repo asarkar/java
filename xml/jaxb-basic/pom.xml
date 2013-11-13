@@ -34,6 +34,7 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
+                  <episodeFile>${project.basedir}/src/main/resources/META-INF/modify-marshal.episode</episodeFile>
                   <generatePackage>name.abhijitsarkar.learning.xml.jaxb.basic.modifymarshal.generated</generatePackage>
                   <schemaDirectory>src/main/resources</schemaDirectory>
                 </configuration>
@@ -45,6 +46,7 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
+                  <episodeFile>${project.basedir}/src/main/resources/META-INF/unmarshal-validate.episode</episodeFile>
                   <generatePackage>name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate.generated</generatePackage>
                   <schemaDirectory>src/main/resources</schemaDirectory>
                 </configuration>

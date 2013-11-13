@@ -23,9 +23,22 @@
     <project.build.sourceLevel>1.7</project.build.sourceLevel>
     <project.build.targetLevel>1.7</project.build.targetLevel>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- Maven sets java.home property to JRE but we want JDK -->
-    <xjc.exec>${java.home}/../bin/xjc</xjc.exec>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.2.3</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>2.2.4-1</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
@@ -80,7 +93,6 @@
           <version>0.8.3</version>
           <inherited>true</inherited>
           <configuration>
-            <episodeFile>${project.basedir}/src/main/resources/META-INF/sun-jaxb.episode</episodeFile>
             <forceRegenerate>true</forceRegenerate>
             <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
             <extension>false</extension>
@@ -89,11 +101,12 @@
           </configuration>
         </plugin>
         <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
-          <version>1.2.1</version> <inherited>true</inherited> <configuration> <executable>${xjc.exec}</executable> 
-          <sourceRoot>${project.basedir}/src/main/java</sourceRoot> <arguments> <argument>-nv</argument> 
-          <argument>-d</argument> <argument>${project.basedir}/src/main/java</argument> <argument>-target</argument> 
-          <argument>2.1</argument> <argument>-encoding</argument> <argument>${project.build.sourceEncoding}</argument> 
-          </arguments> </configuration> </plugin> -->
+          <version>1.2.1</version> <inherited>true</inherited> </plugin> -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>jaxb2-maven-plugin</artifactId>
+          <version>1.5</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 

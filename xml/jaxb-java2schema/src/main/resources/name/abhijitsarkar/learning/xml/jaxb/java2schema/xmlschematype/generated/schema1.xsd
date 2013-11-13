@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="trackingOrder" type="TrackingOrderType"/>
+
+  <xs:complexType name="TrackingOrderType">
+    <xs:sequence>
+      <xs:element name="shipDate" type="xs:date" minOccurs="0"/>
+      <xs:element name="orderDate" type="xs:gMonthDay" minOccurs="0"/>
+      <xs:element name="deliveryDate" type="xs:gMonthDay" minOccurs="0"/>
+      <xs:element name="trackingDuration" type="xs:duration" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

@@ -34,6 +34,7 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
+                  <episodeFile>${project.basedir}/src/main/resources/META-INF/customize-inline.episode</episodeFile>
                   <generatePackage>name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated</generatePackage>
                   <schemaDirectory>src/main/resources/customize-inline</schemaDirectory>
                 </configuration>
@@ -45,6 +46,7 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
+                  <episodeFile>${project.basedir}/src/main/resources/META-INF/customize-external.episode</episodeFile>
                   <generatePackage>name.abhijitsarkar.learning.xml.jaxb.customize.external.generated</generatePackage>
                   <schemaDirectory>src/main/resources/customize-external</schemaDirectory>
                 </configuration>

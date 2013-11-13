@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="kitchenWorldBasket" type="KitchenWorldBasketType"/>
+
+  <xs:element name="purchaseList" type="PurchaseListType"/>
+
+  <xs:complexType name="adapterPurchaseListToHashMap">
+    <xs:complexContent>
+      <xs:extension base="xmlAdapter">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="xmlAdapter" abstract="true">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="PurchaseListType">
+    <xs:sequence>
+      <xs:element name="entry" type="partEntry" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="partEntry">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="key" type="xs:int" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="KitchenWorldBasketType">
+    <xs:sequence>
+      <xs:element name="basket" type="PurchaseListType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+
