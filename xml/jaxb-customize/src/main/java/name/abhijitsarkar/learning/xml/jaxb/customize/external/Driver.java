@@ -1,3 +1,5 @@
+package name.abhijitsarkar.learning.xml.jaxb.customize.external;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
@@ -34,81 +36,80 @@
  * holder.
  */
 
-package name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate;
-
-import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
+import java.math.BigDecimal;
+import java.util.ListIterator;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
-import javax.xml.bind.ValidationEventLocator;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
+import javax.xml.transform.stream.StreamSource;
 
-import name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate.generated.ObjectFactory;
+import name.abhijitsarkar.learning.xml.jaxb.customize.external.generated.Items;
+import name.abhijitsarkar.learning.xml.jaxb.customize.external.generated.Items.Item;
+import name.abhijitsarkar.learning.xml.jaxb.customize.external.generated.ObjectFactory;
+import name.abhijitsarkar.learning.xml.jaxb.customize.external.generated.POType;
+import name.abhijitsarkar.learning.xml.jaxb.customize.external.generated.USAddress;
+import name.abhijitsarkar.learning.xml.jaxb.customize.external.generated.USState;
 
 public class Driver {
 
-	// This sample application demonstrates how to enable validation during
-	// the unmarshal operations.
+	// This sample application demonstrates how to modify a java content
+	// tree and marshal it back to a xml data. This example demonstrates
+	// customiation within the schema file, po.xsd, and the impact that these
+	// customizations have on the schema derived Java representation.
 
 	public static void main(String[] args) {
 		try {
+			// create a JAXBContext capable of handling classes generated into
+			// the primer.po package
 			JAXBContext jc = JAXBContext.newInstance(ObjectFactory.class
 					.getPackage().getName());
 
 			// create an Unmarshaller
 			Unmarshaller u = jc.createUnmarshaller();
 
-			SchemaFactory sf = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
-			try {
-				Schema schema = sf.newSchema(Driver.class
-						.getResource("/po.xsd"));
-				u.setSchema(schema);
-				u.setEventHandler(new ValidationEventHandler() {
-					// allow unmarshalling to continue even if there are errors
-					public boolean handleEvent(ValidationEvent ve) {
-						// ignore warnings
-						if (ve.getSeverity() != ValidationEvent.WARNING) {
-							ValidationEventLocator vel = ve.getLocator();
-							System.out.println("Line:Col["
-									+ vel.getLineNumber() + ":"
-									+ vel.getColumnNumber() + "]:"
-									+ ve.getMessage());
-						}
-						return true;
-					}
-				});
-			} catch (org.xml.sax.SAXException se) {
-				System.out
-						.println("Unable to validate due to following error.");
-				se.printStackTrace();
+			// unmarshal a po instance document into a tree of Java content
+			// objects composed of classes from the primer.myPo package.
+			StreamSource src = new StreamSource(
+					Driver.class.getResourceAsStream("/po.xml"));
+			JAXBElement<POType> poe = u.unmarshal(src, POType.class);
+			POType po = poe.getValue();
+
+			// change the billto address
+			USAddress address = po.getBillTo();
+			address.setToName("John Bob");
+			address.setStreet("242 Driver Street");
+			address.setCity("Beverly Hills");
+			address.setState(USState.CA);
+			address.setZipCode(90210);
+
+			USState purchaseState = address.getState();
+			ListIterator<Item> iter = po.getItems().getItem().listIterator();
+			while (iter.hasNext()) {
+
+				// update to 20% off sale price
+				Items.Item item = (Items.Item) iter.next();
+				item.setPrice(item.getPrice().multiply(new BigDecimal("0.80")));
+
+				// Calculate sales tax for specific states
+				if (purchaseState == USState.MA) {
+					item.setPrice(item.getPrice().multiply(
+							new BigDecimal("1.05")));
+				} else if (purchaseState == USState.CA) {
+					item.setPrice(item.getPrice().multiply(
+							new BigDecimal("1.06")));
+				}
+				item.setPrice(item.getPrice()
+						.setScale(2, BigDecimal.ROUND_DOWN));
 			}
 
-			// unmarshal an invalid po instance document into a tree of Java
-			// content objects composed of classes from the primer.po package.
-			System.out
-					.println("NOTE: This sample is working correctly if you see validation errors!!");
-			Object poe = u.unmarshal(Driver.class
-					.getResource("/unmarshal-validate/po.xml"));
-
-			// even though document was determined to be invalid unmarshalling,
-			// marshal out result.
-			System.out.println("");
-			System.out.println("Still able to marshal invalid document");
+			// create a Marshaller and marshal to a file
 			Marshaller m = jc.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			m.marshal(poe, System.out);
-		} catch (UnmarshalException ue) {
-			// The JAXB specification does not mandate how the JAXB provider
-			// must behave when attempting to unmarshal invalid XML data. In
-			// those cases, the JAXB provider is allowed to terminate the
-			// call to unmarshal with an UnmarshalException.
-			System.out.println("Caught UnmarshalException");
+
 		} catch (JAXBException je) {
 			je.printStackTrace();
 		}
