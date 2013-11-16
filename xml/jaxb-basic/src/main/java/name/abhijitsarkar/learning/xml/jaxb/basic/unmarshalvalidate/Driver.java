@@ -89,8 +89,6 @@ public class Driver {
 				se.printStackTrace();
 			}
 
-			// unmarshal an invalid po instance document into a tree of Java
-			// content objects composed of classes from the primer.po package.
 			System.out
 					.println("NOTE: This sample is working correctly if you see validation errors!!");
 			Object poe = u.unmarshal(Driver.class

@@ -62,16 +62,12 @@ public class Driver {
 
 	public static void main(String[] args) {
 		try {
-			// create a JAXBContext capable of handling classes generated into
-			// the primer.po package
 			JAXBContext jc = JAXBContext.newInstance(ObjectFactory.class
 					.getPackage().getName());
 
 			// create an Unmarshaller
 			Unmarshaller u = jc.createUnmarshaller();
 
-			// unmarshal a po instance document into a tree of Java content
-			// objects composed of classes from the primer.myPo package.
 			StreamSource src = new StreamSource(
 					Driver.class.getResourceAsStream("/po.xml"));
 			JAXBElement<POType> poe = u.unmarshal(src, POType.class);
