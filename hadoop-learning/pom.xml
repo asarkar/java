@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>name.abhijitsarkar.learning</groupId>
+    <groupId>name.abhijitsarkar.hadoop</groupId>
     <artifactId>hadoop-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>

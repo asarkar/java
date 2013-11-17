@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>name.abhijitsarkar.learning.xml.jaxb</groupId>
+    <groupId>name.abhijitsarkar.xml.jaxb</groupId>
     <artifactId>jaxb-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
@@ -50,7 +50,7 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
-                  <outputDirectory>src/main/resources/name/abhijitsarkar/learning/xml/jaxb/java2schema/createmarshal/generated</outputDirectory>
+                  <outputDirectory>src/main/resources/name/abhijitsarkar/xml/jaxb/java2schema/createmarshal/generated</outputDirectory>
                   <includes>
                     <include>**/cardfile/*.java</include>
                   </includes>
@@ -58,7 +58,7 @@
                   <transformSchema>
                     <schemas>
                       <schema>
-                        <uri>http://abhijitsarkar.name/learning/xml/jaxb/java2schema/create-marshal</uri>
+                        <uri>http://abhijitsarkar.name/xml/jaxb/java2schema/create-marshal</uri>
                         <toPrefix>cm</toPrefix>
                         <toFile>create-marshal.xsd</toFile>
                       </schema>
@@ -73,7 +73,7 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
-                  <outputDirectory>src/main/resources/name/abhijitsarkar/learning/xml/jaxb/java2schema/xmladapter/generated</outputDirectory>
+                  <outputDirectory>src/main/resources/name/abhijitsarkar/xml/jaxb/java2schema/xmladapter/generated</outputDirectory>
                   <includes>
                     <include>**/shoppingcart/*.java</include>
                   </includes>
@@ -81,7 +81,7 @@
                   <transformSchema>
                     <schemas>
                       <schema>
-                        <uri>http://abhijitsarkar.name/learning/xml/jaxb/java2schema/xml-adapter</uri>
+                        <uri>http://abhijitsarkar.name/xml/jaxb/java2schema/xml-adapter</uri>
                         <toPrefix>xa</toPrefix>
                         <toFile>xml-adapter.xsd</toFile>
                       </schema>
@@ -96,7 +96,7 @@
                 </goals>
                 <phase>generate-sources</phase>
                 <configuration>
-                  <outputDirectory>src/main/resources/name/abhijitsarkar/learning/xml/jaxb/java2schema/xmlschematype/generated</outputDirectory>
+                  <outputDirectory>src/main/resources/name/abhijitsarkar/xml/jaxb/java2schema/xmlschematype/generated</outputDirectory>
                   <includes>
                     <include>**/address/*.java</include>
                   </includes>
@@ -104,7 +104,7 @@
                   <transformSchema>
                     <schemas>
                       <schema>
-                        <uri>http://abhijitsarkar.name/learning/xml/jaxb/java2schema/xml-schema-type</uri>
+                        <uri>http://abhijitsarkar.name/xml/jaxb/java2schema/xml-schema-type</uri>
                         <toPrefix>xst</toPrefix>
                         <toFile>xml-schema-type.xsd</toFile>
                       </schema>

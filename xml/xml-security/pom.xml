@@ -8,7 +8,7 @@
     <version>1.0</version>
   </parent>
 
-  <groupId>name.abhijitsarkar.learning.webservices</groupId>
+  <groupId>name.abhijitsarkar.xml.security</groupId>
   <artifactId>xml-security</artifactId>
   <packaging>jar</packaging>
 
@@ -23,7 +23,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

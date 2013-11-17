@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="output" path="bin"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-core/4.0.0/source/8baf36aa03aa290f89e43c8a8ffb2297321c609b/lucene-core-4.0.0-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-core/4.0.0/jar/90e70d3763fbf2c52445f827e4e2ebd3615bba60/lucene-core-4.0.0.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-analyzers-common/4.0.0/source/7b6da36c85ac2660aba42da59a369d2527841364/lucene-analyzers-common-4.0.0-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-analyzers-common/4.0.0/jar/ad0e8663f9ebc4be0cf3d3af2fe3974a2bf2f7a6/lucene-analyzers-common-4.0.0.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-queryparser/4.0.0/source/a715d65c436bcd3875bdadaebde83f7a5e6c92c1/lucene-queryparser-4.0.0-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-queryparser/4.0.0/jar/35a2c05a0fd75f750b62b2c32cea5cf11a2f0581/lucene-queryparser-4.0.0.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/commons-cli/commons-cli/1.2/source/6c5459816530a1962ac18cd315cc775b1b384329/commons-cli-1.2-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/commons-cli/commons-cli/1.2/jar/2bf96b7aa8b611c177d329452af1dc933e14501c/commons-cli-1.2.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/junit/junit/4.11/source/28e0ad201304e4a4abf999ca0570b7cffc352c3c/junit-4.11-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/junit/junit/4.11/jar/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-queries/4.0.0/source/b145b76760c8af246d439a4d7ce380854cf4581c/lucene-queries-4.0.0-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-queries/4.0.0/jar/532330f2d71bf6f95af902b8e9eb646499689d45/lucene-queries-4.0.0.jar" exported="true"/>
+	<classpathentry kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/jakarta-regexp/jakarta-regexp/1.4/jar/ea514a179ac1dd7e81c7e6594468b9b9910d298/jakarta-regexp-1.4.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-sandbox/4.0.0/source/33768ba22724fd1930fa826a291304a0ea8e344f/lucene-sandbox-4.0.0-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.apache.lucene/lucene-sandbox/4.0.0/jar/a0d214e521ee0e4cc3a76bbe8c16d529586af4bf/lucene-sandbox-4.0.0.jar" exported="true"/>
+	<classpathentry sourcepath="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.hamcrest/hamcrest-core/1.3/source/1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b/hamcrest-core-1.3-sources.jar" kind="lib" path="/Users/Abhijit/.gradle/caches/artifacts-23/filestore/org.hamcrest/hamcrest-core/1.3/jar/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" exported="true"/>
 </classpath>

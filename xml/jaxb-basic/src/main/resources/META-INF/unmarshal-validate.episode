@@ -10,16 +10,16 @@ Generated on: 2013.11.12 at 09:10:05 PM EST
   -->
   <jaxb:bindings scd="x-schema::">
     <jaxb:schemaBindings map="false">
-      <jaxb:package name="name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate.generated"/>
+      <jaxb:package name="name.abhijitsarkar.xml.jaxb.basic.unmarshalvalidate.generated"/>
     </jaxb:schemaBindings>
     <jaxb:bindings scd="~Items">
-      <jaxb:class ref="name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate.generated.Items"/>
+      <jaxb:class ref="name.abhijitsarkar.xml.jaxb.basic.unmarshalvalidate.generated.Items"/>
     </jaxb:bindings>
     <jaxb:bindings scd="~PurchaseOrderType">
-      <jaxb:class ref="name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate.generated.PurchaseOrderType"/>
+      <jaxb:class ref="name.abhijitsarkar.xml.jaxb.basic.unmarshalvalidate.generated.PurchaseOrderType"/>
     </jaxb:bindings>
     <jaxb:bindings scd="~USAddress">
-      <jaxb:class ref="name.abhijitsarkar.learning.xml.jaxb.basic.unmarshalvalidate.generated.USAddress"/>
+      <jaxb:class ref="name.abhijitsarkar.xml.jaxb.basic.unmarshalvalidate.generated.USAddress"/>
     </jaxb:bindings>
   </jaxb:bindings>
 </jaxb:bindings>

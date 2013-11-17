@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 
-group = 'name.abhijitsarkar.learning.lucene'
+group = 'name.abhijitsarkar.lucene'
 version = '1.0-SNAPSHOT'
 archivesBaseName = 'lucene-common'
 

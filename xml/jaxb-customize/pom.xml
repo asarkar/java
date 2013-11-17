@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>name.abhijitsarkar.learning.xml.jaxb</groupId>
+    <groupId>name.abhijitsarkar.xml.jaxb</groupId>
     <artifactId>jaxb-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
@@ -35,7 +35,7 @@
                 <phase>generate-sources</phase>
                 <configuration>
                   <episodeFile>${project.basedir}/src/main/resources/META-INF/customize-inline.episode</episodeFile>
-                  <generatePackage>name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated</generatePackage>
+                  <generatePackage>name.abhijitsarkar.xml.jaxb.customize.inline.generated</generatePackage>
                   <schemaDirectory>src/main/resources/customize-inline</schemaDirectory>
                 </configuration>
               </execution>
@@ -47,7 +47,7 @@
                 <phase>generate-sources</phase>
                 <configuration>
                   <episodeFile>${project.basedir}/src/main/resources/META-INF/customize-external.episode</episodeFile>
-                  <generatePackage>name.abhijitsarkar.learning.xml.jaxb.customize.external.generated</generatePackage>
+                  <generatePackage>name.abhijitsarkar.xml.jaxb.customize.external.generated</generatePackage>
                   <schemaDirectory>src/main/resources/customize-external</schemaDirectory>
                 </configuration>
               </execution>

@@ -7,8 +7,8 @@
       enableFailFastCheck="false" generateIsSetMethod="false" underscoreBinding="asCharInWord" />
     <jxb:schemaBindings>
       <jxb:package
-        name="name.abhijitsarkar.learning.xml.jaxb.customize.external.generated">
-        <jxb:javadoc><![CDATA[<body>Package level documentation for generated package name.abhijitsarkar.learning.xml.jaxb.customize.external.generated.</body>]]>
+        name="name.abhijitsarkar.xml.jaxb.customize.external.generated">
+        <jxb:javadoc><![CDATA[<body>Package level documentation for generated package name.abhijitsarkar.xml.jaxb.customize.external.generated.</body>]]>
         </jxb:javadoc>
       </jxb:package>
       <jxb:nameXmlTransform>

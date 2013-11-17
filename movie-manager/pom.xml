@@ -6,7 +6,6 @@
 		<artifactId>maven-parent</artifactId>
 		<groupId>name.abhijitsarkar</groupId>
 		<version>1.0</version>
-		<relativePath>../maven-parent</relativePath>
 	</parent>
 	<artifactId>movie-manager</artifactId>
 	<version>3.0</version>

@@ -10,19 +10,19 @@ Generated on: 2013.11.12 at 09:10:30 PM EST
   -->
   <jaxb:bindings scd="x-schema::">
     <jaxb:schemaBindings map="false">
-      <jaxb:package name="name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated"/>
+      <jaxb:package name="name.abhijitsarkar.xml.jaxb.customize.inline.generated"/>
     </jaxb:schemaBindings>
     <jaxb:bindings scd="~Items">
-      <jaxb:class ref="name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated.Items"/>
+      <jaxb:class ref="name.abhijitsarkar.xml.jaxb.customize.inline.generated.Items"/>
     </jaxb:bindings>
     <jaxb:bindings scd="~PurchaseOrderType">
-      <jaxb:class ref="name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated.POType"/>
+      <jaxb:class ref="name.abhijitsarkar.xml.jaxb.customize.inline.generated.POType"/>
     </jaxb:bindings>
     <jaxb:bindings scd="~USAddress">
-      <jaxb:class ref="name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated.USAddress"/>
+      <jaxb:class ref="name.abhijitsarkar.xml.jaxb.customize.inline.generated.USAddress"/>
     </jaxb:bindings>
     <jaxb:bindings scd="~USState">
-      <jaxb:typesafeEnumClass ref="name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated.USState"/>
+      <jaxb:typesafeEnumClass ref="name.abhijitsarkar.xml.jaxb.customize.inline.generated.USState"/>
     </jaxb:bindings>
   </jaxb:bindings>
 </jaxb:bindings>

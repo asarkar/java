@@ -85,9 +85,9 @@
               generateIsSetMethod="false"
               underscoreBinding="asCharInWord"/>
       <jxb:schemaBindings>
-        <jxb:package name="name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated">
+        <jxb:package name="name.abhijitsarkar.xml.jaxb.customize.inline.generated">
           <jxb:javadoc>
-            <![CDATA[<body> Package level documentation for generated package name.abhijitsarkar.learning.xml.jaxb.customize.inline.generated.</body>]]>
+            <![CDATA[<body> Package level documentation for generated package name.abhijitsarkar.xml.jaxb.customize.inline.generated.</body>]]>
           </jxb:javadoc>
         </jxb:package>
         <jxb:nameXmlTransform>
@@ -173,8 +173,8 @@
                 <xsd:annotation>
                   <xsd:appinfo>
                     <jxb:javaType name="short"
-                                  parseMethod="name.abhijitsarkar.learning.xml.jaxb.customize.inline.MyDatatypeConverter.parseIntegerToShort"
-                                  printMethod="name.abhijitsarkar.learning.xml.jaxb.customize.inline.MyDatatypeConverter.printShortToInteger"/>
+                                  parseMethod="name.abhijitsarkar.xml.jaxb.customize.inline.MyDatatypeConverter.parseIntegerToShort"
+                                  printMethod="name.abhijitsarkar.xml.jaxb.customize.inline.MyDatatypeConverter.printShortToInteger"/>
                   </xsd:appinfo>
                 </xsd:annotation>
                 <xsd:restriction base="xsd:positiveInteger">
@@ -247,8 +247,8 @@
       </xsd:documentation>
       <xsd:appinfo>
         <jxb:javaType name="int"
-                      parseMethod="name.abhijitsarkar.learning.xml.jaxb.customize.inline.MyDatatypeConverter.parseIntegerToInt"
-                      printMethod="name.abhijitsarkar.learning.xml.jaxb.customize.inline.MyDatatypeConverter.printIntToInteger"/>
+                      parseMethod="name.abhijitsarkar.xml.jaxb.customize.inline.MyDatatypeConverter.parseIntegerToInt"
+                      printMethod="name.abhijitsarkar.xml.jaxb.customize.inline.MyDatatypeConverter.printIntToInteger"/>
       </xsd:appinfo>
     </xsd:annotation>
     <xsd:restriction base="xsd:integer">
