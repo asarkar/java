@@ -20,7 +20,6 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import name.abhijitsarkar.xml.jaxp.MyErrorHandler;
-import name.abhijitsarkar.xml.jaxp.sax.MySAXParser;
 
 /*
  * This class uses the iterator Stax API
@@ -61,7 +60,7 @@ public class MyStAXParser {
 
 		SchemaFactory schemaFactory = SchemaFactory
 				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		URL schemaURL = MySAXParser.class.getResource("/po.xsd");
+		URL schemaURL = MyStAXParser.class.getResource("/po.xsd");
 		Schema schema = schemaFactory.newSchema(new File(schemaURL.toURI()));
 
 		Validator validator = schema.newValidator();
