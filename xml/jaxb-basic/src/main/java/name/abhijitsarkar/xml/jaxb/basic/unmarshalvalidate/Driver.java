@@ -51,6 +51,8 @@ import javax.xml.validation.SchemaFactory;
 
 import name.abhijitsarkar.xml.jaxb.basic.unmarshalvalidate.generated.ObjectFactory;
 
+import org.xml.sax.SAXException;
+
 public class Driver {
 
 	// This sample application demonstrates how to enable validation during
@@ -83,7 +85,7 @@ public class Driver {
 						return true;
 					}
 				});
-			} catch (org.xml.sax.SAXException se) {
+			} catch (SAXException se) {
 				System.out
 						.println("Unable to validate due to following error.");
 				se.printStackTrace();
