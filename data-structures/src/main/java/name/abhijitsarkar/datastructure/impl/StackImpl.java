@@ -29,14 +29,19 @@ public class StackImpl<E> implements Stack<E> {
 	public E pop() {
 		return stack.remove(0);
 	}
-	
+
 	@Override
 	public E peek() {
-		return stack.remove(0);
+		return stack.peek();
 	}
 
 	@Override
 	public boolean isEmpty() {
 		return stack.size() == 0;
+	}
+
+	@Override
+	public String toString() {
+		return "StackImpl [stack=" + stack + "]";
 	}
 }

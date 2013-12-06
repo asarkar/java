@@ -140,7 +140,7 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		return nodeToBeRemoved.getData();
 	}
-	
+
 	public E peek() {
 		return head.getSuccessor().getData();
 	}
@@ -210,5 +210,25 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 		}
 
 		return predecessor;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder buffer = new StringBuilder();
+
+		buffer.append("LinkedListImpl [");
+
+		for (Node<E> current = head.getSuccessor(); current != tail; current = current
+				.getSuccessor()) {
+			buffer.append(current.getData()).append(", ");
+		}
+
+		int len = buffer.length();
+
+		buffer.delete(len - 2, len);
+
+		buffer.append("]");
+
+		return buffer.toString();
 	}
 }

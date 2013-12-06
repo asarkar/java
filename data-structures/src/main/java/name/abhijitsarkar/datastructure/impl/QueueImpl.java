@@ -30,4 +30,9 @@ public class QueueImpl<E> implements Queue<E> {
 	public boolean isEmpty() {
 		return queue.size() == 0;
 	}
+
+	@Override
+	public String toString() {
+		return "QueueImpl [queue=" + queue + "]";
+	}
 }

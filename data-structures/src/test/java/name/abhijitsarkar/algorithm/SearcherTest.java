@@ -65,4 +65,24 @@ public class SearcherTest {
 		BinaryTreeNode<Integer> five = Searcher.breadthFirstSearch(binTree, 5);
 		Assert.assertTrue(five.isLeaf());
 	}
+
+	@Test
+	public void testDepthFirstSearch() {
+		for (int i = 1; i < 6; i++) {
+			Assert.assertNotNull(Searcher.depthFirstSearch(binTree, i));
+		}
+
+		Assert.assertNull(Searcher.depthFirstSearch(binTree, 10));
+
+		BinaryTreeNode<Integer> four = Searcher.depthFirstSearch(binTree, 4);
+
+		Assert.assertNotNull(four);
+		Assert.assertFalse(four.isLeaf());
+		Assert.assertNull(four.getLeftChild());
+		Assert.assertNotNull(four.getRightChild());
+		Assert.assertEquals(Integer.valueOf(5), four.getRightChild().getData());
+
+		BinaryTreeNode<Integer> five = Searcher.depthFirstSearch(binTree, 5);
+		Assert.assertTrue(five.isLeaf());
+	}
 }

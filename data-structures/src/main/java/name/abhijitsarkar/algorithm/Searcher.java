@@ -4,9 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import name.abhijitsarkar.datastructure.Queue;
+import name.abhijitsarkar.datastructure.Stack;
 import name.abhijitsarkar.datastructure.impl.BinarySearchTree;
 import name.abhijitsarkar.datastructure.impl.BinaryTreeNode;
 import name.abhijitsarkar.datastructure.impl.QueueImpl;
+import name.abhijitsarkar.datastructure.impl.StackImpl;
 
 public class Searcher {
 
@@ -36,7 +38,7 @@ public class Searcher {
 		Set<BinaryTreeNode<E>> visited = new HashSet<BinaryTreeNode<E>>();
 		Queue<BinaryTreeNode<E>> queue = new QueueImpl<BinaryTreeNode<E>>();
 
-		System.out.println("Visited: " + startNode.getData());
+		System.out.println("Visited: " + startNode);
 		visited.add(startNode);
 		queue.enqueue(startNode);
 
@@ -55,12 +57,12 @@ public class Searcher {
 			rightChild = node.getRightChild();
 
 			if (leftChild != null && !visited.contains(leftChild)) {
-				System.out.println("Visited: " + leftChild.getData());
+				System.out.println("Visited: " + leftChild);
 				visited.add(leftChild);
 				queue.enqueue(leftChild);
 			}
 			if (rightChild != null && !visited.contains(rightChild)) {
-				System.out.println("Visited: " + rightChild.getData());
+				System.out.println("Visited: " + rightChild);
 				visited.add(rightChild);
 				queue.enqueue(rightChild);
 			}
@@ -72,5 +74,77 @@ public class Searcher {
 	public static <E extends Comparable<E>> BinaryTreeNode<E> breadthFirstSearch(
 			BinarySearchTree<E> binTree, E value) {
 		return breadthFirstSearch(binTree, binTree.getRoot(), value);
+	}
+
+	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(
+			BinarySearchTree<E> binTree, BinaryTreeNode<E> startNode, E value) {
+		System.out.println("Searching for: " + value);
+
+		Stack<BinaryTreeNode<E>> stack = new StackImpl<BinaryTreeNode<E>>();
+		Set<BinaryTreeNode<E>> visited = new HashSet<BinaryTreeNode<E>>();
+
+		stack.push(startNode);
+		visited.add(startNode);
+
+		BinaryTreeNode<E> leftChild = null;
+		BinaryTreeNode<E> rightChild = null;
+		BinaryTreeNode<E> currentNode = null;
+
+		while (!stack.isEmpty()) {
+			currentNode = stack.pop();
+			visited.add(currentNode);
+			System.out.println("Visited: " + visited);
+
+			if (currentNode.getData().equals(value)) {
+				return currentNode;
+			}
+
+			rightChild = currentNode.getRightChild();
+
+			if (rightChild != null && !visited.contains(rightChild)) {
+				stack.push(rightChild);
+			}
+
+			leftChild = currentNode.getLeftChild();
+
+			if (leftChild != null && !visited.contains(leftChild)) {
+				stack.push(leftChild);
+			}
+		}
+
+		return null;
+	}
+
+	public static <E extends Comparable<E>> BinaryTreeNode<E> recursiveDFS(
+			BinarySearchTree<E> binTree, BinaryTreeNode<E> startNode, E value,
+			Set<BinaryTreeNode<E>> visited) {
+		BinaryTreeNode<E> leftChild = null;
+		BinaryTreeNode<E> rightChild = null;
+
+		visited.add(startNode);
+		System.out.println("Visited: " + visited);
+
+		if (startNode.getData().equals(value)) {
+			return startNode;
+		}
+
+		rightChild = startNode.getRightChild();
+
+		if (rightChild != null && !visited.contains(rightChild)) {
+			recursiveDFS(binTree, rightChild, value, visited);
+		}
+
+		leftChild = startNode.getLeftChild();
+
+		if (leftChild != null && !visited.contains(leftChild)) {
+			recursiveDFS(binTree, leftChild, value, visited);
+		}
+
+		return null;
+	}
+
+	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(
+			BinarySearchTree<E> binTree, E value) {
+		return depthFirstSearch(binTree, binTree.getRoot(), value);
 	}
 }
