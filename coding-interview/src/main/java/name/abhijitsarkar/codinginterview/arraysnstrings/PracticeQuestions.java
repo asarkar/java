@@ -6,38 +6,73 @@ import java.util.Map;
 
 public class PracticeQuestions {
 	/**
-	 * Q1.1: Determines if a string has all unique characters. Assumes that each
-	 * character in the string can be encoded in ASCII. Also assumes that case
-	 * doesn't matter.
+	 * Q1.1: Determines if a string has all unique characters. Assumes character
+	 * set ASCII.
 	 **/
-	public static boolean isUnique(String str) {
-		// Lower case alphabets start at 97
-		final short IDX_SHIFT = 97;
-		short[] charCount = new short[26];
+	public static boolean isUnique(String s) {
+		/*
+		 * Bit vector; note that an int in Java is 32-bit. ASCII has 128
+		 * characters but first 32 are reserved for control characters. Thus, we
+		 * are left with 96 characters, needing 3 int to store the status of
+		 * them all.
+		 * 
+		 * This can also be achieved with a hash table but we'd need 96 buckets,
+		 * most of which are going to be unused for a string. Bit operations
+		 * save space and are faster.
+		 */
+		int[] arr = new int[3];
 
-		char[] charArr = str.toCharArray();
+		int len = s.length();
+		int ch = -1;
+		final int numASCIICtrlChars = 32;
 
-		short idx = 0;
+		for (int i = 0; i < len; i++) {
+			/*
+			 * ASCII has 128 characters but first 32 are reserved for control
+			 * characters.
+			 */
+			ch = s.charAt(i) - numASCIICtrlChars;
 
-		for (char c : charArr) {
-			c = Character.toLowerCase(c);
+			/*
+			 * We need a 32-bit bitmask. Which bit to set is determined by the
+			 * result of (ch % 32). So if ch = 97 ('a'), (97 - 32) % 32 = 1,
+			 * meaning the least significant bit needs to be set. If ch = 103
+			 * ('g'), (103 - 32) % 32 = 7, 7th bit needs to be set. The result
+			 * of the modulo operation can go from 0 to 31. Since each bit
+			 * represents a power of 2, left shift operator (multiplication by
+			 * 2) should do the trick.
+			 * 
+			 * The least significant 5 bits of the result of the modulo 32
+			 * operation are the same as the result of the bitwise 'and'
+			 * operation below.
+			 */
+			int bitmask = 1 << (ch & 0x1f) - 1;
 
-			// Difference of 2 short produces int
-			idx = (short) (((short) c) - IDX_SHIFT);
+			/*
+			 * The index in the bit vector is given by ch / 32, or right shift
+			 * 5. We then do a bitwise 'and' to isolate the bit corresponding to
+			 * 'ch' within the int.
+			 */
+			int bitVectorIdx = ch >> 5;
 
-			if (charCount[idx] > 0) {
+			ch = (arr[bitVectorIdx] & bitmask);
+
+			if (ch == 1) {
 				return false;
 			}
 
-			charCount[idx]++;
+			/*
+			 * Set the corresponding bit keeping previously set bits intact
+			 */
+			arr[bitVectorIdx] |= bitmask;
 		}
 
 		return true;
 	}
 
 	/**
-	 * Q1.3: Checks if one string is a permutation of the other. Assumes that
-	 * each character in the strings can be encoded in ASCII.
+	 * Q1.3: Checks if one string is a permutation of the other. Assumes
+	 * character set ASCII.
 	 * 
 	 * @param s1
 	 *            String to check against for permutation

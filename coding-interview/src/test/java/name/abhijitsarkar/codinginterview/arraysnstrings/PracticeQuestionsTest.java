@@ -9,7 +9,7 @@ public class PracticeQuestionsTest {
 	@Test
 	public void testIsUnique() {
 		Assert.assertTrue(PracticeQuestions.isUnique("abc"));
-		Assert.assertFalse(PracticeQuestions.isUnique("abA"));
+		Assert.assertFalse(PracticeQuestions.isUnique("aba"));
 	}
 
 	@Test
