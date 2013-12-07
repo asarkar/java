@@ -1,54 +1,29 @@
-package name.abhijitsarkar.codinginterview.linkedlists;
+package name.abhijitsarkar.codinginterview.datastructure.linkedlists;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
+import name.abhijitsarkar.codinginterview.datastructure.impl.LinkedListNode;
 
 public class PracticeQuestions {
 	/**
 	 * Q2.1: Remove dupes from an unsorted linked list
 	 */
 	public static <E> void removeDupes(LinkedList<E> linkedList) {
-		List<Integer> dupeIndices = new ArrayList<Integer>();
+		Set<E> dupes = new HashSet<E>();
 
-		for (E element : linkedList) {
-			int idx = linkedList.indexOf(element);
-			int lastIdx = linkedList.lastIndexOf(element);
+		LinkedListNode<E> current = linkedList.head().getSuccessor();
+		E data = null;
 
-			if (dupeIndices.contains(lastIdx)) {
-				continue;
-			}
+		for (int idx = 0; idx < linkedList.size(); idx++) {
+			data = current.getData();
+			current = current.getSuccessor();
 
-			while (lastIdx > idx) {
-				dupeIndices.add(lastIdx);
-
-				lastIdx = linkedList.indexOf(element);
-			}
-		}
-
-		for (int dupeIdx : dupeIndices) {
-			linkedList.remove(dupeIdx);
-		}
-	}
-
-	/**
-	 * A variation of Q2.1: Remove dupes from an unsorted linked list without
-	 * using a temporary buffer
-	 */
-	public static <E> void removeDupesWithoutUsingBuffer(
-			LinkedList<E> linkedList) {
-		E element = null;
-
-		for (int i = 0; i < linkedList.size(); i++) {
-			element = linkedList.get(i);
-
-			int idx = linkedList.indexOf(element);
-			int lastIdx = linkedList.lastIndexOf(element);
-
-			while (lastIdx > idx) {
-				linkedList.remove(lastIdx);
-
-				lastIdx = linkedList.indexOf(element);
+			if (dupes.contains(data)) {
+				linkedList.remove(idx);
+			} else {
+				dupes.add(data);
 			}
 		}
 	}
@@ -89,11 +64,11 @@ public class PracticeQuestions {
 		swap(linkedList, storeIdx, lastIdx);
 	}
 
-	private static <E> void swap(LinkedList<E> linkedList, int idx, int storeIdx) {
-		E element = linkedList.get(idx);
+	private static <E> void swap(LinkedList<E> linkedList, int idx1, int idx2) {
+		E element = linkedList.get(idx1);
 
-		linkedList.set(idx, linkedList.get(storeIdx));
-		linkedList.set(storeIdx, element);
+		linkedList.set(idx1, linkedList.get(idx2));
+		linkedList.set(idx2, element);
 	}
 
 	/**

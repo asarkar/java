@@ -1,38 +1,22 @@
 package name.abhijitsarkar.codinginterview.datastructure.impl;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
 
 public class LinkedListImpl<E> implements LinkedList<E> {
 	private int size = 0;
 
-	private class Node<T> {
-		private T data;
-		private Node<T> successor;
-
-		private Node() {
-		}
-
-		private Node(T data, Node<T> successor) {
-			this.data = data;
-			this.successor = successor;
-		}
-
-		private boolean isTail() {
-			return (this == tail);
-		}
-	}
-
-	private Node<E> last = null;
+	private LinkedListNode<E> last = null;
 
 	// Sentinels
-	private Node<E> head = null;
-	private Node<E> tail = null;
+	private LinkedListNode<E> head = null;
+	private LinkedListNode<E> tail = null;
 
 	public LinkedListImpl() {
-		tail = new Node<E>();
-		head = new Node<E>();
+		tail = new LinkedListNode<E>();
+		head = new LinkedListNode<E>();
 	}
 
 	public LinkedListImpl(Collection<E> elements) {
@@ -42,12 +26,6 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * name.abhijitsarkar.codinginterview.datastructure.LinkedList#add(java.
-	 * lang.Object)
-	 * 
 	 * Time complexity is O(1)
 	 */
 	public boolean add(E e) {
@@ -57,11 +35,12 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 	public boolean add(int index, E e) {
 		validateIndex(index);
 
-		Node<E> predecessor = getPredecessor(index);
+		LinkedListNode<E> predecessor = getPredecessor(index);
 
-		Node<E> newNode = new Node<E>(e, predecessor.successor);
+		LinkedListNode<E> newNode = new LinkedListNode<E>(e,
+				predecessor.getSuccessor());
 
-		predecessor.successor = newNode;
+		predecessor.setSuccessor(newNode);
 
 		if (index == size) {
 			adjustLast(newNode);
@@ -72,21 +51,21 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 		return true;
 	}
 
-	private void adjustLast(Node<E> current) {
+	private void adjustLast(LinkedListNode<E> current) {
 		last = current;
-		last.successor = tail;
+		last.setSuccessor(tail);
 	}
 
 	public boolean addAll(Collection<E> elements) {
-		Node<E> predecessor = head;
-		Node<E> current = null;
+		LinkedListNode<E> predecessor = head;
+		LinkedListNode<E> current = null;
 
 		for (E anElement : elements) {
-			current = new Node<E>();
-			current.data = anElement;
-			current.successor = null;
+			current = new LinkedListNode<E>();
+			current.setData(anElement);
+			current.setSuccessor(null);
 
-			predecessor.successor = current;
+			predecessor.setSuccessor(current);
 
 			predecessor = current;
 
@@ -99,10 +78,6 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see name.abhijitsarkar.codinginterview.datastructure.LinkedList#remove()
-	 * 
 	 * Time complexity is O(1)
 	 */
 	public E remove() {
@@ -112,11 +87,11 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 	public E remove(int index) {
 		validateIndex(index);
 
-		Node<E> predecessor = getPredecessor(index);
+		LinkedListNode<E> predecessor = getPredecessor(index);
 
-		Node<E> nodeToBeRemoved = predecessor.successor;
+		LinkedListNode<E> nodeToBeRemoved = predecessor.getSuccessor();
 
-		predecessor.successor = nodeToBeRemoved.successor;
+		predecessor.setSuccessor(nodeToBeRemoved.getSuccessor());
 
 		if (index == size) {
 			adjustLast(predecessor);
@@ -124,11 +99,20 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		size--;
 
-		return nodeToBeRemoved.data;
+		return nodeToBeRemoved.getData();
+	}
+
+	private final void checkNotEmpty() {
+		if (size == 0) {
+			throw new NoSuchElementException(
+					"Can't remove element from an empty list.");
+		}
 	}
 
 	public E peek() {
-		return head.successor.data;
+		checkNotEmpty();
+
+		return head.getSuccessor().getData();
 	}
 
 	public int size() {
@@ -140,16 +124,16 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 			return;
 		}
 
-		Node<E> predecessor = head;
-		Node<E> current = head.successor;
-		Node<E> successor = null;
+		LinkedListNode<E> predecessor = head;
+		LinkedListNode<E> current = head.getSuccessor();
+		LinkedListNode<E> successor = null;
 
-		while (!current.isTail()) {
+		while (current != this.tail) {
 			// Save the successor
-			successor = current.successor;
+			successor = current.getSuccessor();
 
 			// Reverse the successor
-			current.successor = predecessor;
+			current.setSuccessor(predecessor);
 
 			// Increment
 			predecessor = current;
@@ -159,12 +143,73 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		// Head is now tail
 		tail = head;
-		tail.successor = null;
+		tail.setSuccessor(null);
 
 		// Tail is now head; at the end current is tail and predecessor is the
 		// first element
 		head = current;
-		head.successor = predecessor;
+		head.setSuccessor(predecessor);
+	}
+
+	public LinkedListNode<E> head() {
+		return this.head;
+	}
+
+	public LinkedListNode<E> tail() {
+		return this.tail;
+	}
+
+	@Override
+	public E get(int index) {
+		return nodeAt(index).getData();
+	}
+
+	@Override
+	public void set(int index, E element) {
+		nodeAt(index).setData(element);
+	}
+
+	private final LinkedListNode<E> nodeAt(int index) {
+		validateIndex(index);
+
+		LinkedListNode<E> node = head.getSuccessor();
+
+		for (int idx = 0; idx < index; idx++, node = node.getSuccessor())
+			;
+
+		return node;
+	}
+
+	@Override
+	public int indexOf(E element) {
+		checkNotEmpty();
+
+		LinkedListNode<E> node = head.getSuccessor();
+
+		for (int idx = 0; idx < size; idx++, node = node.getSuccessor()) {
+			if (element.equals(node.getData())) {
+				return idx;
+			}
+		}
+
+		return -1;
+	}
+
+	@Override
+	public int lastIndexOf(E element) {
+		checkNotEmpty();
+
+		int lastIdx = -1;
+
+		LinkedListNode<E> node = head.getSuccessor();
+
+		for (int idx = 0; idx < size; idx++, node = node.getSuccessor()) {
+			if (element.equals(node.getData())) {
+				lastIdx = idx;
+			}
+		}
+
+		return lastIdx;
 	}
 
 	private final void validateIndex(int index) {
@@ -178,7 +223,7 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 	 * If index = 0 or index = size, time complexity is O(1). Else in the worst
 	 * case, when index = (size - 1), it could be O(n).
 	 */
-	protected Node<E> getPredecessor(int index) {
+	protected LinkedListNode<E> getPredecessor(int index) {
 		validateIndex(index);
 
 		if (index == 0) {
@@ -187,12 +232,12 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 			return last;
 		}
 
-		Node<E> current = head;
-		Node<E> predecessor = current;
+		LinkedListNode<E> predecessor = head;
+		LinkedListNode<E> current = predecessor.getSuccessor();
 
 		while (index-- > 0) {
 			predecessor = current;
-			current = current.successor;
+			current = predecessor.getSuccessor();
 		}
 
 		return predecessor;
@@ -204,8 +249,9 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		buffer.append("LinkedListImpl [");
 
-		for (Node<E> current = head.successor; current != tail; current = current.successor) {
-			buffer.append(current.data).append(", ");
+		for (LinkedListNode<E> current = head.getSuccessor(); current != tail; current = current
+				.getSuccessor()) {
+			buffer.append(current.getData()).append(", ");
 		}
 
 		int len = buffer.length();

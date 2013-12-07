@@ -1,8 +1,8 @@
 package name.abhijitsarkar.codinginterview.datastructure;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
-import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
 import name.abhijitsarkar.codinginterview.datastructure.impl.LinkedListImpl;
 
 import org.junit.Assert;
@@ -14,7 +14,7 @@ public class LinkedListImplTest {
 
 	@Before
 	public void setUp() {
-		Integer[] elements = new Integer[] { 3, 2, 1 };
+		Integer[] elements = new Integer[] { 1, 2, 1 };
 		linkedList = new LinkedListImpl<Integer>(Arrays.asList(elements));
 	}
 
@@ -23,28 +23,21 @@ public class LinkedListImplTest {
 		Assert.assertEquals(3, linkedList.size());
 		Assert.assertTrue(linkedList.add(4));
 		Assert.assertEquals(4, linkedList.size());
-		Assert.assertTrue(linkedList.add(0));
+		Assert.assertTrue(linkedList.add(linkedList.size(), 0));
 		Assert.assertEquals(5, linkedList.size());
+		Assert.assertEquals(Integer.valueOf(4), linkedList.remove(3));
+		Assert.assertEquals(Integer.valueOf(1), linkedList.remove());
 	}
 
 	@Test
 	public void testRemove() {
 		Assert.assertEquals(3, linkedList.size());
-		Assert.assertEquals(Integer.valueOf(3), linkedList.remove());
+		Assert.assertEquals(Integer.valueOf(1), linkedList.remove());
 		Assert.assertEquals(2, linkedList.size());
-		Assert.assertEquals(Integer.valueOf(2), linkedList.remove());
+		Assert.assertEquals(Integer.valueOf(2), linkedList.remove(0));
 		Assert.assertEquals(1, linkedList.size());
 		Assert.assertEquals(Integer.valueOf(1), linkedList.remove());
 		Assert.assertEquals(0, linkedList.size());
-	}
-
-	@Test
-	public void testAddAndRemove() {
-		Assert.assertEquals(3, linkedList.size());
-		Assert.assertTrue(linkedList.add(0, 4));
-		Assert.assertEquals(4, linkedList.size());
-		Assert.assertEquals(Integer.valueOf(4), linkedList.remove());
-		Assert.assertEquals(3, linkedList.size());
 	}
 
 	@Test
@@ -56,12 +49,23 @@ public class LinkedListImplTest {
 		Assert.assertEquals(2, linkedList.size());
 		Assert.assertEquals(Integer.valueOf(2), linkedList.remove());
 		Assert.assertEquals(1, linkedList.size());
-		Assert.assertEquals(Integer.valueOf(3), linkedList.remove());
+		Assert.assertEquals(Integer.valueOf(1), linkedList.remove());
 		Assert.assertEquals(0, linkedList.size());
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testInvalidIndexOperation() {
 		linkedList.add(10, 1);
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testAttemptRemoveWhenEmpty() {
+		int size = linkedList.size();
+
+		while (size-- > 0) {
+			linkedList.remove();
+		}
+
+		linkedList.remove();
 	}
 }

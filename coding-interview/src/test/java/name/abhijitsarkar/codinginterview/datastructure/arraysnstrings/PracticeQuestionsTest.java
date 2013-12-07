@@ -1,6 +1,6 @@
-package name.abhijitsarkar.codinginterview.arraysnstrings;
+package name.abhijitsarkar.codinginterview.datastructure.arraysnstrings;
 
-import name.abhijitsarkar.codinginterview.arraysnstrings.PracticeQuestions;
+import name.abhijitsarkar.codinginterview.datastructure.arraysnstrings.PracticeQuestions;
 
 import org.junit.Assert;
 import org.junit.Test;
