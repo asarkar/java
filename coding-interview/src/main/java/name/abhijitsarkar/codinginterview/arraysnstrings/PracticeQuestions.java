@@ -1,4 +1,4 @@
-package name.abhijitsarkar.codinginterview.datastructure.arraysnstrings;
+package name.abhijitsarkar.codinginterview.arraysnstrings;
 
 import java.util.Arrays;
 import java.util.HashMap;

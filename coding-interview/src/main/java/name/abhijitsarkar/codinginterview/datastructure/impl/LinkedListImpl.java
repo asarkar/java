@@ -19,22 +19,6 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 			this.successor = successor;
 		}
 
-		private T getData() {
-			return this.data;
-		}
-
-		private void setData(T data) {
-			this.data = data;
-		}
-
-		private Node<T> getSuccessor() {
-			return successor;
-		}
-
-		private void setSuccessor(Node<T> successor) {
-			this.successor = successor;
-		}
-
 		private boolean isTail() {
 			return (this == tail);
 		}
@@ -60,7 +44,9 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see name.abhijitsarkar.codinginterview.datastructure.LinkedList#add(java.lang.Object)
+	 * @see
+	 * name.abhijitsarkar.codinginterview.datastructure.LinkedList#add(java.
+	 * lang.Object)
 	 * 
 	 * Time complexity is O(1)
 	 */
@@ -73,9 +59,9 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		Node<E> predecessor = getPredecessor(index);
 
-		Node<E> newNode = new Node<E>(e, predecessor.getSuccessor());
+		Node<E> newNode = new Node<E>(e, predecessor.successor);
 
-		predecessor.setSuccessor(newNode);
+		predecessor.successor = newNode;
 
 		if (index == size) {
 			adjustLast(newNode);
@@ -88,7 +74,7 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 	private void adjustLast(Node<E> current) {
 		last = current;
-		last.setSuccessor(tail);
+		last.successor = tail;
 	}
 
 	public boolean addAll(Collection<E> elements) {
@@ -97,10 +83,10 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		for (E anElement : elements) {
 			current = new Node<E>();
-			current.setData(anElement);
-			current.setSuccessor(null);
+			current.data = anElement;
+			current.successor = null;
 
-			predecessor.setSuccessor(current);
+			predecessor.successor = current;
 
 			predecessor = current;
 
@@ -128,9 +114,9 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		Node<E> predecessor = getPredecessor(index);
 
-		Node<E> nodeToBeRemoved = predecessor.getSuccessor();
+		Node<E> nodeToBeRemoved = predecessor.successor;
 
-		predecessor.setSuccessor(nodeToBeRemoved.getSuccessor());
+		predecessor.successor = nodeToBeRemoved.successor;
 
 		if (index == size) {
 			adjustLast(predecessor);
@@ -138,11 +124,11 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		size--;
 
-		return nodeToBeRemoved.getData();
+		return nodeToBeRemoved.data;
 	}
 
 	public E peek() {
-		return head.getSuccessor().getData();
+		return head.successor.data;
 	}
 
 	public int size() {
@@ -155,15 +141,15 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 		}
 
 		Node<E> predecessor = head;
-		Node<E> current = head.getSuccessor();
+		Node<E> current = head.successor;
 		Node<E> successor = null;
 
 		while (!current.isTail()) {
 			// Save the successor
-			successor = current.getSuccessor();
+			successor = current.successor;
 
 			// Reverse the successor
-			current.setSuccessor(predecessor);
+			current.successor = predecessor;
 
 			// Increment
 			predecessor = current;
@@ -173,12 +159,12 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		// Head is now tail
 		tail = head;
-		tail.setSuccessor(null);
+		tail.successor = null;
 
 		// Tail is now head; at the end current is tail and predecessor is the
 		// first element
 		head = current;
-		head.setSuccessor(predecessor);
+		head.successor = predecessor;
 	}
 
 	private final void validateIndex(int index) {
@@ -206,7 +192,7 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		while (index-- > 0) {
 			predecessor = current;
-			current = current.getSuccessor();
+			current = current.successor;
 		}
 
 		return predecessor;
@@ -218,9 +204,8 @@ public class LinkedListImpl<E> implements LinkedList<E> {
 
 		buffer.append("LinkedListImpl [");
 
-		for (Node<E> current = head.getSuccessor(); current != tail; current = current
-				.getSuccessor()) {
-			buffer.append(current.getData()).append(", ");
+		for (Node<E> current = head.successor; current != tail; current = current.successor) {
+			buffer.append(current.data).append(", ");
 		}
 
 		int len = buffer.length();
