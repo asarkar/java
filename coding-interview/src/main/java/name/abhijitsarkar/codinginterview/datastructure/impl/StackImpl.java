@@ -6,7 +6,7 @@ import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
 import name.abhijitsarkar.codinginterview.datastructure.Stack;
 
 public class StackImpl<E> implements Stack<E> {
-	private LinkedList<E> stack = null;
+	protected LinkedList<E> stack = null;
 
 	public StackImpl() {
 		stack = new LinkedListImpl<E>();
