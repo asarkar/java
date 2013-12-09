@@ -3,12 +3,10 @@ package name.abhijitsarkar.codinginterview.algorithm;
 import java.util.HashSet;
 import java.util.Set;
 
+import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree;
+import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree.BinaryTreeNode;
 import name.abhijitsarkar.codinginterview.datastructure.Queue;
 import name.abhijitsarkar.codinginterview.datastructure.Stack;
-import name.abhijitsarkar.codinginterview.datastructure.impl.BinarySearchTree;
-import name.abhijitsarkar.codinginterview.datastructure.impl.BinaryTreeNode;
-import name.abhijitsarkar.codinginterview.datastructure.impl.QueueImpl;
-import name.abhijitsarkar.codinginterview.datastructure.impl.StackImpl;
 
 public class Searcher {
 
@@ -36,7 +34,7 @@ public class Searcher {
 		System.out.println("Searching for: " + value);
 
 		Set<BinaryTreeNode<E>> visited = new HashSet<BinaryTreeNode<E>>();
-		Queue<BinaryTreeNode<E>> queue = new QueueImpl<BinaryTreeNode<E>>();
+		Queue<BinaryTreeNode<E>> queue = new Queue<BinaryTreeNode<E>>();
 
 		System.out.println("Visited: " + startNode);
 		visited.add(startNode);
@@ -80,7 +78,7 @@ public class Searcher {
 			BinarySearchTree<E> binTree, BinaryTreeNode<E> startNode, E value) {
 		System.out.println("Searching for: " + value);
 
-		Stack<BinaryTreeNode<E>> stack = new StackImpl<BinaryTreeNode<E>>();
+		Stack<BinaryTreeNode<E>> stack = new Stack<BinaryTreeNode<E>>();
 		Set<BinaryTreeNode<E>> visited = new HashSet<BinaryTreeNode<E>>();
 
 		stack.push(startNode);

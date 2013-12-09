@@ -1,7 +1,6 @@
 package name.abhijitsarkar.codinginterview.datastructure.linkedlists;
 
 import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
-import name.abhijitsarkar.codinginterview.datastructure.impl.LinkedListImpl;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,7 +8,7 @@ import org.junit.Test;
 public class PracticeQuestionsTest {
 	@Test
 	public void testRemoveDupes() {
-		LinkedList<Integer> linkedList = new LinkedListImpl<Integer>();
+		LinkedList<Integer> linkedList = new LinkedList<Integer>();
 		linkedList.add(1);
 		linkedList.add(2);
 		linkedList.add(1);
@@ -24,7 +23,7 @@ public class PracticeQuestionsTest {
 
 	@Test
 	public void testPartition() {
-		LinkedList<Integer> linkedList = new LinkedListImpl<Integer>();
+		LinkedList<Integer> linkedList = new LinkedList<Integer>();
 		linkedList.add(2);
 		linkedList.add(4);
 		linkedList.add(5);
@@ -41,7 +40,7 @@ public class PracticeQuestionsTest {
 
 	@Test
 	public void testIsPalindrome() {
-		LinkedList<Character> linkedList = new LinkedListImpl<Character>();
+		LinkedList<Character> linkedList = new LinkedList<Character>();
 		linkedList.add('c');
 		linkedList.add('i');
 		linkedList.add('v');
@@ -50,7 +49,7 @@ public class PracticeQuestionsTest {
 
 		Assert.assertTrue(PracticeQuestions.isPalindrome(linkedList));
 
-		linkedList = new LinkedListImpl<Character>();
+		linkedList = new LinkedList<Character>();
 		linkedList.add('a');
 		linkedList.add('n');
 		linkedList.add('n');
@@ -58,7 +57,7 @@ public class PracticeQuestionsTest {
 
 		Assert.assertTrue(PracticeQuestions.isPalindrome(linkedList));
 
-		linkedList = new LinkedListImpl<Character>();
+		linkedList = new LinkedList<Character>();
 		linkedList.add('a');
 		linkedList.add('n');
 		linkedList.add('m');

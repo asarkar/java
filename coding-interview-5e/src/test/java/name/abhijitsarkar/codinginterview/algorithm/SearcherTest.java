@@ -1,8 +1,7 @@
 package name.abhijitsarkar.codinginterview.algorithm;
 
-import name.abhijitsarkar.codinginterview.algorithm.Searcher;
-import name.abhijitsarkar.codinginterview.datastructure.impl.BinarySearchTree;
-import name.abhijitsarkar.codinginterview.datastructure.impl.BinaryTreeNode;
+import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree;
+import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree.BinaryTreeNode;
 
 import org.junit.Assert;
 import org.junit.Before;

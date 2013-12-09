@@ -1,8 +1,6 @@
 package name.abhijitsarkar.codinginterview.datastructure.stacksnqueues;
 
-import name.abhijitsarkar.codinginterview.datastructure.Queue;
 import name.abhijitsarkar.codinginterview.datastructure.Stack;
-import name.abhijitsarkar.codinginterview.datastructure.impl.StackImpl;
 
 /*
  * Q3.5: Implement a MyQueue class which implements a queue using two stacks.
@@ -10,30 +8,27 @@ import name.abhijitsarkar.codinginterview.datastructure.impl.StackImpl;
  * For each enqueue and dequeue operation, we transfer all elements from one
  * stack to the other, thus essentially reversing the order of elements. 
  */
-public class MyQueue<E> implements Queue<E> {
+public class MyQueue<E> {
 	private Stack<E> popStack;
 	private Stack<E> pushStack;
 
 	public MyQueue() {
-		popStack = new StackImpl<E>();
-		pushStack = new StackImpl<E>();
+		popStack = new Stack<E>();
+		pushStack = new Stack<E>();
 	}
 
-	@Override
 	public E dequeue() {
 		transferElements(pushStack, popStack);
 
 		return popStack.pop();
 	}
 
-	@Override
 	public boolean enqueue(E element) {
 		transferElements(popStack, pushStack);
 
 		return pushStack.push(element) != null;
 	}
 
-	@Override
 	public boolean isEmpty() {
 		return popStack.isEmpty() && pushStack.isEmpty();
 	}

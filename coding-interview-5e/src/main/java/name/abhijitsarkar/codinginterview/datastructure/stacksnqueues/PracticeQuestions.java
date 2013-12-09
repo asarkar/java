@@ -1,7 +1,6 @@
 package name.abhijitsarkar.codinginterview.datastructure.stacksnqueues;
 
 import name.abhijitsarkar.codinginterview.datastructure.Stack;
-import name.abhijitsarkar.codinginterview.datastructure.impl.StackImpl;
 
 public class PracticeQuestions {
 	/*
@@ -12,7 +11,7 @@ public class PracticeQuestions {
 	 */
 	public static <E extends Comparable<E>> Stack<E> sort(Stack<E> stack) {
 
-		Stack<E> holdingStack = new StackImpl<E>();
+		Stack<E> holdingStack = new Stack<E>();
 
 		while (!stack.isEmpty()) {
 			E min = stack.pop();

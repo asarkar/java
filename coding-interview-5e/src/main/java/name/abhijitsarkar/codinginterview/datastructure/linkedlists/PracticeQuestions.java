@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
-import name.abhijitsarkar.codinginterview.datastructure.impl.LinkedListNode;
+import name.abhijitsarkar.codinginterview.datastructure.LinkedList.LinkedListNode;
 
 public class PracticeQuestions {
 	/*

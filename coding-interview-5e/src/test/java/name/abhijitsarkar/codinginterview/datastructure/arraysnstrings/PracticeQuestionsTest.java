@@ -1,7 +1,5 @@
 package name.abhijitsarkar.codinginterview.datastructure.arraysnstrings;
 
-import name.abhijitsarkar.codinginterview.datastructure.arraysnstrings.PracticeQuestions;
-
 import org.junit.Assert;
 import org.junit.Test;
 

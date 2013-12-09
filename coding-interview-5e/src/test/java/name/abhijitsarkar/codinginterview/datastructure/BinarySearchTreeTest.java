@@ -1,7 +1,5 @@
 package name.abhijitsarkar.codinginterview.datastructure;
 
-import name.abhijitsarkar.codinginterview.datastructure.impl.BinarySearchTree;
-
 import org.junit.Assert;
 import org.junit.Before;
 

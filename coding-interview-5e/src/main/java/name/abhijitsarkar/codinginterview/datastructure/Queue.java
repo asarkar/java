@@ -1,9 +1,32 @@
 package name.abhijitsarkar.codinginterview.datastructure;
 
-public interface Queue<E> {
-	public E dequeue();
+import java.util.Collection;
 
-	public boolean enqueue(E element);
-	
-	public boolean isEmpty();
+public class Queue<E> {
+	private LinkedList<E> queue = null;
+
+	public Queue() {
+		queue = new LinkedList<E>();
+	}
+
+	public Queue(Collection<E> elements) {
+		queue = new LinkedList<E>(elements);
+	}
+
+	public E dequeue() {
+		return queue.remove(0);
+	}
+
+	public boolean enqueue(E element) {
+		return queue.add(element);
+	}
+
+	public boolean isEmpty() {
+		return queue.size() == 0;
+	}
+
+	@Override
+	public String toString() {
+		return "Queue [queue=" + queue + "]";
+	}
 }

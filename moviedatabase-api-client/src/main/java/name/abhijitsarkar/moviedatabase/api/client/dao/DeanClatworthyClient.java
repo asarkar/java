@@ -32,7 +32,8 @@ public class DeanClatworthyClient extends AbstractClient {
 		super(endpoint);
 	}
 
-	public Movie getMovieInfoByTitleAndYear(String title, short year,
+	@SafeVarargs
+	public final Movie getMovieInfoByTitleAndYear(String title, short year,
 			Map<String, String>... param) {
 		Map<String, String> queryParam = getQueryParam(param);
 		queryParam.put(getEnv().getProperty("deanclatworthyapi.title"), title);
@@ -42,7 +43,8 @@ public class DeanClatworthyClient extends AbstractClient {
 		return getMovieInfoInternal(queryParam, DeanClatworthyStyleMovie.class);
 	}
 
-	public Movie getMovieInfoByTitleOnly(String title,
+	@SafeVarargs
+	public final Movie getMovieInfoByTitleOnly(String title,
 			Map<String, String>... param) {
 		Map<String, String> queryParam = getQueryParam(param);
 		queryParam.put(getEnv().getProperty("deanclatworthyapi.title"), title);
@@ -52,7 +54,8 @@ public class DeanClatworthyClient extends AbstractClient {
 		return getMovieInfoInternal(queryParam, DeanClatworthyStyleMovie.class);
 	}
 
-	public Movie getMovieInfoById(String id, Map<String, String>... param) {
+	@SafeVarargs
+	public final Movie getMovieInfoById(String id, Map<String, String>... param) {
 		throw new ClientException(new UnsupportedOperationException(
 				"Dean Clatworthy API does not support searching by ID."));
 	}

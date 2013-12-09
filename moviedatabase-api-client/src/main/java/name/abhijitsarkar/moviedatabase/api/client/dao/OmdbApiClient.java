@@ -31,7 +31,8 @@ public class OmdbApiClient extends AbstractClient {
 		super(endpoint);
 	}
 
-	public Movie getMovieInfoByTitleAndYear(String title, short year,
+	@SafeVarargs
+	public final Movie getMovieInfoByTitleAndYear(String title, short year,
 			Map<String, String>... param) {
 		Map<String, String> queryParam = getQueryParam(param);
 		queryParam.put(getEnv().getProperty("omdbapi.title"), title);
@@ -41,7 +42,8 @@ public class OmdbApiClient extends AbstractClient {
 		return getMovieInfoInternal(queryParam, OmdbApiStyleMovie.class);
 	}
 
-	public Movie getMovieInfoByTitleOnly(String title,
+	@SafeVarargs
+	public final Movie getMovieInfoByTitleOnly(String title,
 			Map<String, String>... param) {
 		Map<String, String> queryParam = getQueryParam(param);
 		queryParam.put(getEnv().getProperty("omdbapi.title"), title);
@@ -49,7 +51,8 @@ public class OmdbApiClient extends AbstractClient {
 		return getMovieInfoInternal(queryParam, OmdbApiStyleMovie.class);
 	}
 
-	public Movie getMovieInfoById(String id, Map<String, String>... param) {
+	@SafeVarargs
+	public final Movie getMovieInfoById(String id, Map<String, String>... param) {
 		Map<String, String> queryParam = getQueryParam(param);
 		queryParam.put(getEnv().getProperty("omdbapi.id"), id);
 
