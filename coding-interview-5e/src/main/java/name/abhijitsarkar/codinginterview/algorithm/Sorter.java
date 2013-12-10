@@ -1,6 +1,10 @@
 package name.abhijitsarkar.codinginterview.algorithm;
 
+import java.lang.reflect.Array;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Sorter {
 	public static int[] mergeSort(int[] arr) {
@@ -76,7 +80,7 @@ public class Sorter {
 		if ((endIdx - startIdx) <= 1) {
 			return startIdx;
 		}
-		
+
 		int pivotValue = arr[startIdx];
 
 		swap(arr, startIdx, endIdx);
@@ -99,5 +103,112 @@ public class Sorter {
 
 		arr[idx1] = arr[idx2];
 		arr[idx2] = element;
+	}
+
+	public static int[] bucketSort(int[] arr) {
+		int[][] buckets = scatter(arr);
+
+		ArrayDeque<int[]> stack = new ArrayDeque<int[]>();
+
+		for (int[] bucket : buckets) {
+			if (bucket != null) {
+				stack.add(mergeSort(bucket));
+			}
+		}
+
+		return gather(stack);
+	}
+
+	private static int[][] scatter(int[] arr) {
+		@SuppressWarnings("unchecked")
+		List<Integer>[] tempBuckets = (List<Integer>[]) Array.newInstance(
+				ArrayList.class, 8);
+
+		long hash = -1;
+		int idx = -1;
+		List<Integer> bucket = null;
+
+		for (int i : arr) {
+			hash = DJBHash(Integer.valueOf(i).toString());
+			idx = computeIndex(hash);
+
+			bucket = createOrGetBucket(tempBuckets, idx);
+
+			bucket.add(i);
+		}
+
+		return toArray(tempBuckets);
+	}
+
+	private static int[][] toArray(List<Integer>[] tempBuckets) {
+		final int numBuckets = tempBuckets.length;
+		int[][] buckets = new int[numBuckets][];
+		List<Integer> aBucket = null;
+
+		for (int numBucket = 0; numBucket < numBuckets; numBucket++) {
+			aBucket = tempBuckets[numBucket];
+
+			if (aBucket == null) {
+				continue;
+			}
+
+			final int numBucketElements = aBucket.size();
+			buckets[numBucket] = new int[numBucketElements];
+
+			for (int numElement = 0; numElement < numBucketElements; numElement++) {
+				buckets[numBucket][numElement] = aBucket.get(numElement);
+			}
+		}
+
+		return buckets;
+	}
+
+	private static int computeIndex(long hash) {
+		// Compute modulo 8 with a bitmask
+		return (int) (hash & 0x07);
+	}
+
+	/*
+	 * http://www.partow.net/programming/hashfunctions
+	 */
+	private static final long DJBHash(String str) {
+		long hash = 5381;
+
+		for (int i = 0; i < str.length(); i++) {
+			hash = ((hash << 5) + hash) + str.charAt(i);
+		}
+
+		return hash;
+	}
+
+	private static List<Integer> createOrGetBucket(List<Integer>[] buckets,
+			int idx) {
+		List<Integer> bucket = buckets[idx];
+
+		if (bucket == null) {
+			bucket = new ArrayList<Integer>();
+
+			buckets[idx] = bucket;
+		}
+
+		return bucket;
+	}
+
+	private static int[] gather(ArrayDeque<int[]> stack) {
+		int[] mergedBucket = null;
+
+		while (!stack.isEmpty()) {
+			mergedBucket = stack.remove();
+
+			if (!stack.isEmpty()) {
+				int[] bucket = stack.remove();
+
+				mergedBucket = merge(mergedBucket, bucket);
+
+				stack.add(mergedBucket);
+			}
+		}
+
+		return mergedBucket;
 	}
 }

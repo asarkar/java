@@ -24,4 +24,14 @@ public class SorterTest {
 
 		Assert.assertArrayEquals(expected, actual);
 	}
+	
+	@Test
+	public void testBucketSort() {
+		int[] arr = new int[] { 17, 3, 99, 51 };
+		int[] expected = new int[] { 3, 17, 51, 99 };
+
+		int[] actual = Sorter.bucketSort(arr);
+
+		Assert.assertArrayEquals(expected, actual);
+	}
 }
