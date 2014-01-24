@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>name.abhijitsarkar.xml.jaxb</groupId>
+		<artifactId>jaxb-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jaxb-xmltransient</artifactId>
+	<name>jaxb-xmltransient</name>
+	<description>
+		<![CDATA[
+		JAXB @XmlTransient annotation behavior POC.
+		JAXB marshalls private fields from a super class if it's annotated with @XmlAccessorType(XmlAccessType.FIELD).
+		The only way to prevent that is to annotate the parent class with @XmlTransient, use
+		@XmlAccessorType(XmlAccessType.PROPERTY) on the subclass, override the getter method and mark 
+		the getter method @XmlTransient.
+		]]>
+	</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>
