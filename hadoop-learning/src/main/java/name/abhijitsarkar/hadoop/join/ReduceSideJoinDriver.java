@@ -60,6 +60,7 @@ public class ReduceSideJoinDriver extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
+		// TODO: Get rid of the GenericOptionsParser and just pass the args to the ToolRunner
 		GenericOptionsParser parser = new GenericOptionsParser(new Configuration(), args);
 
 		if (parser.getRemainingArgs().length < 2) {

@@ -220,7 +220,8 @@ public class CitationRetriever extends Configured implements Tool {
 		if (args.length < 4) {
 			throw new IllegalArgumentException("Usage: CitationRetriever input_file output_dir cache_file citation_num");
 		}
-
+		
+		// TODO: Get rid of the GenericOptionsParser and just pass the args to the ToolRunner
 		GenericOptionsParser parser = new GenericOptionsParser(new Configuration(), args);
 
 		ToolRunner.run(new CitationRetriever(), parser.getRemainingArgs());

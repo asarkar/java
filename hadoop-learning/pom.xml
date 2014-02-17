@@ -18,6 +18,10 @@
     The following is a good start:
     http://hadoop.apache.org/docs/current1/single_node_setup.html
     
+    The 4 most important Hadoop configurations files are core-site.xml, hdfs-site.xml, mapred-site.xml and hadoop-env.sh.
+    An archived conf directory is available in src/site of this project for reference. The above-mentioned files
+    have been modified within the archived conf directory to customize the installation.
+    
     1) You need to do some prework on the HDFS. To do that, find out from conf/core-site.xml or conf/hdfs-site.xml 
     where the HDFS is set up. I usually choose /tmp/hadoop as the value of the key hadoop.tmp.dir.
     2) Create namenode and datanode directories, which're relative to hadoop.tmp.dir.
@@ -59,6 +63,7 @@
     13) Verify the status of the run from Job tracker.
     14) Verify the output with the following command:
         $ hadoop dfs -cat <output_directory_hdfs_path>/part-r-<something>
+    15) When stopping Job tracker and DFS, do in the reverse order as started, i.e. stop Job tracker first, then DFS.
     ]]>
   </description>
 
