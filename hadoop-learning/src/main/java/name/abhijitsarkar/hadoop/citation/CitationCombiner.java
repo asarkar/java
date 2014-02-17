@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2014, the original author or authors.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3 of the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * A copy of the GNU General Public License accompanies this software, 
+ * and is also available at http://www.gnu.org/licenses.
+ *******************************************************************************/
 package name.abhijitsarkar.hadoop.citation;
 
 import java.io.IOException;
@@ -21,92 +36,90 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This class works on the cite.txt. It outputs a space separated key-value pair
- * where the key is a citation ID and the value is a comma-separated list of
+ * This class works on the cite.txt. It outputs a space separated key-value pair where the key is a citation ID and the
+ * value is a comma-separated list of citations that refer to the key.
+ * 
+ * @author Abhijit Sarkar
  */
 public class CitationCombiner extends Configured implements Tool {
-    public static class CitationMapper extends MapReduceBase implements
-            Mapper<Text, Text, Text, Text> {
+	public static final Logger LOGGER = LoggerFactory.getLogger(CitationCombiner.class);
 
-        public void map(Text key, Text value,
-                OutputCollector<Text, Text> output, Reporter reporter)
-                throws IOException {
-            System.out.println("CitationMapper - Key: " + key + ", Value: "
-                    + value);
+	public static class CitationMapper extends MapReduceBase implements Mapper<Text, Text, Text, Text> {
 
-            /* Skip the header row */
-            try {
-                Long.valueOf(key.toString());
+		public void map(Text key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+			LOGGER.debug("Key: {}, Value: {}.", key, value);
 
-                output.collect(value, key);
-            } catch (NumberFormatException nfe) {
-                nfe.printStackTrace();
-            }
-        }
-    }
+			/* Skip the header row */
+			try {
+				Long.valueOf(key.toString());
 
-    public static class CitationReducer extends MapReduceBase implements
-            Reducer<Text, Text, Text, Text> {
-        public static final byte[] COMMA = new org.apache.hadoop.io.Text(",")
-                .getBytes();
+				output.collect(value, key);
+			} catch (NumberFormatException nfe) {
+				LOGGER.warn("NumberFormatException: {}.", nfe.getMessage());
+			}
+		}
+	}
 
-        public void reduce(Text key, Iterator<Text> values,
-                OutputCollector<Text, Text> output, Reporter reporter)
-                throws IOException {
-            Text value = null;
-            Text citations = new Text();
+	public static class CitationReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
+		public static final byte[] COMMA = new org.apache.hadoop.io.Text(",").getBytes();
 
-            while (values.hasNext()) {
-                value = values.next();
+		public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter)
+				throws IOException {
+			Text value = null;
+			Text citations = new Text();
 
-                if (value != null && value.getLength() > 0) {
-                    citations.append(value.getBytes(), 0, value.getLength());
+			while (values.hasNext()) {
+				value = values.next();
 
-                    if (values.hasNext()) {
-                        citations.append(COMMA, 0, 1);
-                    }
-                }
-            }
+				if (value != null && value.getLength() > 0) {
+					citations.append(value.getBytes(), 0, value.getLength());
 
-            System.out.println("CitationReducer - Key: " + key
-                    + ", Citations: " + citations.toString());
-            output.collect(key, citations);
-        }
-    }
+					if (values.hasNext()) {
+						citations.append(COMMA, 0, 1);
+					}
+				}
+			}
 
-    @Override
-    public int run(String[] args) throws Exception {
-        JobConf conf = new JobConf(getConf(), getClass());
-        conf.setJobName("citation-combiner");
+			LOGGER.debug("Key: {}, Citations: {}.", key, citations.toString());
 
-        /* This is to set the separator byte for KeyValueTextInputFormat */
-        conf.set("key.value.separator.in.input.line", ",");
+			output.collect(key, citations);
+		}
+	}
 
-        conf.setMapperClass(CitationMapper.class);
-        conf.setReducerClass(CitationReducer.class);
+	@Override
+	public int run(String[] args) throws Exception {
+		JobConf conf = new JobConf(getConf(), getClass());
+		conf.setJobName("citation-combiner");
 
-        conf.setMapOutputKeyClass(Text.class);
-        conf.setMapOutputValueClass(Text.class);
-        conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(Text.class);
+		/* This is to set the separator byte for KeyValueTextInputFormat */
+		conf.set("key.value.separator.in.input.line", ",");
 
-        conf.setInputFormat(KeyValueTextInputFormat.class);
-        conf.setOutputFormat(TextOutputFormat.class);
+		conf.setMapperClass(CitationMapper.class);
+		conf.setReducerClass(CitationReducer.class);
 
-        FileInputFormat.setInputPaths(conf, new Path(args[0]));
-        FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+		conf.setMapOutputKeyClass(Text.class);
+		conf.setMapOutputValueClass(Text.class);
+		conf.setOutputKeyClass(Text.class);
+		conf.setOutputValueClass(Text.class);
 
-        JobClient.runJob(conf);
+		conf.setInputFormat(KeyValueTextInputFormat.class);
+		conf.setOutputFormat(TextOutputFormat.class);
 
-        return 0;
-    }
+		FileInputFormat.setInputPaths(conf, new Path(args[0]));
+		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 
-    public static void main(String[] args) throws Exception {
-        GenericOptionsParser parser = new GenericOptionsParser(
-                new Configuration(), args);
+		JobClient.runJob(conf);
 
-        ToolRunner.run(new CitationCombiner(), parser.getRemainingArgs());
-    }
+		return 0;
+	}
+
+	public static void main(String[] args) throws Exception {
+		GenericOptionsParser parser = new GenericOptionsParser(new Configuration(), args);
+
+		ToolRunner.run(new CitationCombiner(), parser.getRemainingArgs());
+	}
 }

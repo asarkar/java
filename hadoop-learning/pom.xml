@@ -12,6 +12,55 @@
   <packaging>jar</packaging>
 
   <name>hadoop-examples</name>
+  
+  <description>
+    <![CDATA[
+    The following is a good start:
+    http://hadoop.apache.org/docs/current1/single_node_setup.html
+    
+    1) You need to do some prework on the HDFS. To do that, find out from conf/core-site.xml or conf/hdfs-site.xml 
+    where the HDFS is set up. I usually choose /tmp/hadoop as the value of the key hadoop.tmp.dir.
+    2) Create namenode and datanode directories, which're relative to hadoop.tmp.dir.
+        $ mkdir -p /tmp/hadoop/dfs/name
+        $ mkdir -p /tmp/hadoop/dfs/data
+    3) Format the namenode. If asked for confirmation, type 'Y' and press enter.
+        $ hadoop namenode -format
+    4) Hadoop nodes communicate via ssh so make sure you can do the following without a passphrase:
+        $ ssh localhost
+        
+        If it asks for a passphrase, do the following and try again:
+        
+        $ ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa 
+        $ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+        
+        $ ssh localhost
+        
+        If it warns about adding the host to the list of known hosts, type 'yes' and press enter.
+    5) Start the DFS:
+        $ ./start-dfs.sh    
+    6) Verify that it's up and running by going to the URL provided in the conf/hdfs-site.xml, 
+        under key dfs.http.address. The default port is 50070.
+    7) Start Job tracker:
+        $ ./start-mapred.sh
+    8) Verify that it's up and running by going to the URL provided in the conf/mapred-site.xml, 
+        under key mapred.job.tracker.http.address.http.address. The default port is 50030.
+    9) Create a HDFS directory from where the MapRed job will read input files.
+        $ hadoop dfs -mkdir <directory_name>
+        
+        This will create a HDFS path /user/<username>/<directory_name>
+    
+    10) Copy the input file(s) to the newly created directory.
+        $ hadoop dfs -copyFromLocal <source_path> <hdfs_path>
+    11) Check that the above worked:
+        $ hadoop dfs -lsr
+    12) Package the MapRed code in a jar. Then run the following command. Note that the output directory must not
+        exist. If it does, delete it first by $ hadoop dfs -rmr <output_directory_hdfs_path>
+        $ hadoop jar <path_to_jar> <fully_qualified_main_class> <input_file_path_on_hdfs> <output_directory_hdfs_path>
+    13) Verify the status of the run from Job tracker.
+    14) Verify the output with the following command:
+        $ hadoop dfs -cat <output_directory_hdfs_path>/part-r-<something>
+    ]]>
+  </description>
 
   <dependencies>
     <dependency>
