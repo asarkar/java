@@ -65,7 +65,7 @@ public class CitationCombiner extends Configured implements Tool {
 	}
 
 	public static class CitationReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
-		public static final byte[] COMMA = new org.apache.hadoop.io.Text(",").getBytes();
+		static final byte[] COMMA = new Text(",").getBytes();
 
 		public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter)
 				throws IOException {

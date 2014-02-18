@@ -51,7 +51,7 @@ public class Sorter {
 
 		int leftIdx = 0, rightIdx = 0;
 
-		for (; leftIdx < len1 && rightIdx < len2;) {
+		while (leftIdx < len1 && rightIdx < len2) {
 			if (leftArr[leftIdx] < rightArr[rightIdx]) {
 				holderArr[leftIdx + rightIdx] = leftArr[leftIdx];
 
@@ -83,9 +83,7 @@ public class Sorter {
 			return arr;
 		}
 
-		final int pivotIdx = (startIdx + endIdx) >> 1;
-
-		final int newPivotIdx = partition(arr, startIdx, endIdx, pivotIdx);
+		final int newPivotIdx = partition(arr, startIdx, endIdx);
 
 		recursiveQuickSort(arr, startIdx, newPivotIdx - 1);
 		recursiveQuickSort(arr, newPivotIdx + 1, endIdx);
@@ -93,8 +91,7 @@ public class Sorter {
 		return arr;
 	}
 
-	private static int partition(int[] arr, int startIdx, int endIdx,
-			int pivotIdx) {
+	private static int partition(int[] arr, int startIdx, int endIdx) {
 		if ((endIdx - startIdx) <= 1) {
 			return startIdx;
 		}
@@ -193,7 +190,7 @@ public class Sorter {
 		long hash = 5381;
 
 		for (int i = 0; i < str.length(); i++) {
-			hash = ((hash << 5) + hash) + str.charAt(i);
+			hash = hash << 5 + hash + str.charAt(i);
 		}
 
 		return hash;

@@ -75,7 +75,7 @@ public class PracticeQuestions {
 			 */
 			int bitVectorIdx = ch >> 5;
 
-			ch = (arr[bitVectorIdx] & bitmask);
+			ch = arr[bitVectorIdx] & bitmask;
 
 			if (ch == 1) {
 				return false;
@@ -114,7 +114,7 @@ public class PracticeQuestions {
 			sum2 += ((short) charArr2[i]);
 		}
 
-		return (sum1 == sum2);
+		return sum1 == sum2;
 	}
 
 	/*
@@ -151,7 +151,7 @@ public class PracticeQuestions {
 			}
 		}
 
-		return (buffer.length() < str.length() ? buffer.toString() : str);
+		return buffer.length() < str.length() ? buffer.toString() : str;
 	}
 
 	/*

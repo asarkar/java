@@ -81,7 +81,7 @@ public class TowerOfHanoi {
 		Disk disk = pegs.get(fromPeg).pop();
 		pegs.get(toPeg).push(disk);
 
-		System.out.printf("Moved disk %d from peg %d to peg %d.\n", disk.data,
+		System.out.printf("Moved disk %d from peg %d to peg %d.%n", disk.data,
 				fromPeg, toPeg);
 	}
 
@@ -108,11 +108,9 @@ public class TowerOfHanoi {
 
 	private int sparePeg(int fromPeg, int toPeg) {
 		for (int aPeg = 0; aPeg < pegs.size(); aPeg++) {
-			if (aPeg == fromPeg || aPeg == toPeg) {
-				continue;
+			if (aPeg != fromPeg && aPeg != toPeg) {
+				return aPeg;
 			}
-
-			return aPeg;
 		}
 		return -1;
 	}
@@ -168,7 +166,7 @@ public class TowerOfHanoi {
 		}
 	}
 
-	class MoveNotAllowedException extends RuntimeException {
+	static class MoveNotAllowedException extends RuntimeException {
 		private static final long serialVersionUID = 6271857984782497758L;
 
 		public MoveNotAllowedException(String message) {

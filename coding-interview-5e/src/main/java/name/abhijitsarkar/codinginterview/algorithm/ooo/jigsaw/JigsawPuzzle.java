@@ -58,7 +58,7 @@ public class JigsawPuzzle {
 			}
 		}
 
-		return (stackOfPieces.size() == 1);
+		return stackOfPieces.size() == 1;
 	}
 
 	private Stack<Piece> stackOfPieces() {

@@ -88,7 +88,7 @@ public class CitationCombinerWithChaining extends Configured implements Tool {
 	}
 
 	public static class CitationReducer extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
-		public static final byte[] COMMA_BYTES = new Text(COMMA).getBytes();
+		static final byte[] COMMA_BYTES = new Text(COMMA).getBytes();
 
 		public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter)
 				throws IOException {

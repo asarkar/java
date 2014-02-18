@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
@@ -107,7 +108,7 @@ public class IOUtils {
 		final FileSystem fs = inputPath.getFileSystem(conf);
 
 		final InputStream data = new FileInputStream(inputURI.getPath());
-		final BufferedReader reader = new BufferedReader(new InputStreamReader(data));
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(data, StandardCharsets.UTF_8));
 
 		String line = null;
 		final URI mapFileURI = new Path(inputPath.getParent(), "map_file").toUri();
@@ -173,13 +174,22 @@ public class IOUtils {
 		LOGGER.debug("uncompressedURI: {}.", uncompressedURI);
 		LOGGER.debug("archiveURI: {}", archivePath.toString());
 
-		final OutputStream outputStream = new FileOutputStream(archivePath.toUri().getPath());
-		final InputStream inputStream = new FileInputStream(uncompressedURI.getPath());
-		final CompressionOutputStream out = codec.createOutputStream(outputStream);
-		org.apache.hadoop.io.IOUtils.copyBytes(inputStream, out, conf, false);
-		out.finish();
+		OutputStream outputStream = null;
+		InputStream inputStream = null;
+		CompressionOutputStream out = null;
 
-		closeStreams(inputStream, outputStream, out);
+		try {
+			outputStream = new FileOutputStream(archivePath.toUri().getPath());
+			inputStream = new FileInputStream(uncompressedURI.getPath());
+
+			out = codec.createOutputStream(outputStream);
+			org.apache.hadoop.io.IOUtils.copyBytes(inputStream, out, conf, false);
+			out.finish();
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			closeStreams(inputStream, outputStream, out);
+		}
 
 		return archivePath.toUri();
 	}
@@ -224,7 +234,7 @@ public class IOUtils {
 	}
 
 	public static String removeExtension(String filename) {
-		if (filename != null && filename.length() <= 1) {
+		if ((filename != null && filename.length() <= 1) || filename == null) {
 			return filename;
 		}
 
@@ -252,38 +262,45 @@ public class IOUtils {
 	 */
 	public static URI uncompressFile(final URI archiveURI, final Configuration conf) throws IOException {
 		Path archivePath = new Path(archiveURI);
+		OutputStream outputStream = null;
+		InputStream inputStream = null;
+		Path uncompressionPath = null;
 
-		final FileSystem fs = FileSystem.getLocal(conf);
+		try {
+			final FileSystem fs = FileSystem.getLocal(conf);
 
-		FileStatus[] statuses = new FileStatus[] { fs.getFileStatus(archivePath) };
-		if (statuses[0].isDir()) {
-			statuses = fs.listStatus(archivePath);
+			FileStatus[] statuses = new FileStatus[] { fs.getFileStatus(archivePath) };
+			if (statuses[0].isDir()) {
+				statuses = fs.listStatus(archivePath);
 
-			LOGGER.debug("Archive is a directory and contains {} elements.", statuses.length);
+				LOGGER.debug("Archive is a directory and contains {} elements.", statuses.length);
 
-			archivePath = statuses[0].getPath();
+				archivePath = statuses[0].getPath();
+			}
+
+			LOGGER.debug("archiveURI: {}.", archivePath.toUri());
+
+			final CompressionCodec codec = new CompressionCodecFactory(conf).getCodec(archivePath);
+			if (codec == null) {
+				LOGGER.debug("Not an archive: {}.", archivePath.toUri());
+				return archivePath.toUri();
+			}
+
+			LOGGER.debug("Using codec: {}.", codec.getClass().getName());
+			uncompressionPath = new Path(addExtension(archivePath.toUri().getPath(), ".new", true));
+
+			LOGGER.debug("uncompressedURI: {}.", uncompressionPath.toUri());
+
+			outputStream = new FileOutputStream(uncompressionPath.toUri().getPath());
+
+			inputStream = new FileInputStream(archivePath.toUri().getPath());
+			final CompressionInputStream in = codec.createInputStream(inputStream);
+			org.apache.hadoop.io.IOUtils.copyBytes(in, outputStream, conf, false);
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			closeStreams(inputStream, outputStream);
 		}
-
-		LOGGER.debug("archiveURI: {}.", archivePath.toUri());
-
-		final CompressionCodec codec = new CompressionCodecFactory(conf).getCodec(archivePath);
-		if (codec == null) {
-			LOGGER.debug("Not an archive: {}.", archivePath.toUri());
-			return archivePath.toUri();
-		}
-
-		LOGGER.debug("Using codec: {}.", codec.getClass().getName());
-		final Path uncompressionPath = new Path(addExtension(archivePath.toUri().getPath(), ".new", true));
-
-		LOGGER.debug("uncompressedURI: {}.", uncompressionPath.toUri());
-
-		final OutputStream outputStream = new FileOutputStream(uncompressionPath.toUri().getPath());
-
-		final InputStream inputStream = new FileInputStream(archivePath.toUri().getPath());
-		final CompressionInputStream in = codec.createInputStream(inputStream);
-		org.apache.hadoop.io.IOUtils.copyBytes(in, outputStream, conf, false);
-
-		closeStreams(inputStream, outputStream);
 
 		return uncompressionPath.toUri();
 	}

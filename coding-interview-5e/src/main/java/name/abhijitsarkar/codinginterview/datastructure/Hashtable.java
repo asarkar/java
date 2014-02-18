@@ -38,7 +38,7 @@ public class Hashtable<K, V> {
 		final long hash = DJBHash(key.toString());
 		int idx = computeIndex(hash);
 
-		System.out.printf("Hash = %d, index = %d.\n", hash, idx);
+		System.out.printf("Hash = %d, index = %d.%n", hash, idx);
 
 		LinkedList<Entry<K, V>> bucket = createOrGetBucket(idx);
 
@@ -117,7 +117,7 @@ public class Hashtable<K, V> {
 		long hash = 5381;
 
 		for (int i = 0; i < str.length(); i++) {
-			hash = ((hash << 5) + hash) + str.charAt(i);
+			hash = hash << 5 + hash + str.charAt(i);
 		}
 
 		return hash;

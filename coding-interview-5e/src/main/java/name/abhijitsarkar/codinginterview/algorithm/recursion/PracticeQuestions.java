@@ -24,30 +24,36 @@ import java.util.Set;
  */
 public class PracticeQuestions {
 	/*
-	 * Q9.3: A magic index in an array A[0...n-1] is defined to be an index such
-	 * that A[i] = i. Given a sorted array of distinct integers, write a method
-	 * to find a magic index, if one exists, in array A.
+	 * Q9.3: A magic index in an array A[0...n-1] is defined to be an index such that A[i] = i. Given a sorted array of
+	 * distinct integers, write a method to find a magic index, if one exists, in array A.
 	 * 
-	 * This algorithm doesn't handle dupes in the input array. See the book for
-	 * a solution that does.
+	 * This algorithm doesn't handle dupes in the input array. See the book for a solution that does.
 	 */
 	public static int magicIndex(int[] array, int startIndex, int endIndex) {
 		if (startIndex >= endIndex) {
 			return -1;
 		}
 
-		int midIdx = startIndex + endIndex >> 1;
+		long avg = startIndex + endIndex >> 1;
+
+		/*
+		 * Check for overflow. Nice read: http://pages.cs.wisc.edu/~willb/cs302/spring-07/why-integer-overflow-cl.pdf
+		 */
+		if (avg >= Integer.MAX_VALUE) {
+			return -1;
+		}
+
+		int midIdx = (int) avg;
+
 		int val = array[midIdx];
 
 		if (val == midIdx) {
-			System.out.printf("Found magic index %d\n", midIdx);
+			System.out.printf("Found magic index %d%n", midIdx);
 			return midIdx;
 		}
 
-		System.out.printf(
-				"Start index = %d, end index = %d, middle index = %d\n",
-				startIndex, endIndex, midIdx);
-		System.out.printf("val = %d\n", val);
+		System.out.printf("Start index = %d, end index = %d, middle index = %d%n", startIndex, endIndex, midIdx);
+		System.out.printf("val = %d%n", val);
 
 		if (midIdx < val) {
 			return magicIndex(array, startIndex, --midIdx);
@@ -64,8 +70,7 @@ public class PracticeQuestions {
 		return perms.toArray(new String[] {});
 	}
 
-	private static Set<String> recursivePerm(String s, int index,
-			Set<String> perms) {
+	private static Set<String> recursivePerm(String s, int index, Set<String> perms) {
 		int len = s.length();
 
 		if (len <= 1) {

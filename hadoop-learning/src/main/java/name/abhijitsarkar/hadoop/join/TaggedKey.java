@@ -105,7 +105,7 @@ public class TaggedKey implements WritableComparable<TaggedKey> {
 
 		TaggedKey other = (TaggedKey) obj;
 
-		return (this.compareTo(other) == 0);
+		return this.compareTo(other) == 0;
 	}
 
 	@Override

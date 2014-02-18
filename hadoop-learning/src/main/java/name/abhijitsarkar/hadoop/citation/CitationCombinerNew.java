@@ -77,7 +77,7 @@ public class CitationCombinerNew extends Configured implements Tool {
 	}
 
 	public static class CitationReducer extends Reducer<Text, Text, Text, Text> {
-		public static final byte[] COMMA_BYTES = new Text(COMMA).getBytes();
+		static final byte[] COMMA_BYTES = new Text(COMMA).getBytes();
 
 		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 			final Iterator<Text> it = values.iterator();

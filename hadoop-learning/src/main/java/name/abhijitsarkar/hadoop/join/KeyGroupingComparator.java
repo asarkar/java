@@ -15,6 +15,8 @@
  *******************************************************************************/
 package name.abhijitsarkar.hadoop.join;
 
+import java.io.Serializable;
+
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 
@@ -27,7 +29,9 @@ import org.apache.hadoop.io.WritableComparator;
  * 
  * @author Abhijit Sarkar
  */
-public class KeyGroupingComparator extends WritableComparator {
+public class KeyGroupingComparator extends WritableComparator implements Serializable {
+	private static final long serialVersionUID = 7494159558598918364L;
+
 	public KeyGroupingComparator() {
 		super(TaggedKey.class, true);
 	}

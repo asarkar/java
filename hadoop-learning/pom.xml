@@ -11,7 +11,7 @@
   <artifactId>hadoop-learning</artifactId>
   <packaging>jar</packaging>
 
-  <name>hadoop-examples</name>
+  <name>hadoop-learning</name>
   
   <description>
     <![CDATA[

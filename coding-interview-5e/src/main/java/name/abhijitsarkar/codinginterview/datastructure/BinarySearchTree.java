@@ -120,7 +120,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 
 		public boolean isLeaf() {
-			return (this.leftChild == null && this.rightChild == null);
+			return this.leftChild == null && this.rightChild == null;
 		}
 
 		@Override

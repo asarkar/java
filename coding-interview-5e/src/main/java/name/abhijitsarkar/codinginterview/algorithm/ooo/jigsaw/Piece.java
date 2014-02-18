@@ -46,7 +46,7 @@ public class Piece {
 	}
 
 	public boolean fitsWith(Piece otherPiece) {
-		return (Math.abs(data - otherPiece.data) <= 1.0d);
+		return Math.abs(data - otherPiece.data) <= 1.0d;
 	}
 
 	@Override
