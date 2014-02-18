@@ -19,10 +19,15 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Abhijit Sarkar
  */
 public class PracticeQuestions {
+	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestions.class);
+
 	/*
 	 * Q9.3: A magic index in an array A[0...n-1] is defined to be an index such that A[i] = i. Given a sorted array of
 	 * distinct integers, write a method to find a magic index, if one exists, in array A.
@@ -48,12 +53,12 @@ public class PracticeQuestions {
 		int val = array[midIdx];
 
 		if (val == midIdx) {
-			System.out.printf("Found magic index %d%n", midIdx);
+			LOGGER.debug("Found magic index{}.%n", midIdx);
 			return midIdx;
 		}
 
-		System.out.printf("Start index = %d, end index = %d, middle index = %d%n", startIndex, endIndex, midIdx);
-		System.out.printf("val = %d%n", val);
+		LOGGER.debug("Start index = {}, end index = {}, middle index = {}.%n", startIndex, endIndex, midIdx);
+		LOGGER.debug("val = {}.%n", val);
 
 		if (midIdx < val) {
 			return magicIndex(array, startIndex, --midIdx);

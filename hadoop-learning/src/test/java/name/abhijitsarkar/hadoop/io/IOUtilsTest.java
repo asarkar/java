@@ -25,6 +25,8 @@ import static name.abhijitsarkar.hadoop.io.IOUtils.uncompressFile;
 import java.io.File;
 import java.net.URI;
 
+import name.abhijitsarkar.hadoop.citation.CitationCombiner;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
@@ -32,11 +34,15 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Abhijit Sarkar
  */
 public class IOUtilsTest {
+	public static final Logger LOGGER = LoggerFactory.getLogger(IOUtilsTest.class);
+	
 	private static URI dirURI = null;
 	private static Configuration conf = null;
 
@@ -67,7 +73,7 @@ public class IOUtilsTest {
 		try {
 			URI archiveURI = compressFile(getClass().getResource("/apat.txt").toURI(), "gzip", new Configuration());
 
-			System.out.println("archiveURI: " + archiveURI);
+			LOGGER.debug("archiveURI: {}.", archiveURI);
 
 			Assert.assertTrue("Can't read archive: " + archiveURI, new File(archiveURI).canRead());
 

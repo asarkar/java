@@ -17,6 +17,9 @@ package name.abhijitsarkar.codinginterview.datastructure;
 
 import name.abhijitsarkar.codinginterview.datastructure.LinkedList.LinkedListNode;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Abhijit Sarkar
  */
@@ -24,6 +27,8 @@ import name.abhijitsarkar.codinginterview.datastructure.LinkedList.LinkedListNod
  * Q8.10: Design and implement a hash table which uses chaining (linked lists) to handle collisions.
  */
 public class Hashtable<K, V> {
+	public static final Logger LOGGER = LoggerFactory.getLogger(Hashtable.class);
+
 	private int capacity = 8;
 	private int numElements = 0;
 
@@ -38,7 +43,7 @@ public class Hashtable<K, V> {
 		final long hash = DJBHash(key.toString());
 		int idx = computeIndex(hash);
 
-		System.out.printf("Hash = %d, index = %d.%n", hash, idx);
+		LOGGER.debug("Hash = {}, index = {}.%n", hash, idx);
 
 		LinkedList<Entry<K, V>> bucket = createOrGetBucket(idx);
 

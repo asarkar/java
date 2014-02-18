@@ -17,6 +17,9 @@ package name.abhijitsarkar.codinginterview.algorithm.ooo.deckofcards;
 
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Abhijit Sarkar
  */
@@ -24,6 +27,8 @@ import java.util.Random;
  * Q8.1: Design the data structures for a generic deck of cards.
  */
 public class DeckOfCards {
+	public static final Logger LOGGER = LoggerFactory.getLogger(DeckOfCards.class);
+
 	public static final int NUM_CARDS = 52;
 
 	private Card[] cards = new Card[NUM_CARDS];
@@ -51,8 +56,7 @@ public class DeckOfCards {
 
 	private void validateIndex(int index) {
 		if (index < 0 || index >= NUM_CARDS) {
-			throw new IndexOutOfBoundsException(
-					"Index must be within the range [0, " + NUM_CARDS + "]");
+			throw new IndexOutOfBoundsException("Index must be within the range [0, " + NUM_CARDS + "]");
 		}
 	}
 
@@ -60,7 +64,7 @@ public class DeckOfCards {
 		Random rand = new Random();
 		final int maxNumShuffles = rand.nextInt(25) + 1;
 
-		System.out.println("Shuffling " + maxNumShuffles + " times...");
+		LOGGER.debug("Shuffling {} times.", maxNumShuffles);
 
 		for (int numShuffle = 0; numShuffle < maxNumShuffles; numShuffle++) {
 			int firstCardIdx = rand.nextInt(52);
@@ -79,7 +83,6 @@ public class DeckOfCards {
 		cards[firstCardIdx] = cards[secondCardIdx];
 		cards[secondCardIdx] = temp;
 
-		System.out.println("Swapped " + temp + " with " + cards[firstCardIdx]
-				+ ".");
+		LOGGER.debug("Swapped {} with {}.", temp, cards[firstCardIdx]);
 	}
 }

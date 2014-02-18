@@ -19,26 +19,28 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Abhijit Sarkar
  */
 public class PracticeQuestions {
+	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestions.class);
+
 	/*
-	 * Q1.1: Implement an algorithm to determine if a string has all unique
-	 * characters. What if you cannot use additional data structures?
+	 * Q1.1: Implement an algorithm to determine if a string has all unique characters. What if you cannot use
+	 * additional data structures?
 	 * 
 	 * Assumes character set ASCII.
 	 */
 	public static boolean isUnique(String s) {
 		/*
-		 * Bit vector; note that an int in Java is 32-bit. ASCII has 128
-		 * characters but first 32 are reserved for control characters. Thus, we
-		 * are left with 96 characters, needing 3 int to store the status of
-		 * them all.
+		 * Bit vector; note that an int in Java is 32-bit. ASCII has 128 characters but first 32 are reserved for
+		 * control characters. Thus, we are left with 96 characters, needing 3 int to store the status of them all.
 		 * 
-		 * This can also be achieved with a hash table but we'd need 96 buckets,
-		 * most of which are going to be unused for a string. Bit operations
-		 * save space and are faster.
+		 * This can also be achieved with a hash table but we'd need 96 buckets, most of which are going to be unused
+		 * for a string. Bit operations save space and are faster.
 		 */
 		int[] arr = new int[3];
 
@@ -48,30 +50,24 @@ public class PracticeQuestions {
 
 		for (int i = 0; i < len; i++) {
 			/*
-			 * ASCII has 128 characters but first 32 are reserved for control
-			 * characters.
+			 * ASCII has 128 characters but first 32 are reserved for control characters.
 			 */
 			ch = s.charAt(i) - numASCIICtrlChars;
 
 			/*
-			 * We need a 32-bit bitmask. Which bit to set is determined by the
-			 * result of (ch % 32). So if ch = 97 ('a'), (97 - 32) % 32 = 1,
-			 * meaning the least significant bit needs to be set. If ch = 103
-			 * ('g'), (103 - 32) % 32 = 7, 7th bit needs to be set. The result
-			 * of the modulo operation can go from 0 to 31. Since each bit
-			 * represents a power of 2, left shift operator (multiplication by
-			 * 2) should do the trick.
+			 * We need a 32-bit bitmask. Which bit to set is determined by the result of (ch % 32). So if ch = 97 ('a'),
+			 * (97 - 32) % 32 = 1, meaning the least significant bit needs to be set. If ch = 103 ('g'), (103 - 32) % 32
+			 * = 7, 7th bit needs to be set. The result of the modulo operation can go from 0 to 31. Since each bit
+			 * represents a power of 2, left shift operator (multiplication by 2) should do the trick.
 			 * 
-			 * The least significant 5 bits of the result of the modulo 32
-			 * operation are the same as the result of the bitwise 'and'
-			 * operation below.
+			 * The least significant 5 bits of the result of the modulo 32 operation are the same as the result of the
+			 * bitwise 'and' operation below.
 			 */
 			int bitmask = 1 << (ch & 0x1f) - 1;
 
 			/*
-			 * The index in the bit vector is given by ch / 32, or right shift
-			 * 5. We then do a bitwise 'and' to isolate the bit corresponding to
-			 * 'ch' within the int.
+			 * The index in the bit vector is given by ch / 32, or right shift 5. We then do a bitwise 'and' to isolate
+			 * the bit corresponding to 'ch' within the int.
 			 */
 			int bitVectorIdx = ch >> 5;
 
@@ -91,8 +87,7 @@ public class PracticeQuestions {
 	}
 
 	/*
-	 * Q1.3: Given two strings, write a method to decide if one is a permutation
-	 * of the other.
+	 * Q1.3: Given two strings, write a method to decide if one is a permutation of the other.
 	 * 
 	 * Assumes character set ASCII.
 	 */
@@ -118,9 +113,8 @@ public class PracticeQuestions {
 	}
 
 	/*
-	 * Q1.5: Implement a method to perform basic string compression using the
-	 * counts of repeated characters. For example, the string aabcccccaaa would
-	 * become a2blc5a3. If the "compressed" string would not become smaller than
+	 * Q1.5: Implement a method to perform basic string compression using the counts of repeated characters. For
+	 * example, the string aabcccccaaa would become a2blc5a3. If the "compressed" string would not become smaller than
 	 * the original string, your method should return the original string.
 	 */
 	public static String encodeRepeatedChars(String str) {
@@ -155,8 +149,7 @@ public class PracticeQuestions {
 	}
 
 	/*
-	 * Q1.7: Write an algorithm such that if an element in an MxN matrix is 0,
-	 * its entire row and column are set to 0.
+	 * Q1.7: Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column are set to 0.
 	 */
 	public static void fillIfZero(int[][] matrix) {
 		int numRows = matrix.length;
@@ -173,8 +166,7 @@ public class PracticeQuestions {
 				isZeroFound = (matrix[rowNum][colNum] == 0) | isZeroFound;
 
 				if (isZeroFound) {
-					System.out.println("Zero found at [" + rowNum + ", "
-							+ colNum + "]");
+					LOGGER.debug("Zero found at [{},{}].", rowNum, colNum);
 
 					colWhereZeroFound = colNum;
 					rowWhereZeroFound = rowNum;
@@ -184,29 +176,26 @@ public class PracticeQuestions {
 			}
 
 			if (isZeroFound) {
-				System.out.println("Setting to zero [" + rowNum + ", "
-						+ colWhereZeroFound + "]");
+				LOGGER.debug("Setting to zero [{},{}].", rowNum, colWhereZeroFound);
 
 				matrix[rowNum][colWhereZeroFound] = 0;
 			}
 		}
 
-		System.out.println("Setting to zero [" + rowWhereZeroFound + "]");
+		LOGGER.debug("Setting to zero [{}].", rowWhereZeroFound);
 
 		Arrays.fill(matrix[rowWhereZeroFound], 0);
 
 		for (int rowNum = 0; rowNum < rowWhereZeroFound; rowNum++) {
-			System.out.println("Setting to zero [" + rowNum + ", "
-					+ colWhereZeroFound + "]");
+			LOGGER.debug("Setting to zero [{},{}].", rowNum, colWhereZeroFound);
 
 			matrix[rowNum][colWhereZeroFound] = 0;
 		}
 	}
 
 	/*
-	 * Q1.8: Assume you have a method isSubstring which checks if one word is a
-	 * substring of another. Given two strings, s i and s2, write code to check
-	 * if s2 is a rotation of si using only one call to isSubstring
+	 * Q1.8: Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings,
+	 * s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring
 	 * (e.g.,"waterbottle"is a rotation of"erbottlewat").
 	 */
 	public static boolean isRotation(String s1, String s2) {
@@ -226,8 +215,7 @@ public class PracticeQuestions {
 			}
 		}
 
-		return isSubstring(s1,
-				String.valueOf(Arrays.copyOfRange(charArr2, j, len)));
+		return isSubstring(s1, String.valueOf(Arrays.copyOfRange(charArr2, j, len)));
 	}
 
 	private static boolean isSubstring(String s1, String s2) {

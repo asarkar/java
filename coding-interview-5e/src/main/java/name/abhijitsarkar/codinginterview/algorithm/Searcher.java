@@ -23,13 +23,17 @@ import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree.BinaryT
 import name.abhijitsarkar.codinginterview.datastructure.Queue;
 import name.abhijitsarkar.codinginterview.datastructure.Stack;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Abhijit Sarkar
  */
 public class Searcher {
+	public static final Logger LOGGER = LoggerFactory.getLogger(Searcher.class);
 
-	public static <E extends Comparable<E>> BinaryTreeNode<E> binarySearch(
-			BinarySearchTree<E> binTree, BinaryTreeNode<E> startNode, E value) {
+	public static <E extends Comparable<E>> BinaryTreeNode<E> binarySearch(BinarySearchTree<E> binTree,
+			BinaryTreeNode<E> startNode, E value) {
 		// startNode can be null if the value doesn't exist in the tree
 		if (startNode == null || value.equals(startNode.getData())) {
 			return startNode;
@@ -42,19 +46,19 @@ public class Searcher {
 		return binarySearch(binTree, startNode.getRightChild(), value);
 	}
 
-	public static <E extends Comparable<E>> BinaryTreeNode<E> binarySearch(
-			BinarySearchTree<E> binTree, E value) {
+	public static <E extends Comparable<E>> BinaryTreeNode<E> binarySearch(BinarySearchTree<E> binTree, E value) {
 		return binarySearch(binTree, binTree.getRoot(), value);
 	}
 
-	public static <E extends Comparable<E>> BinaryTreeNode<E> breadthFirstSearch(
-			BinarySearchTree<E> binTree, BinaryTreeNode<E> startNode, E value) {
-		System.out.println("Searching for: " + value);
+	public static <E extends Comparable<E>> BinaryTreeNode<E> breadthFirstSearch(BinarySearchTree<E> binTree,
+			BinaryTreeNode<E> startNode, E value) {
+		LOGGER.debug("Searching for: {}.", value);
 
 		Set<BinaryTreeNode<E>> visited = new HashSet<BinaryTreeNode<E>>();
 		Queue<BinaryTreeNode<E>> queue = new Queue<BinaryTreeNode<E>>();
 
-		System.out.println("Visited: " + startNode);
+		LOGGER.debug("Visited: {}.", startNode);
+
 		visited.add(startNode);
 		queue.enqueue(startNode);
 
@@ -73,12 +77,14 @@ public class Searcher {
 			rightChild = node.getRightChild();
 
 			if (leftChild != null && !visited.contains(leftChild)) {
-				System.out.println("Visited: " + leftChild);
+				LOGGER.debug("Visited: {}.", leftChild);
+
 				visited.add(leftChild);
 				queue.enqueue(leftChild);
 			}
 			if (rightChild != null && !visited.contains(rightChild)) {
-				System.out.println("Visited: " + rightChild);
+				LOGGER.debug("Visited: {}.", rightChild);
+
 				visited.add(rightChild);
 				queue.enqueue(rightChild);
 			}
@@ -87,14 +93,13 @@ public class Searcher {
 		return null;
 	}
 
-	public static <E extends Comparable<E>> BinaryTreeNode<E> breadthFirstSearch(
-			BinarySearchTree<E> binTree, E value) {
+	public static <E extends Comparable<E>> BinaryTreeNode<E> breadthFirstSearch(BinarySearchTree<E> binTree, E value) {
 		return breadthFirstSearch(binTree, binTree.getRoot(), value);
 	}
 
-	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(
-			BinarySearchTree<E> binTree, BinaryTreeNode<E> startNode, E value) {
-		System.out.println("Searching for: " + value);
+	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(BinarySearchTree<E> binTree,
+			BinaryTreeNode<E> startNode, E value) {
+		LOGGER.debug("Searching for: {}.", value);
 
 		Stack<BinaryTreeNode<E>> stack = new Stack<BinaryTreeNode<E>>();
 		Set<BinaryTreeNode<E>> visited = new HashSet<BinaryTreeNode<E>>();
@@ -109,7 +114,8 @@ public class Searcher {
 		while (!stack.isEmpty()) {
 			currentNode = stack.pop();
 			visited.add(currentNode);
-			System.out.println("Visited: " + visited);
+
+			LOGGER.debug("Visited: {}.", visited);
 
 			if (currentNode.getData().equals(value)) {
 				return currentNode;
@@ -131,8 +137,7 @@ public class Searcher {
 		return null;
 	}
 
-	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(
-			BinarySearchTree<E> binTree, E value) {
+	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(BinarySearchTree<E> binTree, E value) {
 		return depthFirstSearch(binTree, binTree.getRoot(), value);
 	}
 }
