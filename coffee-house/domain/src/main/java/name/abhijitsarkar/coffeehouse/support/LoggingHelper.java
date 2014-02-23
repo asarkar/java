@@ -21,8 +21,12 @@ import org.slf4j.Logger;
 /**
  * @author Abhijit Sarkar
  */
-public class LoggingHelper {
-    public static void logArgs(Logger logger, Object[] args) {
+public final class LoggingHelper {
+    private LoggingHelper() {
+
+    }
+
+    public static void logArgs(final Logger logger, final Object[] args) {
         final String orderedBlend = args[0].toString();
 
         logger.debug("Ordered blend: {}.", orderedBlend);

@@ -24,9 +24,9 @@ import java.util.Locale;
  * @author Abhijit Sarkar
  */
 public abstract class Barista {
-    private final Menu menu;
+    private final transient Menu menu;
 
-    public Barista(Menu menu) {
+    public Barista(final Menu menu) {
         this.menu = menu;
     }
 

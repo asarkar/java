@@ -19,6 +19,7 @@ subprojects {
     apply plugin: 'maven'
     apply plugin: 'jacoco'
     apply plugin: 'pmd'
+    apply plugin: 'findbugs'
 
     sourceCompatibility = projectSourceCompatibility
     targetCompatibility = projectSourceCompatibility
@@ -36,12 +37,29 @@ subprojects {
 
     pmd {
         toolVersion = pmdVersion
+        sourceSets = [sourceSets.main]
         ignoreFailures = true
         targetJdk = projectSourceCompatibility
         ruleSetFiles = files("${rootProject.projectDir}/src/main/config/pmd/ruleset.xml")
     }
 
+    findbugs {
+        toolVersion = findbugsVersion
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        reportsDir = file("${buildDir}/reports/findbugs")
+        effort = 'default'
+    }
+
     tasks.withType(Pmd) {
+        it.onlyIf { !project.hasProperty('skipCoverage') }
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+
+    tasks.withType(FindBugs) {
         it.onlyIf { !project.hasProperty('skipCoverage') }
         reports {
             xml.enabled = false
@@ -78,6 +96,10 @@ subprojects {
                 [group: 'junit', name: 'junit', version: junitVersion]
         )
         pmd([group: 'net.sourceforge.pmd', name: 'pmd', version: pmdVersion])
+        findbugs([group: 'com.google.code.findbugs', name: 'findbugs', version: findbugsVersion])
+        jacocoAnt([group: 'org.jacoco', name: 'org.jacoco.ant', version: jacocoVersion])
+        jacocoAgent([group: 'org.jacoco', name: 'org.jacoco.agent', version: jacocoVersion])
+
     }
 
     sourceSets {

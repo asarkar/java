@@ -31,20 +31,20 @@ import java.util.Locale;
 public class OrderValidator implements ConstraintValidator<ValidOrder, String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderValidator.class);
 
-    private Class<? extends Enum> order;
+    private transient Class<? extends Enum> order;
 
     @Override
-    public void initialize(ValidOrder constraintAnnotation) {
+    public void initialize(final ValidOrder constraintAnnotation) {
         this.order = constraintAnnotation.value();
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(final String value, final ConstraintValidatorContext context) {
 
         return isValidBlend(value) || isValidFlavor(value);
     }
 
-    boolean isValidBlend(String value) {
+    boolean isValidBlend(final String value) {
         LOGGER.debug("Validating value: {}.", value);
 
         if (!Coffee.Blend.class.isAssignableFrom(order)) {
@@ -53,31 +53,31 @@ public class OrderValidator implements ConstraintValidator<ValidOrder, String> {
 
         try {
             @SuppressWarnings("unchecked")
-            Coffee.Blend blend = (Coffee.Blend) Enum.valueOf(order, value.toUpperCase(Locale.getDefault()));
+            final Coffee.Blend blend = (Coffee.Blend) Enum.valueOf(order, value.toUpperCase(Locale.getDefault()));
 
             LOGGER.debug("Found valid blend: {}.", blend);
 
             return true;
-        } catch (IllegalArgumentException iae) {
+        } catch (final IllegalArgumentException iae) {
             LOGGER.debug(iae.getMessage());
         }
 
         return false;
     }
 
-    boolean isValidFlavor(String value) {
+    boolean isValidFlavor(final String value) {
         if (!Coffee.Flavor.class.isAssignableFrom(order)) {
             return false;
         }
 
         try {
             @SuppressWarnings("unchecked")
-            Coffee.Flavor flavor = (Coffee.Flavor) Enum.valueOf(order, value.toUpperCase(Locale.getDefault()));
+            final Coffee.Flavor flavor = (Coffee.Flavor) Enum.valueOf(order, value.toUpperCase(Locale.getDefault()));
 
             LOGGER.debug("Found valid flavor: {}.", flavor);
 
             return true;
-        } catch (IllegalArgumentException iae) {
+        } catch (final IllegalArgumentException iae) {
             LOGGER.debug(iae.getMessage());
         }
 

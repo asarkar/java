@@ -29,6 +29,9 @@ import java.util.List;
 public abstract class Menu {
     private static final Logger LOGGER = LoggerFactory.getLogger(Menu.class);
 
+    private List<Coffee.Blend> blends;
+    private List<Coffee.Flavor> flavors;
+
     public Menu() {
         /* Arrays.asList() returns a barebone List implementation that doesn't have many optional method implemented.
          * Subclasses are going to get an UnsupportedOperationException if they try to invoke any of those methods.
@@ -40,9 +43,6 @@ public abstract class Menu {
         setBlends(blendsOnTheMenu);
         setFlavors(flavorsOnTheMenu);
     }
-
-    private List<Coffee.Blend> blends;
-    private List<Coffee.Flavor> flavors;
 
     public List<Coffee.Blend> getBlends() {
         return blends;

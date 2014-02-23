@@ -24,19 +24,20 @@ public class NotOperationalException extends RuntimeException {
         super();
     }
 
-    public NotOperationalException(String message) {
+    public NotOperationalException(final String message) {
         super(message);
     }
 
-    public NotOperationalException(String message, Throwable cause) {
+    public NotOperationalException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public NotOperationalException(Throwable cause) {
+    public NotOperationalException(final Throwable cause) {
         super(cause);
     }
 
-    protected NotOperationalException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected NotOperationalException(final String message, final Throwable cause,
+                                      final boolean enableSuppression, final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

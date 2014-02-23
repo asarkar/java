@@ -43,7 +43,7 @@ public class CoffeeHouseClosingEventListener {
         return open.get();
     }
 
-    public void setOpen(@Observes @Operational OperationalEvent event) {
+    public void setOpen(@Observes @Operational final OperationalEvent event) {
         CoffeeHouseClosingEventListener.open.set(event.isOpen());
 
         LOGGER.debug("Received notification to {} shop.", open.get() ? "open" : "close");

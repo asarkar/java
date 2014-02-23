@@ -37,7 +37,7 @@ public class OperatedAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(OperatedAspect.class);
 
     @Autowired
-    CoffeeHouseClosingEventListener listener;
+    private transient CoffeeHouseClosingEventListener listener;
 
     /* Define a pointcut, for the execution of all methods that return type 'Coffee',
      * are defined in the 'Barista' interface, named 'serve' and takes at least one String argument. */

@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationEvent;
 public class OperationalEvent extends ApplicationEvent {
     private boolean open;
 
-    public OperationalEvent(Object source) {
+    public OperationalEvent(final Object source) {
         super(source);
     }
 
@@ -32,7 +32,7 @@ public class OperationalEvent extends ApplicationEvent {
         return open;
     }
 
-    public void setOpen(boolean open) {
+    public void setOpen(final boolean open) {
         this.open = open;
     }
 }

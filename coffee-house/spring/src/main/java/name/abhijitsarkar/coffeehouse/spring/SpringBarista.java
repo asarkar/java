@@ -21,13 +21,18 @@ import name.abhijitsarkar.coffeehouse.Barista;
 import name.abhijitsarkar.coffeehouse.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * @author Abhijit Sarkar
  */
 
-/* May use general-purpose @Component too */
+/* May use general-purpose @Component too.
+ * GOTCHA ALERT: Without the Validated annotation, methods are NOT searched for inline constraint annotations.
+ * c.f. MethodValidationPostProcessor.
+ */
 @Service
+@Validated
 public class SpringBarista extends Barista {
 
     @Autowired

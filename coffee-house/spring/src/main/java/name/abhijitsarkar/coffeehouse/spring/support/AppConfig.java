@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 /**
  * @author Abhijit Sarkar
@@ -32,7 +33,17 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 public abstract class AppConfig {
 
     @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+        final MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
+        methodValidationPostProcessor.setValidator(validator());
+
+        return methodValidationPostProcessor;
+    }
+
+    @Bean
     public LocalValidatorFactoryBean validator() {
-        return new LocalValidatorFactoryBean();
+        final LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+
+        return localValidatorFactoryBean;
     }
 }
