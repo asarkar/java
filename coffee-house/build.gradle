@@ -109,6 +109,11 @@ subprojects {
 
             it.output.resourcesDir = project.file("$buildDir/classes/${it.name}")
         }
+        test {
+            resources {
+                srcDir "${rootProject.projectDir}/src/test/resources"
+            }
+        }
     }
 
     jar { manifest.attributes provider: 'Abhijit Sarkar' }

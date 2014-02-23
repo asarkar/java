@@ -28,7 +28,7 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
  */
 
 @Configuration
-@ComponentScan(basePackages = "name.abhijitsarkar.coffeehouse")
+@ComponentScan(basePackages = "name.abhijitsarkar.coffeehouse.spring")
 @EnableAspectJAutoProxy
 public abstract class AppConfig {
 
