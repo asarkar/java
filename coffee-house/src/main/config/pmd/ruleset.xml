@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2014, the original author or authors.
+  ~
+  ~ This program is free software; you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation; version 3 of the License.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ A copy of the GNU General Public License accompanies this software,
+  ~ and is also available at http://www.gnu.org/licenses.
+  -->
+
+<ruleset name="Custom ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        This ruleset checks my code for bad stuff
+    </description>
+
+    <!-- https://github.com/estatio/estatio/tree/master/codequality/pmd-rulesets -->
+
+    <rule ref="rulesets/java/basic.xml"/>
+    <rule ref="rulesets/java/braces.xml"/>
+    <rule ref="rulesets/java/clone.xml"/>
+    <rule ref="rulesets/java/codesize.xml"/>
+    <rule ref="rulesets/java/controversial.xml">
+        <exclude name="OnlyOneReturn"/>
+    </rule>
+    <rule ref="rulesets/java/coupling.xml"/>
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="UncommentedEmptyConstructor"/>
+    </rule>
+    <rule ref="rulesets/java/empty.xml"/>
+    <rule ref="rulesets/java/finalizers.xml"/>
+    <rule ref="rulesets/java/imports.xml"/>
+    <rule ref="rulesets/java/j2ee.xml"/>
+    <rule ref="rulesets/java/javabeans.xml"/>
+    <rule ref="rulesets/java/junit.xml"/>
+    <rule ref="rulesets/java/naming.xml">
+        <exclude name="ShortClassName"/>
+    </rule>
+    <rule ref="rulesets/java/optimizations.xml"/>
+    <rule ref="rulesets/java/strictexception.xml"/>
+    <rule ref="rulesets/java/strings.xml"/>
+    <rule ref="rulesets/java/sunsecure.xml"/>
+    <rule ref="rulesets/java/typeresolution.xml"/>
+    <rule ref="rulesets/java/unnecessary.xml"/>
+    <rule ref="rulesets/java/unusedcode.xml"/>
+
+</ruleset>

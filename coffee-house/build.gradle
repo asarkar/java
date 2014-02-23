@@ -1,0 +1,97 @@
+/*
+ * Copyright (c) 2014, the original author or authors.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 3 of the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * A copy of the GNU General Public License accompanies this software,
+ * and is also available at http://www.gnu.org/licenses.
+ */
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
+    apply plugin: 'pmd'
+
+    sourceCompatibility = projectSourceCompatibility
+    targetCompatibility = projectSourceCompatibility
+
+    group = projectGroup
+    version = projectVersion
+
+    configurations {
+        provided
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    pmd {
+        toolVersion = pmdVersion
+        ignoreFailures = true
+        targetJdk = projectSourceCompatibility
+        ruleSetFiles = files("${rootProject.projectDir}/src/main/config/pmd/ruleset.xml")
+    }
+
+    tasks.withType(Pmd) {
+        it.onlyIf { !project.hasProperty('skipCoverage') }
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+
+    jacoco {
+        toolVersion = jacocoVersion
+    }
+
+    jacocoTestReport {
+        reports {
+            html.destination "${buildDir}/reports/jacoco"
+        }
+    }
+
+    dependencies {
+        compile(
+                [group: 'javax.inject', name: 'javax.inject', version: injectApiVersion],
+                [group: 'javax.validation', name: 'validation-api', version: beanValidationApiVersion],
+                [group: 'javax.annotation', name: 'javax.annotation-api', version: annotationApiVersion]
+        )
+        runtime(
+                [group: 'org.hibernate', name: 'hibernate-validator', version: hibernateValidatorVersion],
+                [group: 'javax.el', name: 'javax.el-api', version: elVersion],
+                [group: 'org.glassfish.web', name: 'javax.el', version: glassfishElVersion]
+        )
+        provided(
+                [group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion],
+                [group: 'org.slf4j', name: 'slf4j-log4j12', version: slf4jVersion]
+        )
+        testCompile(
+                [group: 'junit', name: 'junit', version: junitVersion]
+        )
+        pmd([group: 'net.sourceforge.pmd', name: 'pmd', version: pmdVersion])
+    }
+
+    sourceSets {
+        [main, test].each {
+            it.compileClasspath += configurations.provided
+            it.runtimeClasspath += configurations.provided
+
+            it.output.resourcesDir = project.file("$buildDir/classes/${it.name}")
+        }
+    }
+
+    jar { manifest.attributes provider: 'Abhijit Sarkar' }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = project.gradleVersion
+}

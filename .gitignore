@@ -1,8 +1,25 @@
+# http://git-scm.com/docs/gitignore
+
+ # Mac
 .DS_Store
-target
-bin
+
+# Logs
 *.log
-build
-.gradle
-.idea
+
+# Eclipse 
+.classpath
+.project
+.settings/
+bin/
+
+# IntelliJ
+.idea/
 *.iml
+
+# Maven
+target/
+
+# Gradle
+build/
+.gradle/
+userHome/
