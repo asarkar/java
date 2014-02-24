@@ -16,6 +16,7 @@
 
 package name.abhijitsarkar.coffeehouse.spring.support;
 
+import name.abhijitsarkar.coffeehouse.spring.annotation.ConditionalOnDayOfTheWeek;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Condition;
@@ -24,7 +25,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import java.util.Map;
 
-import static name.abhijitsarkar.coffeehouse.spring.support.ConditionalOnDayOfTheWeek.DayOfTheWeek;
+import static name.abhijitsarkar.coffeehouse.spring.annotation.ConditionalOnDayOfTheWeek.DayOfTheWeek;
 
 /**
  * @author Abhijit Sarkar

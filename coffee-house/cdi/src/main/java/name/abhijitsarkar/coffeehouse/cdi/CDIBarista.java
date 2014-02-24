@@ -19,8 +19,8 @@ package name.abhijitsarkar.coffeehouse.cdi;
 import name.abhijitsarkar.coffeehouse.Barista;
 import name.abhijitsarkar.coffeehouse.Coffee;
 import name.abhijitsarkar.coffeehouse.Menu;
-import name.abhijitsarkar.coffeehouse.cdi.support.CDI;
-import name.abhijitsarkar.coffeehouse.cdi.support.Operated;
+import name.abhijitsarkar.coffeehouse.cdi.annotation.CDI;
+import name.abhijitsarkar.coffeehouse.cdi.annotation.Operated;
 
 import javax.inject.Inject;
 

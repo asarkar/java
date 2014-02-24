@@ -18,7 +18,7 @@ package name.abhijitsarkar.coffeehouse.spring;
 
 import name.abhijitsarkar.coffeehouse.Coffee;
 import name.abhijitsarkar.coffeehouse.Menu;
-import name.abhijitsarkar.coffeehouse.spring.support.ConditionalOnDayOfTheWeek;
+import name.abhijitsarkar.coffeehouse.spring.annotation.ConditionalOnDayOfTheWeek;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

@@ -19,7 +19,7 @@ package name.abhijitsarkar.coffeehouse.cdi;
 import name.abhijitsarkar.coffeehouse.Barista;
 import name.abhijitsarkar.coffeehouse.Coffee;
 import name.abhijitsarkar.coffeehouse.NotOnTheMenuException;
-import name.abhijitsarkar.coffeehouse.cdi.support.CDI;
+import name.abhijitsarkar.coffeehouse.cdi.annotation.CDI;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

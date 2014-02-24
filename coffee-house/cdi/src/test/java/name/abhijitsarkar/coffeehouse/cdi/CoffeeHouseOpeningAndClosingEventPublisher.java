@@ -16,7 +16,7 @@
 
 package name.abhijitsarkar.coffeehouse.cdi;
 
-import name.abhijitsarkar.coffeehouse.cdi.support.Operational;
+import name.abhijitsarkar.coffeehouse.cdi.annotation.Operational;
 import name.abhijitsarkar.coffeehouse.cdi.support.OperationalEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,12 +41,12 @@ public class CoffeeHouseOpeningAndClosingEventPublisher {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @Inject
-    @Operational
     Event<OperationalEvent> event;
 
     @Produces
+    /* Qualifier @Operational is optional here but recommended to avoid ambiguity */
     @Operational
-    public Boolean open() {
+    public boolean open() {
         LOGGER.debug("Opening shop.");
 
         return true;

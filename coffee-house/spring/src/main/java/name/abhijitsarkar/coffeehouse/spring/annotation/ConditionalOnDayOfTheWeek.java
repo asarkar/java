@@ -14,11 +14,11 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.cdi.support;
+package name.abhijitsarkar.coffeehouse.spring.annotation;
 
-import javax.enterprise.inject.Stereotype;
-import javax.inject.Named;
-import javax.inject.Qualifier;
+import name.abhijitsarkar.coffeehouse.spring.support.DayOfTheWeekCondition;
+import org.springframework.context.annotation.Conditional;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,10 +30,13 @@ import java.lang.annotation.Target;
  */
 
 @Documented
-@Named
-@Stereotype
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@Qualifier
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE})
-public @interface CDI {
+@Conditional(DayOfTheWeekCondition.class)
+public @interface ConditionalOnDayOfTheWeek {
+    public DayOfTheWeek value() default DayOfTheWeek.WEEKDAY;
+
+    public enum DayOfTheWeek {
+        WEEKDAY, WEEKEND;
+    }
 }

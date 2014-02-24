@@ -16,6 +16,7 @@
 
 package name.abhijitsarkar.coffeehouse.cdi.support;
 
+import name.abhijitsarkar.coffeehouse.cdi.annotation.Operational;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,9 @@ public class CoffeeHouseClosingEventListener {
     private static AtomicBoolean open;
 
     @Inject
+    /* Qualifier @Operational is optional here but recommended to avoid ambiguity */
     @Operational
-    public CoffeeHouseClosingEventListener(final Boolean open) {
+    public CoffeeHouseClosingEventListener(final boolean open) {
         CoffeeHouseClosingEventListener.open = new AtomicBoolean(open);
     }
 
@@ -43,6 +45,7 @@ public class CoffeeHouseClosingEventListener {
         return open.get();
     }
 
+    /* Qualifier @Operational is optional here but recommended to avoid ambiguity */
     public void setOpen(@Observes @Operational final OperationalEvent event) {
         CoffeeHouseClosingEventListener.open.set(event.isOpen());
 

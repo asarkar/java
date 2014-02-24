@@ -21,7 +21,6 @@ import name.abhijitsarkar.coffeehouse.support.LoggingHelper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,31 +38,9 @@ public class OperatedAspect {
     @Autowired
     private transient CoffeeHouseClosingEventListener listener;
 
-    /* Define a pointcut, for the execution of all methods that return type 'Coffee',
-     * are defined in the 'Barista' interface, named 'serve' and takes at least one String argument. */
-    @Pointcut(
-            "execution(name.abhijitsarkar.coffeehouse.Coffee name.abhijitsarkar.coffeehouse.Barista.serve(String, ..))"
+    /* Intercept any method named serve defined in the type Barista.*/
+    @Before("execution(* name.abhijitsarkar.coffeehouse.Barista.serve(..))"
     )
-    public void order() {
-        /* This method only exists to serve as a pointcut definition; it doesn't need a body. */
-    }
-
-    /* Could also be written using an in-place pointcut expression:
-     * @Before("execution(* name.abhijitsarkar.coffeehouse.Coffee name.abhijitsarkar.coffeehouse.Barista serve(String, ..))").
-     *
-     * Arguments are more commonly retrieved using the 'binding' form args(parameterName,..)
-     * in the pointcut expression. That provides for both stronger match and strong typing.
-     *
-     * So, in this case, pointcut would become:
-     * @Pointcut("execution(* name.abhijitsarkar.coffeehouse.Coffee name.abhijitsarkar.coffeehouse.Barista serve(String, ..))
-     *      && args(String blend, ..)")
-     * public void order(String blend)
-     * and advice would become:
-     * @Before("name.abhijitsarkar.coffeehouse.spring.support.OperatedAspect.order(blend)")
-     *
-     * Since the number of arguments are variable, we resort to the JoinPoint instead of the 'binding' args.
-     */
-    @Before("name.abhijitsarkar.coffeehouse.spring.support.OperatedAspect.order()")
     public void verifyThatOperational(final JoinPoint joinPoint) {
         LOGGER.debug("Intercepted {}.", joinPoint.getSignature());
 

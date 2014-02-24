@@ -17,6 +17,7 @@
 package name.abhijitsarkar.coffeehouse.cdi.support;
 
 import name.abhijitsarkar.coffeehouse.NotOperationalException;
+import name.abhijitsarkar.coffeehouse.cdi.annotation.Operated;
 import name.abhijitsarkar.coffeehouse.support.LoggingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

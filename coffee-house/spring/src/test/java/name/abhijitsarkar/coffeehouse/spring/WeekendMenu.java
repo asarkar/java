@@ -17,7 +17,7 @@
 package name.abhijitsarkar.coffeehouse.spring;
 
 import name.abhijitsarkar.coffeehouse.Menu;
-import name.abhijitsarkar.coffeehouse.spring.support.ConditionalOnDayOfTheWeek;
+import name.abhijitsarkar.coffeehouse.spring.annotation.ConditionalOnDayOfTheWeek;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Scope;
 
 import javax.inject.Named;
 
-import static name.abhijitsarkar.coffeehouse.spring.support.ConditionalOnDayOfTheWeek.DayOfTheWeek;
+import static name.abhijitsarkar.coffeehouse.spring.annotation.ConditionalOnDayOfTheWeek.DayOfTheWeek;
 
 /**
  * @author Abhijit Sarkar

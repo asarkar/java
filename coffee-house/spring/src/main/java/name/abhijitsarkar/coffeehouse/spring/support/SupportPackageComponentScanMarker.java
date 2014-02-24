@@ -14,33 +14,12 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.cdi;
-
-import name.abhijitsarkar.coffeehouse.Barista;
-import name.abhijitsarkar.coffeehouse.NotOperationalException;
-import name.abhijitsarkar.coffeehouse.cdi.annotation.CDI;
-import org.junit.Test;
-
-import javax.inject.Inject;
+package name.abhijitsarkar.coffeehouse.spring.support;
 
 /**
  * @author Abhijit Sarkar
  */
-public class CDICloseCoffeeShopTest extends AbstractCDITest {
 
-    @Inject
-    private CoffeeHouseOpeningAndClosingEventPublisher publisher;
-
-    @Inject
-    @CDI
-    private Barista barista;
-
-    @Test(expected = NotOperationalException.class)
-    public void testServeWhenShopClosed() throws InterruptedException {
-        publisher.closeShop();
-
-        Thread.sleep(5000);
-
-        barista.serve("dark");
-    }
+/* This interface exists only to aid type-safe component scanning of the package it is in. */
+public interface SupportPackageComponentScanMarker {
 }
