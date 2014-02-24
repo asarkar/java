@@ -14,15 +14,16 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.spring;
+package name.abhijitsarkar.coffeehouse.cdi.event;
 
-import name.abhijitsarkar.coffeehouse.spring.support.OperationalEvent;
+import name.abhijitsarkar.coffeehouse.cdi.annotation.Operational;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.stereotype.Component;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -31,29 +32,35 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Abhijit Sarkar
  */
-@Component
-public class CoffeeHouseClosingEventPublisher implements ApplicationEventPublisherAware {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CoffeeHouseClosingEventPublisher.class);
 
-    private ApplicationEventPublisher publisher;
+@ApplicationScoped
+public class CoffeeHouseOpeningAndClosingEventPublisher {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CoffeeHouseOpeningAndClosingEventPublisher.class);
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-    @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
-        this.publisher = publisher;
+    @Inject
+    Event<OperationalEvent> event;
+
+    @Produces
+    /* Qualifier @Operational is optional here but recommended to avoid ambiguity */
+    @Operational
+    public boolean open() {
+        LOGGER.debug("Opening shop.");
+
+        return true;
     }
 
     void closeShop() {
         final Runnable closer = new Runnable() {
             public void run() {
-                final OperationalEvent event = new OperationalEvent(this);
+                final OperationalEvent operationalEvent = new OperationalEvent();
 
-                event.setOpen(false);
+                operationalEvent.setOpen(false);
 
                 LOGGER.debug("Firing notification to close shop.");
 
-                CoffeeHouseClosingEventPublisher.this.publisher.publishEvent(event);
+                event.fire(operationalEvent);
             }
         };
 

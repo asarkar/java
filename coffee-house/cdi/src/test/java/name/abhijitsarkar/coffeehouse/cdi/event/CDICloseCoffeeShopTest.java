@@ -14,22 +14,27 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.spring;
+package name.abhijitsarkar.coffeehouse.cdi.event;
 
 import name.abhijitsarkar.coffeehouse.Barista;
 import name.abhijitsarkar.coffeehouse.NotOperationalException;
+import name.abhijitsarkar.coffeehouse.cdi.AbstractCDITest;
+import name.abhijitsarkar.coffeehouse.cdi.annotation.CDI;
+import name.abhijitsarkar.coffeehouse.cdi.event.CoffeeHouseOpeningAndClosingEventPublisher;
 import org.junit.Test;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
 
 /**
  * @author Abhijit Sarkar
  */
-public class SpringCloseCoffeeShopTest extends AbstractSpringContextAwareTest {
-    @Resource
-    private CoffeeHouseClosingEventPublisher publisher;
+public class CDICloseCoffeeShopTest extends AbstractCDITest {
 
-    @Resource
+    @Inject
+    private CoffeeHouseOpeningAndClosingEventPublisher publisher;
+
+    @Inject
+    @CDI
     private Barista barista;
 
     @Test(expected = NotOperationalException.class)

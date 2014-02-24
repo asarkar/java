@@ -14,7 +14,7 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.cdi.support;
+package name.abhijitsarkar.coffeehouse.cdi.event;
 
 import name.abhijitsarkar.coffeehouse.cdi.annotation.Operational;
 import org.slf4j.Logger;

@@ -16,6 +16,7 @@
 
 package name.abhijitsarkar.coffeehouse.spring;
 
+import name.abhijitsarkar.coffeehouse.spring.event.SpringCloseCoffeeShopTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

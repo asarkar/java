@@ -16,6 +16,7 @@
 
 package name.abhijitsarkar.coffeehouse.cdi;
 
+import name.abhijitsarkar.coffeehouse.cdi.event.CDICloseCoffeeShopTest;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestSuiteRunner;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

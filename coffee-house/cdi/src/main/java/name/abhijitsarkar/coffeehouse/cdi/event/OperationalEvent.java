@@ -14,7 +14,7 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.cdi.support;
+package name.abhijitsarkar.coffeehouse.cdi.event;
 
 import java.io.Serializable;
 

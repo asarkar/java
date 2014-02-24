@@ -14,7 +14,7 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.spring.support;
+package name.abhijitsarkar.coffeehouse.spring.event;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

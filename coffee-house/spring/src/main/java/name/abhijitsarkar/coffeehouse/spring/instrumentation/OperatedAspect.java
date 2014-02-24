@@ -14,50 +14,43 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.cdi.support;
+package name.abhijitsarkar.coffeehouse.spring.instrumentation;
 
 import name.abhijitsarkar.coffeehouse.NotOperationalException;
-import name.abhijitsarkar.coffeehouse.cdi.annotation.Operated;
+import name.abhijitsarkar.coffeehouse.spring.event.CoffeeHouseClosingEventListener;
 import name.abhijitsarkar.coffeehouse.support.LoggingHelper;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-import java.io.Serializable;
-import java.lang.reflect.Method;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Abhijit Sarkar
  */
 
-@Operated
-@Interceptor
-public class OperatedInterceptor implements Serializable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(OperatedInterceptor.class);
+@Component
+@Aspect
+public class OperatedAspect {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OperatedAspect.class);
 
-    private static final long serialVersionUID = -3316843159950922501L;
-
-    @Inject
+    @Autowired
     private transient CoffeeHouseClosingEventListener listener;
 
-    @AroundInvoke
-    public Object verifyThatOperational(final InvocationContext invocationContext) throws Exception {
-        final Method method = invocationContext.getMethod();
+    /* Intercept any method named serve defined in the type Barista.*/
+    @Before("execution(* name.abhijitsarkar.coffeehouse.Barista.serve(..))"
+    )
+    public void verifyThatOperational(final JoinPoint joinPoint) {
+        LOGGER.debug("Intercepted {}.", joinPoint.getSignature());
 
-        LOGGER.debug("Intercepted {} {}.{}({}).", method.getReturnType().getSimpleName(), method.getDeclaringClass(),
-                method.getName(), method.getParameterTypes());
-
-        final Object[] args = invocationContext.getParameters();
+        final Object[] args = joinPoint.getArgs();
 
         LoggingHelper.logArgs(LOGGER, args);
 
         if (!listener.isOpen()) {
             throw new NotOperationalException("Sorry, we're currently closed.");
         }
-
-        return invocationContext.proceed();
     }
 }

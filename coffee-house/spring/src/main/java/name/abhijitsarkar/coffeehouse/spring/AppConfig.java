@@ -16,7 +16,6 @@
 
 package name.abhijitsarkar.coffeehouse.spring;
 
-import name.abhijitsarkar.coffeehouse.spring.support.SupportPackageComponentScanMarker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +28,7 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
  */
 
 @Configuration
-@ComponentScan(basePackageClasses = {SpringPackageComponentScanMarker.class, SupportPackageComponentScanMarker.class})
+@ComponentScan(basePackageClasses = {SpringPackageComponentScanMarker.class})
 @EnableAspectJAutoProxy
 public abstract class AppConfig {
 

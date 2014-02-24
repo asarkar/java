@@ -14,12 +14,25 @@
  * and is also available at http://www.gnu.org/licenses.
  */
 
-package name.abhijitsarkar.coffeehouse.spring.support;
+package name.abhijitsarkar.coffeehouse.spring.event;
+
+import org.springframework.context.ApplicationEvent;
 
 /**
  * @author Abhijit Sarkar
  */
+public class OperationalEvent extends ApplicationEvent {
+    private boolean open;
 
-/* This interface exists only to aid type-safe component scanning of the package it is in. */
-public interface SupportPackageComponentScanMarker {
+    public OperationalEvent(final Object source) {
+        super(source);
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(final boolean open) {
+        this.open = open;
+    }
 }
