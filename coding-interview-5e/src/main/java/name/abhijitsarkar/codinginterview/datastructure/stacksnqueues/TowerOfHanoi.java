@@ -20,8 +20,6 @@ import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Stack;
 
-import name.abhijitsarkar.hadoop.citation.CitationCombiner;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

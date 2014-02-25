@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Abhijit Sarkar
  */
-public class PracticeQuestions {
-	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestions.class);
+public class PracticeQuestionsCh1 {
+	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh1.class);
 
 	/*
 	 * Q1.1: Implement an algorithm to determine if a string has all unique characters. What if you cannot use

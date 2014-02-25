@@ -21,19 +21,19 @@ import org.junit.Test;
 /**
  * @author Abhijit Sarkar
  */
-public class PracticeQuestionsTest {
+public class PracticeQuestionsCh9Test {
 
 	@Test
 	public void testMagicIndex() {
 		int[] array = new int[] { -1, 0, 2 };
 
 		Assert.assertEquals(2,
-				PracticeQuestions.magicIndex(array, 0, array.length));
+				PracticeQuestionsCh9.magicIndex(array, 0, array.length));
 
 		array = new int[] { 1, 2, 3 };
 
 		Assert.assertEquals(-1,
-				PracticeQuestions.magicIndex(array, 0, array.length));
+				PracticeQuestionsCh9.magicIndex(array, 0, array.length));
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class PracticeQuestionsTest {
 
 		String[] expected = new String[] { "cab", "abc", "bac", "acb" };
 
-		String[] actual = PracticeQuestions.perm(s);
+		String[] actual = PracticeQuestionsCh9.perm(s);
 
 		Assert.assertArrayEquals(expected, actual);
 	}

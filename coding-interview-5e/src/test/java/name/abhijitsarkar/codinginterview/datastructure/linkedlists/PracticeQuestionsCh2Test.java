@@ -23,7 +23,7 @@ import org.junit.Test;
 /**
  * @author Abhijit Sarkar
  */
-public class PracticeQuestionsTest {
+public class PracticeQuestionsCh2Test {
 	@Test
 	public void testRemoveDupes() {
 		LinkedList<Integer> linkedList = new LinkedList<Integer>();
@@ -31,7 +31,7 @@ public class PracticeQuestionsTest {
 		linkedList.add(2);
 		linkedList.add(1);
 
-		PracticeQuestions.removeDupes(linkedList);
+		PracticeQuestionsCh2.removeDupes(linkedList);
 
 		Assert.assertEquals(2, linkedList.size());
 		Assert.assertEquals(Integer.valueOf(1), linkedList.remove());
@@ -47,7 +47,7 @@ public class PracticeQuestionsTest {
 		linkedList.add(5);
 		linkedList.add(1);
 
-		PracticeQuestions.partition(linkedList, 4);
+		PracticeQuestionsCh2.partition(linkedList, 4);
 
 		Assert.assertEquals(4, linkedList.size());
 		Assert.assertEquals(Integer.valueOf(2), linkedList.get(0));
@@ -65,7 +65,7 @@ public class PracticeQuestionsTest {
 		linkedList.add('i');
 		linkedList.add('c');
 
-		Assert.assertTrue(PracticeQuestions.isPalindrome(linkedList));
+		Assert.assertTrue(PracticeQuestionsCh2.isPalindrome(linkedList));
 
 		linkedList = new LinkedList<Character>();
 		linkedList.add('a');
@@ -73,7 +73,7 @@ public class PracticeQuestionsTest {
 		linkedList.add('n');
 		linkedList.add('a');
 
-		Assert.assertTrue(PracticeQuestions.isPalindrome(linkedList));
+		Assert.assertTrue(PracticeQuestionsCh2.isPalindrome(linkedList));
 
 		linkedList = new LinkedList<Character>();
 		linkedList.add('a');
@@ -81,6 +81,6 @@ public class PracticeQuestionsTest {
 		linkedList.add('m');
 		linkedList.add('a');
 
-		Assert.assertFalse(PracticeQuestions.isPalindrome(linkedList));
+		Assert.assertFalse(PracticeQuestionsCh2.isPalindrome(linkedList));
 	}
 }

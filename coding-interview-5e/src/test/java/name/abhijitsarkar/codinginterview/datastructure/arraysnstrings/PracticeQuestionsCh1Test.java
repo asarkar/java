@@ -21,33 +21,33 @@ import org.junit.Test;
 /**
  * @author Abhijit Sarkar
  */
-public class PracticeQuestionsTest {
+public class PracticeQuestionsCh1Test {
 	@Test
 	public void testIsUnique() {
-		Assert.assertTrue(PracticeQuestions.isUnique("abc"));
-		Assert.assertFalse(PracticeQuestions.isUnique("aba"));
+		Assert.assertTrue(PracticeQuestionsCh1.isUnique("abc"));
+		Assert.assertFalse(PracticeQuestionsCh1.isUnique("aba"));
 	}
 
 	@Test
 	public void testIsPermutation() {
-		Assert.assertTrue(PracticeQuestions.isPermutation("abc", "cba"));
-		Assert.assertTrue(PracticeQuestions.isPermutation("aBc", "acB"));
-		Assert.assertFalse(PracticeQuestions.isPermutation("abc", "c"));
-		Assert.assertFalse(PracticeQuestions.isPermutation("abc", "def"));
+		Assert.assertTrue(PracticeQuestionsCh1.isPermutation("abc", "cba"));
+		Assert.assertTrue(PracticeQuestionsCh1.isPermutation("aBc", "acB"));
+		Assert.assertFalse(PracticeQuestionsCh1.isPermutation("abc", "c"));
+		Assert.assertFalse(PracticeQuestionsCh1.isPermutation("abc", "def"));
 	}
 
 	@Test
 	public void testEncodeRepeatedChars() {
 		Assert.assertEquals("a3b2",
-				PracticeQuestions.encodeRepeatedChars("aaabb"));
-		Assert.assertEquals("abc", PracticeQuestions.encodeRepeatedChars("abc"));
+				PracticeQuestionsCh1.encodeRepeatedChars("aaabb"));
+		Assert.assertEquals("abc", PracticeQuestionsCh1.encodeRepeatedChars("abc"));
 	}
 
 	@Test
 	public void testFillIfZero() {
 		int[][] matrix = new int[][] { { 1, 2 }, { 3, 4 }, { 5, 0 } };
 
-		PracticeQuestions.fillIfZero(matrix);
+		PracticeQuestionsCh1.fillIfZero(matrix);
 
 		Assert.assertEquals(0, matrix[0][1]);
 		Assert.assertEquals(0, matrix[1][1]);
@@ -60,9 +60,9 @@ public class PracticeQuestionsTest {
 
 	@Test
 	public void testIsRotation() {
-		Assert.assertTrue(PracticeQuestions.isRotation("erbottlewat",
+		Assert.assertTrue(PracticeQuestionsCh1.isRotation("erbottlewat",
 				"waterbottle"));
-		Assert.assertFalse(PracticeQuestions.isRotation("erbottlewat",
+		Assert.assertFalse(PracticeQuestionsCh1.isRotation("erbottlewat",
 				"waterbottel"));
 	}
 }

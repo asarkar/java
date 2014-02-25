@@ -20,7 +20,7 @@ import name.abhijitsarkar.codinginterview.datastructure.Stack;
 /**
  * @author Abhijit Sarkar
  */
-public class PracticeQuestions {
+public class PracticeQuestionsCh3 {
 	/*
 	 * Q3.6: Write a program to sort a stack in ascending order (with biggest items on
 	 * top). You may use at most one additional stack to hold items, but you may

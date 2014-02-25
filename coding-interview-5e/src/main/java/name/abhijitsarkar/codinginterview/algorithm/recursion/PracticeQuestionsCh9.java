@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Abhijit Sarkar
  */
-public class PracticeQuestions {
-	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestions.class);
+public class PracticeQuestionsCh9 {
+	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh9.class);
 
 	/*
 	 * Q9.3: A magic index in an array A[0...n-1] is defined to be an index such that A[i] = i. Given a sorted array of

@@ -24,7 +24,7 @@ import name.abhijitsarkar.codinginterview.datastructure.LinkedList.LinkedListNod
 /**
  * @author Abhijit Sarkar
  */
-public class PracticeQuestions {
+public class PracticeQuestionsCh2 {
 	/*
 	 * Q2.1: Write code to remove duplicates from an unsorted linked list.
 	 */
