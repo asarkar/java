@@ -15,66 +15,15 @@
  */
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'maven'
-    apply plugin: 'jacoco'
-    apply plugin: 'pmd'
-    apply plugin: 'findbugs'
+    apply from: 'https://raw.github.com/abhijitsarkar/gradle/master/gradle-common/build.gradle'
 
-    sourceCompatibility = projectSourceCompatibility
-    targetCompatibility = projectSourceCompatibility
+    apply plugin: 'maven'
 
     group = projectGroup
-    version = projectVersion
 
     configurations {
-        provided
-    }
-
-    repositories {
-        mavenCentral()
-    }
-
-    pmd {
-        toolVersion = pmdVersion
-        sourceSets = [sourceSets.main]
-        ignoreFailures = true
-        targetJdk = projectSourceCompatibility
-        ruleSetFiles = files("${rootProject.projectDir}/src/main/config/pmd/ruleset.xml")
-    }
-
-    findbugs {
-        toolVersion = findbugsVersion
-        sourceSets = [sourceSets.main]
-        ignoreFailures = true
-        reportsDir = file("${buildDir}/reports/findbugs")
-        effort = 'default'
-    }
-
-    tasks.withType(Pmd) {
-        it.onlyIf { !project.hasProperty('skipCoverage') }
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
-
-    tasks.withType(FindBugs) {
-        it.onlyIf { !project.hasProperty('skipCoverage') }
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
-
-    jacoco {
-        toolVersion = jacocoVersion
-    }
-
-    jacocoTestReport {
-        reports {
-            html.destination "${buildDir}/reports/jacoco"
-        }
+        // Weld uses Log4j, so exclude Logback from gradle-common
+        provided.exclude group: 'ch.qos.logback'
     }
 
     dependencies {
@@ -92,33 +41,11 @@ subprojects {
                 [group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion],
                 [group: 'org.slf4j', name: 'slf4j-log4j12', version: slf4jVersion]
         )
-        testCompile(
-                [group: 'junit', name: 'junit', version: junitVersion]
-        )
-        pmd([group: 'net.sourceforge.pmd', name: 'pmd', version: pmdVersion])
-        findbugs([group: 'com.google.code.findbugs', name: 'findbugs', version: findbugsVersion])
-        jacocoAnt([group: 'org.jacoco', name: 'org.jacoco.ant', version: jacocoVersion])
-        jacocoAgent([group: 'org.jacoco', name: 'org.jacoco.agent', version: jacocoVersion])
-
     }
 
+    // Add the Log4j file to classpath without having to copy it to each subproject
     sourceSets {
-        [main, test].each {
-            it.compileClasspath += configurations.provided
-            it.runtimeClasspath += configurations.provided
-
-            it.output.resourcesDir = project.file("$buildDir/classes/${it.name}")
-        }
-        test {
-            resources {
-                srcDir "${rootProject.projectDir}/src/test/resources"
-            }
-        }
+        test.runtimeClasspath += files("${rootProject.projectDir}/src/test/resources")
     }
-
-    jar { manifest.attributes provider: 'Abhijit Sarkar' }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = project.gradleVersion
-}
