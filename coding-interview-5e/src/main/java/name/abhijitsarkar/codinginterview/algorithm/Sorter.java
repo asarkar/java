@@ -98,9 +98,9 @@ public class Sorter {
 
 		int pivotValue = arr[startIdx];
 
-		swap(arr, startIdx, endIdx);
-
 		int storeIdx = startIdx;
+		
+		swap(arr, storeIdx, endIdx);
 
 		for (int runningIdx = startIdx; runningIdx <= endIdx; runningIdx++) {
 			if (arr[runningIdx] <= pivotValue) {
