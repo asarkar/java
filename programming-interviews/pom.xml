@@ -13,6 +13,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>name.abhijitsarkar.algorithms</groupId>
+      <artifactId>algorithms-core</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>

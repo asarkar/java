@@ -1,69 +1,87 @@
 package name.abhijitsarkar.programminginterviews.arraysnstrings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.ArrayList;
-
 public class PracticeQuestionsCh6 {
 	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh6.class);
-    
-	/* Q6.22: TODO  */
-	public List<String> keypadPermutation(int numSeq) {
-	    char[] digits  = String.valueOf(numSeq).toCharArray();
 
-		List<String> perms = new ArrayList<>();
+	/*
+	 * Q6.22: Given a cell phone keypad (specified by a mapping M that takes individual digits and returns the
+	 * corresponding set of characters) and a number sequence, return all possible character sequences (not just legal
+	 * words) that correspond to the number sequence.
+	 */
+	public static List<String> keypadPermutation(int num) {
+		final List<String> perms = new ArrayList<>();
 
-        for (int idx = 0; idx <= digits.length; idx++) {
-		    permute(digits[idx], perms);
-		}
+		final String numSeq = String.valueOf(num);
 
-		return perms;
+		return permute(numSeq, 0, perms);
 	}
 
-	private permute(int digit, List<String> perms) {
-	    String charSeq = charSeq(digit);
-
-		for (String s : perms) {
-		    
+	private static List<String> permute(String numSeq, int idx, List<String> perms) {
+		if (idx == numSeq.length()) {
+			return perms;
 		}
+
+		final String charSeq = charSeq(numSeq.charAt(idx));
+
+		final List<String> buffer = new ArrayList<>();
+
+		if (perms.isEmpty()) {
+			fillBufferWithPerms("", charSeq, buffer);
+		} else {
+			for (final String s : perms) {
+				fillBufferWithPerms(s, charSeq, buffer);
+			}
+		}
+
+		return permute(numSeq, ++idx, buffer);
 	}
 
-	private String charSeq(char digit) {
-	    String charSeq = "";
+	private static String charSeq(char digit) {
+		String charSeq = "";
 		final int idxOfZeroInASCII = 48;
-        int intVal = digit - idxOfZeroInASCII;
+		int intVal = digit - idxOfZeroInASCII;
 
 		switch (intVal) {
-		    case 2:
-		        charSeq = "ABC";
-			    break;
-		    case 3:
-		        charSeq = "DEF";
-			    break;
-		    case 4:
-		        charSeq = "GHI";
-			    break;
-		    case 5:
-		        charSeq = "JKL";
-			    break;
-		    case 6:
-		        charSeq = "MNO";
-			    break;
-		    case 7:
-		        charSeq = "PQRS";
-			    break;
-		    case 8:
-		        charSeq = "TUV";
-			    break;
-		    case 9:
-		        charSeq = "WXWZ";
-			    break;
-			default:
-				break;
+		case 2:
+			charSeq = "ABC";
+			break;
+		case 3:
+			charSeq = "DEF";
+			break;
+		case 4:
+			charSeq = "GHI";
+			break;
+		case 5:
+			charSeq = "JKL";
+			break;
+		case 6:
+			charSeq = "MNO";
+			break;
+		case 7:
+			charSeq = "PQRS";
+			break;
+		case 8:
+			charSeq = "TUV";
+			break;
+		case 9:
+			charSeq = "WXWZ";
+			break;
+		default:
+			break;
 		}
 
 		return charSeq;
+	}
+
+	private static void fillBufferWithPerms(String s, String charSeq, List<String> buffer) {
+		for (int i = 0; i < charSeq.length(); ++i) {
+			buffer.add(s + charSeq.charAt(i));
+		}
 	}
 }

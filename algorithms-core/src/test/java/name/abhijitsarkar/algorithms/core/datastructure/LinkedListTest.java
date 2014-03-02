@@ -13,7 +13,7 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.datastructure;
+package name.abhijitsarkar.algorithms.core.datastructure;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

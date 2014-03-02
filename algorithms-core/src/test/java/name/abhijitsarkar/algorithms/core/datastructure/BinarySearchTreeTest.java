@@ -13,46 +13,29 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.datastructure;
+package name.abhijitsarkar.algorithms.core.datastructure;
 
-import java.util.Collection;
+import org.junit.Assert;
+import org.junit.Before;
 
 /**
  * @author Abhijit Sarkar
  */
-public class Stack<E> {
-	protected LinkedList<E> stack = null;
+public class BinarySearchTreeTest {
+	private BinarySearchTree<Integer> binTree;
 
-	public Stack() {
-		stack = new LinkedList<E>();
-	}
+	@Before
+	public void setUp() {
+		binTree = new BinarySearchTree<Integer>();
 
-	public Stack(Collection<E> elements) {
-		stack = new LinkedList<E>(elements);
-	}
+		binTree.add(3);
+		binTree.add(2);
+		binTree.add(4);
+		binTree.add(1);
+		binTree.add(5);
 
-	public E push(E element) {
-		if (stack.add(0, element)) {
-			return element;
-		}
+		Assert.assertEquals(Integer.valueOf(3), binTree.getRoot().getData());
 
-		return null;
-	}
-
-	public E pop() {
-		return stack.remove(0);
-	}
-
-	public E peek() {
-		return stack.peek();
-	}
-
-	public boolean isEmpty() {
-		return stack.size() == 0;
-	}
-
-	@Override
-	public String toString() {
-		return "Stack [stack=" + stack + "]";
+		Assert.assertEquals(3, binTree.getDepth());
 	}
 }

@@ -13,29 +13,32 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.datastructure;
+package name.abhijitsarkar.algorithms.core.datastructure;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Abhijit Sarkar
  */
-public class BinarySearchTreeTest {
-	private BinarySearchTree<Integer> binTree;
+public class HashtableTest {
+	private Hashtable<Integer, Integer> hashtable;
 
-	@Before
-	public void setUp() {
-		binTree = new BinarySearchTree<Integer>();
+	public HashtableTest() {
+		hashtable = new Hashtable<Integer, Integer>();
 
-		binTree.add(3);
-		binTree.add(2);
-		binTree.add(4);
-		binTree.add(1);
-		binTree.add(5);
+		hashtable.put(1, 2);
+		hashtable.put(2, 3);
+	}
 
-		Assert.assertEquals(Integer.valueOf(3), binTree.getRoot().getData());
+	@Test
+	public void testHashtable() {
+		Assert.assertEquals(2, hashtable.size());
 
-		Assert.assertEquals(3, binTree.getDepth());
+		Assert.assertEquals(Integer.valueOf(3), hashtable.get(2));
+		Assert.assertEquals(Integer.valueOf(2), hashtable.get(1));
+		hashtable.put(2, 5);
+		Assert.assertEquals(Integer.valueOf(5), hashtable.get(2));
+		Assert.assertEquals(null, hashtable.get(10));
 	}
 }

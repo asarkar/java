@@ -13,7 +13,12 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.datastructure;
+package name.abhijitsarkar.algorithms.other;
+
+import java.util.List;
+
+import name.abhijitsarkar.algorithms.other.TowerOfHanoi.Disk;
+import name.abhijitsarkar.algorithms.other.TowerOfHanoi.Peg;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,24 +26,29 @@ import org.junit.Test;
 /**
  * @author Abhijit Sarkar
  */
-public class HashtableTest {
-	private Hashtable<Integer, Integer> hashtable;
+public class TowerOfHanoiTest {
+	TowerOfHanoi tower = null;
 
-	public HashtableTest() {
-		hashtable = new Hashtable<Integer, Integer>();
+	public TowerOfHanoiTest() {
+		tower = new TowerOfHanoi(3, 3);
 
-		hashtable.put(1, 2);
-		hashtable.put(2, 3);
+		List<Peg<Disk>> pegs = tower.pegs();
+
+		Assert.assertEquals(3, pegs.size());
+		Assert.assertEquals(3, pegs.get(0).size());
+		Assert.assertEquals(0, pegs.get(1).size());
+		Assert.assertEquals(0, pegs.get(2).size());
 	}
 
 	@Test
-	public void testHashtable() {
-		Assert.assertEquals(2, hashtable.size());
+	public void testMove() {
+		tower.move(3, 0, 2);
 
-		Assert.assertEquals(Integer.valueOf(3), hashtable.get(2));
-		Assert.assertEquals(Integer.valueOf(2), hashtable.get(1));
-		hashtable.put(2, 5);
-		Assert.assertEquals(Integer.valueOf(5), hashtable.get(2));
-		Assert.assertEquals(null, hashtable.get(10));
+		List<Peg<Disk>> pegs = tower.pegs();
+
+		Assert.assertEquals(3, pegs.size());
+		Assert.assertEquals(3, pegs.get(2).size());
+		Assert.assertEquals(0, pegs.get(0).size());
+		Assert.assertEquals(0, pegs.get(1).size());
 	}
 }

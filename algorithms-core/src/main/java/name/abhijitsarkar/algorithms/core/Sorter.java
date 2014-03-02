@@ -13,7 +13,7 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.algorithms.core;
 
 import java.lang.reflect.Array;
 import java.util.ArrayDeque;
@@ -29,8 +29,7 @@ public class Sorter {
 		return recursiveMergeSort(arr, 0, arr.length - 1);
 	}
 
-	private static int[] recursiveMergeSort(int[] arr, int startIndex,
-			int endIndex) {
+	private static int[] recursiveMergeSort(int[] arr, int startIndex, int endIndex) {
 		if (startIndex >= endIndex) {
 			return Arrays.copyOfRange(arr, startIndex, endIndex + 1);
 		}
@@ -99,7 +98,7 @@ public class Sorter {
 		int pivotValue = arr[startIdx];
 
 		int storeIdx = startIdx;
-		
+
 		swap(arr, storeIdx, endIdx);
 
 		for (int runningIdx = startIdx; runningIdx <= endIdx; runningIdx++) {
@@ -136,8 +135,7 @@ public class Sorter {
 
 	private static int[][] scatter(int[] arr) {
 		@SuppressWarnings("unchecked")
-		List<Integer>[] tempBuckets = (List<Integer>[]) Array.newInstance(
-				ArrayList.class, 8);
+		List<Integer>[] tempBuckets = (List<Integer>[]) Array.newInstance(ArrayList.class, 8);
 
 		long hash = -1;
 		int idx = -1;
@@ -196,8 +194,7 @@ public class Sorter {
 		return hash;
 	}
 
-	private static List<Integer> createOrGetBucket(List<Integer>[] buckets,
-			int idx) {
+	private static List<Integer> createOrGetBucket(List<Integer>[] buckets, int idx) {
 		List<Integer> bucket = buckets[idx];
 
 		if (bucket == null) {

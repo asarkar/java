@@ -13,15 +13,15 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.algorithms.core;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree;
-import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree.BinaryTreeNode;
-import name.abhijitsarkar.codinginterview.datastructure.Queue;
-import name.abhijitsarkar.codinginterview.datastructure.Stack;
+import name.abhijitsarkar.algorithms.core.datastructure.BinarySearchTree;
+import name.abhijitsarkar.algorithms.core.datastructure.BinarySearchTree.BinaryTreeNode;
+import name.abhijitsarkar.algorithms.core.datastructure.Queue;
+import name.abhijitsarkar.algorithms.core.datastructure.Stack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

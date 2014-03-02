@@ -15,7 +15,8 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.datastructure.stacksnqueues;
 
-import name.abhijitsarkar.codinginterview.datastructure.Stack;
+import name.abhijitsarkar.algorithms.core.datastructure.Stack;
+
 
 /**
  * @author Abhijit Sarkar

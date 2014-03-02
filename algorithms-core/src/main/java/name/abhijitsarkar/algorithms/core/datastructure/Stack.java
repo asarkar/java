@@ -13,43 +13,46 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.algorithms.core.datastructure;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.Collection;
 
 /**
  * @author Abhijit Sarkar
  */
-public class SorterTest {
+public class Stack<E> {
+	protected LinkedList<E> stack = null;
 
-	@Test
-	public void testMergeSort() {
-		int[] arr = new int[] { 17, 3, 99, 51 };
-		int[] expected = new int[] { 3, 17, 51, 99 };
-
-		int[] actual = Sorter.mergeSort(arr);
-
-		Assert.assertArrayEquals(expected, actual);
+	public Stack() {
+		stack = new LinkedList<E>();
 	}
 
-	@Test
-	public void testQuickSort() {
-		int[] arr = new int[] { 17, 3, 99, 51 };
-		int[] expected = new int[] { 3, 17, 51, 99 };
-
-		int[] actual = Sorter.quickSort(arr);
-
-		Assert.assertArrayEquals(expected, actual);
+	public Stack(Collection<E> elements) {
+		stack = new LinkedList<E>(elements);
 	}
-	
-	@Test
-	public void testBucketSort() {
-		int[] arr = new int[] { 17, 3, 99, 51 };
-		int[] expected = new int[] { 3, 17, 51, 99 };
 
-		int[] actual = Sorter.bucketSort(arr);
+	public E push(E element) {
+		if (stack.add(0, element)) {
+			return element;
+		}
 
-		Assert.assertArrayEquals(expected, actual);
+		return null;
+	}
+
+	public E pop() {
+		return stack.remove(0);
+	}
+
+	public E peek() {
+		return stack.peek();
+	}
+
+	public boolean isEmpty() {
+		return stack.size() == 0;
+	}
+
+	@Override
+	public String toString() {
+		return "Stack [stack=" + stack + "]";
 	}
 }

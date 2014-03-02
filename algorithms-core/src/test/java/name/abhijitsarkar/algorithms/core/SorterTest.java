@@ -1,3 +1,5 @@
+package name.abhijitsarkar.algorithms.core;
+
 /*******************************************************************************
  * Copyright (c) 2014, the original author or authors.
  *
@@ -13,12 +15,6 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.datastructure.stacksnqueues;
-
-import java.util.List;
-
-import name.abhijitsarkar.codinginterview.datastructure.stacksnqueues.TowerOfHanoi.Disk;
-import name.abhijitsarkar.codinginterview.datastructure.stacksnqueues.TowerOfHanoi.Peg;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,29 +22,35 @@ import org.junit.Test;
 /**
  * @author Abhijit Sarkar
  */
-public class TowerOfHanoiTest {
-	TowerOfHanoi tower = null;
+public class SorterTest {
 
-	public TowerOfHanoiTest() {
-		tower = new TowerOfHanoi(3, 3);
+	@Test
+	public void testMergeSort() {
+		int[] arr = new int[] { 17, 3, 99, 51 };
+		int[] expected = new int[] { 3, 17, 51, 99 };
 
-		List<Peg<Disk>> pegs = tower.pegs();
+		int[] actual = Sorter.mergeSort(arr);
 
-		Assert.assertEquals(3, pegs.size());
-		Assert.assertEquals(3, pegs.get(0).size());
-		Assert.assertEquals(0, pegs.get(1).size());
-		Assert.assertEquals(0, pegs.get(2).size());
+		Assert.assertArrayEquals(expected, actual);
 	}
 
 	@Test
-	public void testMove() {
-		tower.move(3, 0, 2);
+	public void testQuickSort() {
+		int[] arr = new int[] { 17, 3, 99, 51 };
+		int[] expected = new int[] { 3, 17, 51, 99 };
 
-		List<Peg<Disk>> pegs = tower.pegs();
+		int[] actual = Sorter.quickSort(arr);
 
-		Assert.assertEquals(3, pegs.size());
-		Assert.assertEquals(3, pegs.get(2).size());
-		Assert.assertEquals(0, pegs.get(0).size());
-		Assert.assertEquals(0, pegs.get(1).size());
+		Assert.assertArrayEquals(expected, actual);
+	}
+
+	@Test
+	public void testBucketSort() {
+		int[] arr = new int[] { 17, 3, 99, 51 };
+		int[] expected = new int[] { 3, 17, 51, 99 };
+
+		int[] actual = Sorter.bucketSort(arr);
+
+		Assert.assertArrayEquals(expected, actual);
 	}
 }

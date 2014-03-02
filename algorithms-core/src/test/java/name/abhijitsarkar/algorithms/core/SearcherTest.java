@@ -1,3 +1,4 @@
+package name.abhijitsarkar.algorithms.core;
 /*******************************************************************************
  * Copyright (c) 2014, the original author or authors.
  *
@@ -13,10 +14,10 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.algorithm;
 
-import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree;
-import name.abhijitsarkar.codinginterview.datastructure.BinarySearchTree.BinaryTreeNode;
+
+import name.abhijitsarkar.algorithms.core.datastructure.BinarySearchTree;
+import name.abhijitsarkar.algorithms.core.datastructure.BinarySearchTree.BinaryTreeNode;
 
 import org.junit.Assert;
 import org.junit.Before;

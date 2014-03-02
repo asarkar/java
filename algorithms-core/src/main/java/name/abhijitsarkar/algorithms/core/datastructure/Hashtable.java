@@ -13,9 +13,9 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.datastructure;
+package name.abhijitsarkar.algorithms.core.datastructure;
 
-import name.abhijitsarkar.codinginterview.datastructure.LinkedList.LinkedListNode;
+import name.abhijitsarkar.algorithms.core.datastructure.LinkedList.LinkedListNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @author Abhijit Sarkar
  */
 /*
- * Q8.10: Design and implement a hash table which uses chaining (linked lists) to handle collisions.
+ * Hash table which uses chaining (linked lists) to handle collisions.
  */
 public class Hashtable<K, V> {
 	public static final Logger LOGGER = LoggerFactory.getLogger(Hashtable.class);
@@ -87,12 +87,12 @@ public class Hashtable<K, V> {
 			return null;
 		}
 
-		LinkedListNode<Entry<K, V>> node = bucket.head().getSuccessor();
+		LinkedListNode<Entry<K, V>> node = bucket.head().successor();
 		LinkedListNode<Entry<K, V>> tail = bucket.tail();
 
 		Entry<K, V> anEntry = null;
-		for (; node != tail; node = node.getSuccessor()) {
-			anEntry = node.getData();
+		for (; node != tail; node = node.successor()) {
+			anEntry = node.data();
 
 			if (anEntry.key.equals(key)) {
 				return anEntry.value;

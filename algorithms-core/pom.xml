@@ -1,25 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>name.abhijitsarkar</groupId>
     <artifactId>maven-parent</artifactId>
     <version>1.0</version>
   </parent>
 
-  <groupId>name.abhijitsarkar.codinginterview</groupId>
-  <artifactId>coding-interview</artifactId>
-  <version>5e</version>
-  <name>coding-interview</name>
-  <description>Practice code from "Cracking the Coding Interview", 5e, ISBN 098478280X</description>
+  <groupId>name.abhijitsarkar.algorithms</groupId>
+  <artifactId>algorithms-core</artifactId>
+  <name>algorithms-core</name>
+
+  <description>Various core algorithms and data structures</description>
 
   <dependencies>
-    <dependency>
-      <groupId>name.abhijitsarkar.algorithms</groupId>
-      <artifactId>algorithms-core</artifactId>
-      <version>1.0</version>
-    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -37,4 +31,5 @@
       <artifactId>logback-core</artifactId>
     </dependency>
   </dependencies>
+</project>
 </project>

@@ -13,7 +13,7 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.codinginterview.datastructure;
+package name.abhijitsarkar.algorithms.core.datastructure;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -68,12 +68,9 @@ public class LinkedList<E> {
 	 *             If index is less than 0 or greater than size.
 	 */
 	public boolean add(int index, E e) {
-		validateIndex(index);
+		LinkedListNode<E> predecessor = predecessor(index);
 
-		LinkedListNode<E> predecessor = getPredecessor(index);
-
-		LinkedListNode<E> newNode = new LinkedListNode<E>(e,
-				predecessor.getSuccessor());
+		LinkedListNode<E> newNode = new LinkedListNode<E>(e, predecessor.successor());
 
 		predecessor.setSuccessor(newNode);
 
@@ -148,13 +145,11 @@ public class LinkedList<E> {
 	 *             If index is less than 0 or greater than size.
 	 */
 	public E remove(int index) {
-		validateIndex(index);
+		LinkedListNode<E> predecessor = predecessor(index);
 
-		LinkedListNode<E> predecessor = getPredecessor(index);
+		LinkedListNode<E> nodeToBeRemoved = predecessor.successor();
 
-		LinkedListNode<E> nodeToBeRemoved = predecessor.getSuccessor();
-
-		predecessor.setSuccessor(nodeToBeRemoved.getSuccessor());
+		predecessor.setSuccessor(nodeToBeRemoved.successor());
 
 		if (index == size) {
 			adjustLast(predecessor);
@@ -162,13 +157,12 @@ public class LinkedList<E> {
 
 		size--;
 
-		return nodeToBeRemoved.getData();
+		return nodeToBeRemoved.data();
 	}
 
 	private final void checkNotEmpty() {
 		if (size == 0) {
-			throw new NoSuchElementException(
-					"Can't remove element from an empty list.");
+			throw new NoSuchElementException("Can't remove element from an empty list.");
 		}
 	}
 
@@ -183,7 +177,7 @@ public class LinkedList<E> {
 	public E peek() {
 		checkNotEmpty();
 
-		return head.getSuccessor().getData();
+		return head.successor().data();
 	}
 
 	/**
@@ -203,12 +197,12 @@ public class LinkedList<E> {
 		}
 
 		LinkedListNode<E> predecessor = head;
-		LinkedListNode<E> current = head.getSuccessor();
+		LinkedListNode<E> current = head.successor();
 		LinkedListNode<E> successor = null;
 
 		while (current != this.tail) {
 			// Save the successor
-			successor = current.getSuccessor();
+			successor = current.successor();
 
 			// Reverse the successor
 			current.setSuccessor(predecessor);
@@ -230,8 +224,7 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * Returns the head node of the list. The head is a sentinel and not a valid
-	 * element of the list.
+	 * Returns the head node of the list. The head is a sentinel and not a valid element of the list.
 	 * 
 	 * @return Head node of the list.
 	 */
@@ -240,8 +233,7 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * Returns the tail node of the list. The tail is a sentinel and not a valid
-	 * element of the list.
+	 * Returns the tail node of the list. The tail is a sentinel and not a valid element of the list.
 	 * 
 	 * @return Tail node of the list.
 	 */
@@ -250,8 +242,7 @@ public class LinkedList<E> {
 	}
 
 	/**
-	 * Returns but doesn't remove the element from the list as specified by the
-	 * index.
+	 * Returns but doesn't remove the element from the list as specified by the index.
 	 * 
 	 * @param index
 	 *            Index to get element from.
@@ -261,7 +252,7 @@ public class LinkedList<E> {
 	 *             If index is less than 0 or greater than size.
 	 */
 	public E get(int index) {
-		return nodeAt(index).getData();
+		return nodeAt(index).data();
 	}
 
 	/**
@@ -282,9 +273,9 @@ public class LinkedList<E> {
 	private final LinkedListNode<E> nodeAt(int index) {
 		validateIndex(index);
 
-		LinkedListNode<E> node = head.getSuccessor();
+		LinkedListNode<E> node = head.successor();
 
-		for (int idx = 0; idx < index; idx++, node = node.getSuccessor())
+		for (int idx = 0; idx < index; idx++, node = node.successor())
 			;
 
 		return node;
@@ -303,10 +294,10 @@ public class LinkedList<E> {
 	public int indexOf(E element) {
 		checkNotEmpty();
 
-		LinkedListNode<E> node = head.getSuccessor();
+		LinkedListNode<E> node = head.successor();
 
-		for (int idx = 0; idx < size; idx++, node = node.getSuccessor()) {
-			if (element.equals(node.getData())) {
+		for (int idx = 0; idx < size; idx++, node = node.successor()) {
+			if (element.equals(node.data())) {
 				return idx;
 			}
 		}
@@ -329,10 +320,10 @@ public class LinkedList<E> {
 
 		int lastIdx = -1;
 
-		LinkedListNode<E> node = head.getSuccessor();
+		LinkedListNode<E> node = head.successor();
 
-		for (int idx = 0; idx < size; idx++, node = node.getSuccessor()) {
-			if (element.equals(node.getData())) {
+		for (int idx = 0; idx < size; idx++, node = node.successor()) {
+			if (element.equals(node.data())) {
 				lastIdx = idx;
 			}
 		}
@@ -342,16 +333,15 @@ public class LinkedList<E> {
 
 	private final void validateIndex(int index) {
 		if (index < 0 || index > size) {
-			throw new IndexOutOfBoundsException(
-					"Index must be within the range [0, " + size + "]");
+			throw new IndexOutOfBoundsException("Index must be within the range [0, " + size + "]");
 		}
 	}
 
 	/*
-	 * If index = 0 or index = size, time complexity is O(1). Else in the worst
-	 * case, when index = (size - 1), it could be O(n).
+	 * If index = 0 or index = size, time complexity is O(1). Else in the worst case, when index = (size - 1), it could
+	 * be O(n).
 	 */
-	protected LinkedListNode<E> getPredecessor(int index) {
+	protected LinkedListNode<E> predecessor(int index) {
 		validateIndex(index);
 
 		if (index == 0) {
@@ -361,11 +351,11 @@ public class LinkedList<E> {
 		}
 
 		LinkedListNode<E> predecessor = head;
-		LinkedListNode<E> current = predecessor.getSuccessor();
+		LinkedListNode<E> current = predecessor.successor();
 
 		while (index-- > 0) {
 			predecessor = current;
-			current = predecessor.getSuccessor();
+			current = predecessor.successor();
 		}
 
 		return predecessor;
@@ -375,11 +365,10 @@ public class LinkedList<E> {
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
 
-		buffer.append("LinkedList [");
+		buffer.append("LinkedList[");
 
-		for (LinkedListNode<E> current = head.getSuccessor(); current != tail; current = current
-				.getSuccessor()) {
-			buffer.append(current.getData()).append(", ");
+		for (LinkedListNode<E> current = head.successor(); current != tail; current = current.successor()) {
+			buffer.append(current.data()).append(", ");
 		}
 
 		int len = buffer.length();
@@ -403,7 +392,7 @@ public class LinkedList<E> {
 			this.successor = successor;
 		}
 
-		public T getData() {
+		public T data() {
 			return this.data;
 		}
 
@@ -411,7 +400,7 @@ public class LinkedList<E> {
 			this.data = data;
 		}
 
-		public LinkedListNode<T> getSuccessor() {
+		public LinkedListNode<T> successor() {
 			return successor;
 		}
 
@@ -443,6 +432,12 @@ public class LinkedList<E> {
 			} else if (!data.equals(other.data))
 				return false;
 			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "LinkedListNode{data = " + data + ", successor = " + (successor != null ? successor.data : null)
+					+ "}";
 		}
 	}
 }

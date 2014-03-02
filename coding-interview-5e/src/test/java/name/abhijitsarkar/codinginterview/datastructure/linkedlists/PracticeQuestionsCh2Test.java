@@ -15,7 +15,7 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.datastructure.linkedlists;
 
-import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
+import name.abhijitsarkar.algorithms.core.datastructure.LinkedList;
 
 import org.junit.Assert;
 import org.junit.Test;

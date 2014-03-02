@@ -15,14 +15,14 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.datastructure.stacksnqueues;
 
-import name.abhijitsarkar.codinginterview.datastructure.Stack;
+import name.abhijitsarkar.algorithms.core.datastructure.Stack;
 
 /**
  * @author Abhijit Sarkar
  */
-/* Q3.2: How would you design a stack which, in addition to push and pop, 
- * also has a function min which returns the minimum element? 
- * Push, pop and min should all operate in O(1) time.
+/*
+ * Q3.2: How would you design a stack which, in addition to push and pop, also has a function min which returns the
+ * minimum element? Push, pop and min should all operate in O(1) time.
  */
 
 public class StackWithMin<E extends Comparable<E>> extends Stack<E> {

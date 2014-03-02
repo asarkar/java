@@ -18,8 +18,8 @@ package name.abhijitsarkar.codinginterview.datastructure.linkedlists;
 import java.util.HashSet;
 import java.util.Set;
 
-import name.abhijitsarkar.codinginterview.datastructure.LinkedList;
-import name.abhijitsarkar.codinginterview.datastructure.LinkedList.LinkedListNode;
+import name.abhijitsarkar.algorithms.core.datastructure.LinkedList;
+import name.abhijitsarkar.algorithms.core.datastructure.LinkedList.LinkedListNode;
 
 /**
  * @author Abhijit Sarkar
@@ -31,12 +31,12 @@ public class PracticeQuestionsCh2 {
 	public static <E> void removeDupes(LinkedList<E> linkedList) {
 		Set<E> dupes = new HashSet<E>();
 
-		LinkedListNode<E> current = linkedList.head().getSuccessor();
+		LinkedListNode<E> current = linkedList.head().successor();
 		E data = null;
 
 		for (int idx = 0; idx < linkedList.size(); idx++) {
-			data = current.getData();
-			current = current.getSuccessor();
+			data = current.data();
+			current = current.successor();
 
 			if (dupes.contains(data)) {
 				linkedList.remove(idx);
@@ -47,21 +47,19 @@ public class PracticeQuestionsCh2 {
 	}
 
 	/*
-	 * Q2.4: Write code to partition a linked list around a value x, such that
-	 * all nodes less than x come before all nodes greater than or equal to x.
+	 * Q2.4: Write code to partition a linked list around a value x, such that all nodes less than x come before all
+	 * nodes greater than or equal to x.
 	 * 
 	 * Doesn't handle dupes in the input list.
 	 * 
 	 * Partition is the basic building block of quick sort.
 	 */
-	public static <E extends Comparable<E>> void partition(
-			LinkedList<E> linkedList, E pivot) {
+	public static <E extends Comparable<E>> void partition(LinkedList<E> linkedList, E pivot) {
 		int lastIdx = linkedList.size() - 1;
 		int pivotIdx = linkedList.indexOf(pivot);
 
 		if (pivotIdx != linkedList.lastIndexOf(pivot)) {
-			throw new IllegalArgumentException(
-					"Can't handle dupes in input list.");
+			throw new IllegalArgumentException("Can't handle dupes in input list.");
 		}
 
 		swap(linkedList, pivotIdx, lastIdx);
