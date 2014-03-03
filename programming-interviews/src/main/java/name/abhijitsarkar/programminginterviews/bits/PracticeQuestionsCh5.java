@@ -12,13 +12,13 @@ public class PracticeQuestionsCh5 {
 	 * Q5.1: How would you go about computing the parity of a very large number of 64-bit nonnegative integers?
 	 */
 	public static long[] computeParities(final long[] input) {
-		final int numInput = (input == null || input.length == 0) ? 0 : input.length;
+		final int numInput = input == null || input.length == 0 ? 0 : input.length;
 
 		if (numInput == 0) {
 			return input;
 		}
 
-		final int storage = (int) ((numInput >> 6) + 1);
+		final int storage = (int) (numInput >> 6) + 1;
 		final long[] parities = new long[storage];
 
 		if (isOddParity(input[0])) {
@@ -27,10 +27,10 @@ public class PracticeQuestionsCh5 {
 
 		for (int i = 1; i < numInput; i++) {
 			final int section = i >> 6;
-			final int currentIdx = (i % 64) - 1;
+			final int currentIdx = i % 64 - 1;
 
 			if (isOddParity(input[i])) {
-				parities[section] ^= (1 << currentIdx);
+				parities[section] ^= 1 << currentIdx;
 			}
 		}
 
@@ -63,7 +63,7 @@ public class PracticeQuestionsCh5 {
 	 * the bits at indices i and j.
 	 */
 	public static long swapBits(final long x, final int i, final int j) {
-		if ((j <= i) || (i < 0) || (j > 63)) {
+		if (j <= i || i < 0 || j > 63) {
 			return x;
 		}
 
