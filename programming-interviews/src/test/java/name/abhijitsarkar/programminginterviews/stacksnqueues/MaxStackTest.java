@@ -13,37 +13,49 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.programminginterviews.arraysnstrings;
+package name.abhijitsarkar.programminginterviews.stacksnqueues;
 
-import static name.abhijitsarkar.programminginterviews.arraysnstrings.PracticeQuestionsCh6.keypadPermutation;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PracticeQuestionsCh6Test {
-	@Test
-	public void testKeypadPermutation() {
-		List<String> expected = new ArrayList<>();
-		expected.add("AD");
-		expected.add("AE");
-		expected.add("AF");
-		expected.add("BD");
-		expected.add("BE");
-		expected.add("BF");
-		expected.add("CD");
-		expected.add("CE");
-		expected.add("CF");
+public class MaxStackTest {
 
-		Assert.assertEquals(expected, keypadPermutation(23));
-		
-		expected.clear();
-		expected.add("A");
-		expected.add("B");
-		expected.add("C");
-		
-		Assert.assertEquals(expected, keypadPermutation(12));
+	@Test
+	public void testPush() {
+		MaxStack maxStack = new MaxStack();
+		maxStack.push(1);
+		maxStack.push(3);
+		maxStack.push(2);
+
+		Assert.assertEquals(3, maxStack.size());
+	}
+
+	@Test
+	public void testPop() {
+		MaxStack maxStack = new MaxStack();
+		maxStack.push(1);
+		maxStack.push(3);
+		maxStack.push(2);
+
+		Assert.assertEquals(2, maxStack.pop());
+		Assert.assertEquals(3, maxStack.pop());
+		Assert.assertEquals(1, maxStack.pop());
+	}
+
+	@Test
+	public void testMax() {
+		MaxStack maxStack = new MaxStack();
+		maxStack.push(1);
+		maxStack.push(3);
+		maxStack.push(2);
+
+		Assert.assertEquals(3, maxStack.max());
+	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testPopWhenEmpty() {
+		new MaxStack().pop();
 	}
 }

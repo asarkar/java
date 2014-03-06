@@ -48,6 +48,10 @@ public class StackWithMin<E extends Comparable<E>> extends Stack<E> {
 		return element;
 	}
 
+	/*
+	 * This implementation of min is buggy. It works the 1st time, but once a minimum element is popped, it loses track
+	 * of the new minimum which could be anywhere in the stack. c.f. Programming interviews Q8.1 for a working solution.
+	 */
 	private final void adjustMin(E element) {
 		if (min == null) {
 			min = element;

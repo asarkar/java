@@ -127,8 +127,6 @@ public class LinkedList<E> {
 	 *             If index is less than 0 or greater than size.
 	 */
 	public E remove() {
-		checkNotEmpty();
-
 		return remove(0);
 	}
 
@@ -145,6 +143,8 @@ public class LinkedList<E> {
 	 *             If index is less than 0 or greater than size.
 	 */
 	public E remove(int index) {
+		checkNotEmpty();
+
 		LinkedListNode<E> predecessor = predecessor(index);
 
 		LinkedListNode<E> nodeToBeRemoved = predecessor.successor();
@@ -186,6 +186,10 @@ public class LinkedList<E> {
 	 */
 	public int size() {
 		return this.size;
+	}
+
+	public boolean isEmpty() {
+		return size == 0;
 	}
 
 	/**
@@ -365,7 +369,7 @@ public class LinkedList<E> {
 	public String toString() {
 		StringBuilder buffer = new StringBuilder();
 
-		buffer.append("LinkedList[");
+		buffer.append("LinkedList [");
 
 		for (LinkedListNode<E> current = head.successor(); current != tail; current = current.successor()) {
 			buffer.append(current.data()).append(", ");
@@ -436,7 +440,7 @@ public class LinkedList<E> {
 
 		@Override
 		public String toString() {
-			return "LinkedListNode{data = " + data + ", successor = " + (successor != null ? successor.data : null)
+			return "LinkedListNode {data = " + data + ", successor = " + (successor != null ? successor.data : null)
 					+ "}";
 		}
 	}

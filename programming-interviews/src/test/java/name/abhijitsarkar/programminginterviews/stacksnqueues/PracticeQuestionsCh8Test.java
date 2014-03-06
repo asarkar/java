@@ -13,37 +13,20 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.programminginterviews.arraysnstrings;
+package name.abhijitsarkar.programminginterviews.stacksnqueues;
 
-import static name.abhijitsarkar.programminginterviews.arraysnstrings.PracticeQuestionsCh6.keypadPermutation;
+import static name.abhijitsarkar.programminginterviews.stacksnqueues.PracticeQuestionsCh8.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Assert;
 
-public class PracticeQuestionsCh6Test {
+public class PracticeQuestionsCh8Test {
 	@Test
-	public void testKeypadPermutation() {
-		List<String> expected = new ArrayList<>();
-		expected.add("AD");
-		expected.add("AE");
-		expected.add("AF");
-		expected.add("BD");
-		expected.add("BE");
-		expected.add("BF");
-		expected.add("CD");
-		expected.add("CE");
-		expected.add("CF");
-
-		Assert.assertEquals(expected, keypadPermutation(23));
-		
-		expected.clear();
-		expected.add("A");
-		expected.add("B");
-		expected.add("C");
-		
-		Assert.assertEquals(expected, keypadPermutation(12));
+	public void testEvalRpn() {
+		Assert.assertEquals(123, evalRpn("123"));
+		Assert.assertEquals(3, evalRpn("1,2,+"));
+		Assert.assertEquals(60, evalRpn("1,2,+,4,5,x,x"));
+		Assert.assertEquals(-4, evalRpn("1,1,+,-2,x"));
+		Assert.assertEquals(0, evalRpn("4,6,/,2,/"));
 	}
 }
