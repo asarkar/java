@@ -23,8 +23,13 @@ import name.abhijitsarkar.algorithms.core.datastructure.LinkedList.LinkedListNod
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/* Due to the nature of Linked lists, they easily lend to recursive solutions. 
- * Most of the solutions here can be changed to recursive ones with little effort.
+/**
+ * @author Abhijit Sarkar
+ */
+
+/*
+ * Due to the nature of Linked lists, they easily lend to recursive solutions. Most of the solutions here can be changed
+ * to recursive ones with little effort.
  */
 public class PracticeQuestionsCh7 {
 	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh7.class);

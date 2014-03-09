@@ -21,6 +21,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Abhijit Sarkar
+ */
 public class PracticeQuestionsCh6 {
 	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh6.class);
 

@@ -21,6 +21,10 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Abhijit Sarkar
+ */
+
 /* Q8.10: Implement a queue API using an array for storing elements. Your API should include a constructor function, 
  * which takes as argument the capacity of the queue, enqueue and dequeue functions, a size function, 
  * which returns the number of elements stored, and implement dynamic resizing.

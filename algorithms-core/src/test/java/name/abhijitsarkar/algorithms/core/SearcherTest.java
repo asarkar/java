@@ -40,9 +40,9 @@ public class SearcherTest {
 		binTree.add(1);
 		binTree.add(5);
 
-		Assert.assertEquals(Integer.valueOf(3), binTree.getRoot().getData());
+		Assert.assertEquals(Integer.valueOf(3), binTree.root().data());
 
-		Assert.assertEquals(3, binTree.getDepth());
+		Assert.assertEquals(3, binTree.depth());
 	}
 
 	@Test
@@ -57,9 +57,9 @@ public class SearcherTest {
 
 		Assert.assertNotNull(four);
 		Assert.assertFalse(four.isLeaf());
-		Assert.assertNull(four.getLeftChild());
-		Assert.assertNotNull(four.getRightChild());
-		Assert.assertEquals(Integer.valueOf(5), four.getRightChild().getData());
+		Assert.assertNull(four.leftChild());
+		Assert.assertNotNull(four.rightChild());
+		Assert.assertEquals(Integer.valueOf(5), four.rightChild().data());
 
 		BinaryTreeNode<Integer> five = Searcher.binarySearch(binTree, 5);
 		Assert.assertTrue(five.isLeaf());
@@ -77,9 +77,9 @@ public class SearcherTest {
 
 		Assert.assertNotNull(four);
 		Assert.assertFalse(four.isLeaf());
-		Assert.assertNull(four.getLeftChild());
-		Assert.assertNotNull(four.getRightChild());
-		Assert.assertEquals(Integer.valueOf(5), four.getRightChild().getData());
+		Assert.assertNull(four.leftChild());
+		Assert.assertNotNull(four.rightChild());
+		Assert.assertEquals(Integer.valueOf(5), four.rightChild().data());
 
 		BinaryTreeNode<Integer> five = Searcher.breadthFirstSearch(binTree, 5);
 		Assert.assertTrue(five.isLeaf());
@@ -97,9 +97,9 @@ public class SearcherTest {
 
 		Assert.assertNotNull(four);
 		Assert.assertFalse(four.isLeaf());
-		Assert.assertNull(four.getLeftChild());
-		Assert.assertNotNull(four.getRightChild());
-		Assert.assertEquals(Integer.valueOf(5), four.getRightChild().getData());
+		Assert.assertNull(four.leftChild());
+		Assert.assertNotNull(four.rightChild());
+		Assert.assertEquals(Integer.valueOf(5), four.rightChild().data());
 
 		BinaryTreeNode<Integer> five = Searcher.depthFirstSearch(binTree, 5);
 		Assert.assertTrue(five.isLeaf());

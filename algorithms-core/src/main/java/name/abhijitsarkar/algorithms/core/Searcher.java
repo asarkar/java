@@ -35,19 +35,19 @@ public class Searcher {
 	public static <E extends Comparable<E>> BinaryTreeNode<E> binarySearch(BinarySearchTree<E> binTree,
 			BinaryTreeNode<E> startNode, E value) {
 		// startNode can be null if the value doesn't exist in the tree
-		if (startNode == null || value.equals(startNode.getData())) {
+		if (startNode == null || value.equals(startNode.data())) {
 			return startNode;
 		}
 
-		if (value.compareTo(startNode.getData()) < 0) {
-			return binarySearch(binTree, startNode.getLeftChild(), value);
+		if (value.compareTo(startNode.data()) < 0) {
+			return binarySearch(binTree, startNode.leftChild(), value);
 		}
 
-		return binarySearch(binTree, startNode.getRightChild(), value);
+		return binarySearch(binTree, startNode.rightChild(), value);
 	}
 
 	public static <E extends Comparable<E>> BinaryTreeNode<E> binarySearch(BinarySearchTree<E> binTree, E value) {
-		return binarySearch(binTree, binTree.getRoot(), value);
+		return binarySearch(binTree, binTree.root(), value);
 	}
 
 	public static <E extends Comparable<E>> BinaryTreeNode<E> breadthFirstSearch(BinarySearchTree<E> binTree,
@@ -69,12 +69,12 @@ public class Searcher {
 		while (!queue.isEmpty()) {
 			node = queue.dequeue();
 
-			if (node.getData().equals(value)) {
+			if (node.data().equals(value)) {
 				return node;
 			}
 
-			leftChild = node.getLeftChild();
-			rightChild = node.getRightChild();
+			leftChild = node.leftChild();
+			rightChild = node.rightChild();
 
 			if (leftChild != null && !visited.contains(leftChild)) {
 				LOGGER.debug("Visited: {}.", leftChild);
@@ -94,7 +94,7 @@ public class Searcher {
 	}
 
 	public static <E extends Comparable<E>> BinaryTreeNode<E> breadthFirstSearch(BinarySearchTree<E> binTree, E value) {
-		return breadthFirstSearch(binTree, binTree.getRoot(), value);
+		return breadthFirstSearch(binTree, binTree.root(), value);
 	}
 
 	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(BinarySearchTree<E> binTree,
@@ -117,17 +117,17 @@ public class Searcher {
 
 			LOGGER.debug("Visited: {}.", visited);
 
-			if (currentNode.getData().equals(value)) {
+			if (currentNode.data().equals(value)) {
 				return currentNode;
 			}
 
-			rightChild = currentNode.getRightChild();
+			rightChild = currentNode.rightChild();
 
 			if (rightChild != null && !visited.contains(rightChild)) {
 				stack.push(rightChild);
 			}
 
-			leftChild = currentNode.getLeftChild();
+			leftChild = currentNode.leftChild();
 
 			if (leftChild != null && !visited.contains(leftChild)) {
 				stack.push(leftChild);
@@ -138,6 +138,6 @@ public class Searcher {
 	}
 
 	public static <E extends Comparable<E>> BinaryTreeNode<E> depthFirstSearch(BinarySearchTree<E> binTree, E value) {
-		return depthFirstSearch(binTree, binTree.getRoot(), value);
+		return depthFirstSearch(binTree, binTree.root(), value);
 	}
 }

@@ -17,6 +17,10 @@ package name.abhijitsarkar.programminginterviews.stacksnqueues;
 
 import name.abhijitsarkar.algorithms.core.datastructure.LinkedList;
 
+/**
+ * @author Abhijit Sarkar
+ */
+
 /* Q8.1: Design a stack that supports a max operation, which returns the maximum value stored in the stack, 
  * and throws an exception if the stack is empty. Assume elements are comparable. All operations must be O(1) time. 
  * You can use O(n) additional space, beyond what is required for the elements themselves.

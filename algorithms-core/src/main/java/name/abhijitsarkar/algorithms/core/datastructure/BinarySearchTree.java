@@ -56,10 +56,10 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
 		incrementDepthIfNeeded(node);
 
-		if (value.compareTo(node.getData()) < 0) {
-			node.setLeftChild(add(node.getLeftChild(), value));
+		if (value.compareTo(node.data()) < 0) {
+			node.setLeftChild(add(node.leftChild(), value));
 		} else {
-			node.setRightChild(add(node.getRightChild(), value));
+			node.setRightChild(add(node.rightChild(), value));
 		}
 
 		return node;
@@ -71,11 +71,11 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 	}
 
-	public int getDepth() {
+	public int depth() {
 		return this.depth;
 	}
 
-	public BinaryTreeNode<E> getRoot() {
+	public BinaryTreeNode<E> root() {
 		return this.root;
 	}
 
@@ -95,7 +95,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			this.rightChild = rightChild;
 		}
 
-		public T getData() {
+		public T data() {
 			return data;
 		}
 
@@ -103,7 +103,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			this.data = data;
 		}
 
-		public BinaryTreeNode<T> getLeftChild() {
+		public BinaryTreeNode<T> leftChild() {
 			return leftChild;
 		}
 
@@ -111,7 +111,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			this.leftChild = leftChild;
 		}
 
-		public BinaryTreeNode<T> getRightChild() {
+		public BinaryTreeNode<T> rightChild() {
 			return rightChild;
 		}
 
@@ -151,7 +151,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
 		@Override
 		public String toString() {
-			return "BinaryTreeNode [data=" + data + "]";
+			return "BinaryTreeNode {data=" + data + "}";
 		}
 	}
 }

@@ -20,6 +20,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Abhijit Sarkar
+ */
 public class PracticeQuestionsCh5 {
 	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh5.class);
 

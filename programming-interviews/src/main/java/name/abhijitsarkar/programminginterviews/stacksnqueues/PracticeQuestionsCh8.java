@@ -20,6 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import name.abhijitsarkar.algorithms.core.datastructure.Stack;
 
+/**
+ * @author Abhijit Sarkar
+ */
+
 public class PracticeQuestionsCh8 {
 	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh8.class);
 

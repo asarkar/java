@@ -34,8 +34,8 @@ public class BinarySearchTreeTest {
 		binTree.add(1);
 		binTree.add(5);
 
-		Assert.assertEquals(Integer.valueOf(3), binTree.getRoot().getData());
+		Assert.assertEquals(Integer.valueOf(3), binTree.root().data());
 
-		Assert.assertEquals(3, binTree.getDepth());
+		Assert.assertEquals(3, binTree.depth());
 	}
 }
