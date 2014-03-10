@@ -33,6 +33,11 @@ public abstract class Heap<E extends Comparable<? super E>> {
 		size = arr.length;
 		heap = Arrays.copyOf(arr, capacity);
 
+		/*
+		 * Start from middle of the array and work towards the start. Starting from the end is a waste because the child
+		 * indices for elements greater than the middle are going to be outside the limits of the array and heapify
+		 * would just fall through without making any changes.
+		 */
 		for (int i = (size - 1) / 2; i >= 0; --i) {
 			heapify(i);
 		}
@@ -51,6 +56,11 @@ public abstract class Heap<E extends Comparable<? super E>> {
 			i = r;
 		}
 
+		/*
+		 * The assumption is that all subtrees above 'i' do not violate the heap property. Since we swap the parent and
+		 * the child, the subtree rooted at parent now satisfies the heap property. We recursively heapify the subtree
+		 * rooted at the child to make them satisfy the heap property too.
+		 */
 		if (i != index) {
 			swap(i, index);
 			heapify(i);
