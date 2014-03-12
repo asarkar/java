@@ -13,12 +13,13 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.algorithms.other;
+package name.abhijitsarkar.algorithms.misc;
 
 import java.util.List;
 
-import name.abhijitsarkar.algorithms.other.TowerOfHanoi.Disk;
-import name.abhijitsarkar.algorithms.other.TowerOfHanoi.Peg;
+import name.abhijitsarkar.algorithms.misc.TowerOfHanoi;
+import name.abhijitsarkar.algorithms.misc.TowerOfHanoi.Disk;
+import name.abhijitsarkar.algorithms.misc.TowerOfHanoi.Peg;
 
 import org.junit.Assert;
 import org.junit.Test;

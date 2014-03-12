@@ -13,7 +13,7 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.algorithms.other;
+package name.abhijitsarkar.algorithms.misc;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
