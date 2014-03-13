@@ -15,29 +15,22 @@
  *******************************************************************************/
 package name.abhijitsarkar.programminginterviews.binarytrees;
 
-import static name.abhijitsarkar.programminginterviews.binarytrees.PracticeQuestionsCh9.iterativeInorder;
-import static name.abhijitsarkar.programminginterviews.binarytrees.PracticeQuestionsCh9.recursiveInorder;
 import static name.abhijitsarkar.programminginterviews.binarytrees.PracticeQuestionsCh9.lowestCommonAncestor;
-
-import java.util.Arrays;
-import java.util.List;
-
-import name.abhijitsarkar.programminginterviews.binarytrees.PracticeQuestionsCh9.Node;
+import name.abhijitsarkar.algorithms.core.datastructure.BinarySearchTree.BinaryTreeNode;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 public class PracticeQuestionsCh9Test {
-	private Node<Integer> root;
-	private Node<Integer> one;
-	private Node<Integer> two;
-	private Node<Integer> three;
-	private Node<Integer> four;
-	private Node<Integer> five;
-	private Node<Integer> six;
-	private Node<Integer> seven;
-	private Node<Integer> eight;
-	private Node<Integer> nine;
+	private BinaryTreeNode<Integer> root;
+	private BinaryTreeNode<Integer> one;
+	private BinaryTreeNode<Integer> two;
+	private BinaryTreeNode<Integer> three;
+	private BinaryTreeNode<Integer> four;
+	private BinaryTreeNode<Integer> five;
+	private BinaryTreeNode<Integer> seven;
+	private BinaryTreeNode<Integer> eight;
+	private BinaryTreeNode<Integer> nine;
 
 	public PracticeQuestionsCh9Test() {
 		buildBST();
@@ -45,68 +38,51 @@ public class PracticeQuestionsCh9Test {
 
 	private void buildBST() {
 		/* The tree formed here may be seen at src/test/resources/bst.png */
-		root = new Node<>(6);
+		root = new BinaryTreeNode<>(6);
 
-		two = new Node<>(2);
+		two = new BinaryTreeNode<>(2);
 		root.setLeftChild(two);
 		two.setParent(root);
 
-		one = new Node<>(1);
+		one = new BinaryTreeNode<>(1);
 		two.setLeftChild(one);
 		one.setParent(two);
 
-		four = new Node<>(4);
+		four = new BinaryTreeNode<>(4);
 		two.setRightChild(four);
 		four.setParent(two);
 
-		three = new Node<>(3);
+		three = new BinaryTreeNode<>(3);
 		four.setLeftChild(three);
 		three.setParent(four);
 
-		five = new Node<>(5);
+		five = new BinaryTreeNode<>(5);
 		four.setRightChild(five);
 		five.setParent(four);
 
-		seven = new Node<>(7);
+		seven = new BinaryTreeNode<>(7);
 		root.setRightChild(seven);
 		seven.setParent(root);
 
-		nine = new Node<>(9);
+		nine = new BinaryTreeNode<>(9);
 		seven.setRightChild(nine);
 		nine.setParent(seven);
 
-		eight = new Node<>(8);
+		eight = new BinaryTreeNode<>(8);
 		nine.setLeftChild(eight);
 		eight.setParent(nine);
 	}
 
 	@Test
-	public void testIterativeInorder() {
-
-		assertInorder(iterativeInorder(root));
-	}
-
-	@Test
-	public void testRecursiveInorder() {
-
-		assertInorder(recursiveInorder(root));
-	}
-
-	private void assertInorder(List<Integer> visited) {
-		List<Integer> expected = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
-		Assert.assertEquals(expected, visited);
-	}
-
-	@Test
 	public void testLowestCommonAncestor() {
-		Node<Integer> lca = lowestCommonAncestor(root, three, five);
+		BinaryTreeNode<Integer> lca = lowestCommonAncestor(root, three, five);
 
 		Assert.assertEquals(4, lca.data().intValue());
-		
+
 		lca = lowestCommonAncestor(root, one, three);
 
 		Assert.assertEquals(2, lca.data().intValue());
-		
+
 		lca = lowestCommonAncestor(root, three, eight);
 
 		Assert.assertEquals(6, lca.data().intValue());

@@ -53,4 +53,14 @@ public class SorterTest {
 
 		Assert.assertArrayEquals(expected, actual);
 	}
+
+	@Test
+	public void testCountingSort() {
+		int[] arr = new int[] { 17, 3, 99, 51 };
+		Integer[] expected = { 3, 17, 51, 99 };
+
+		Integer[] actual = Sorter.countingSort(arr);
+
+		Assert.assertArrayEquals(expected, actual);
+	}
 }

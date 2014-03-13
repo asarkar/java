@@ -83,13 +83,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		private T data = null;
 		private BinaryTreeNode<T> leftChild = null;
 		private BinaryTreeNode<T> rightChild = null;
+		private BinaryTreeNode<T> parent = null;
 
 		public BinaryTreeNode(T data) {
 			this(data, null, null);
 		}
 
-		public BinaryTreeNode(T data, BinaryTreeNode<T> leftChild,
-				BinaryTreeNode<T> rightChild) {
+		public BinaryTreeNode(T data, BinaryTreeNode<T> leftChild, BinaryTreeNode<T> rightChild) {
 			this.data = data;
 			this.leftChild = leftChild;
 			this.rightChild = rightChild;
@@ -117,6 +117,14 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
 		public void setRightChild(BinaryTreeNode<T> rightChild) {
 			this.rightChild = rightChild;
+		}
+
+		public BinaryTreeNode<T> parent() {
+			return parent;
+		}
+
+		public void setParent(BinaryTreeNode<T> parent) {
+			this.parent = parent;
 		}
 
 		public boolean isLeaf() {

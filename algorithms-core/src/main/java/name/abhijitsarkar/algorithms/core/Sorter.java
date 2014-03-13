@@ -19,7 +19,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import name.abhijitsarkar.algorithms.core.datastructure.BinarySearchTree;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.TransformerUtils;
 
 /**
  * @author Abhijit Sarkar
@@ -222,5 +229,60 @@ public class Sorter {
 		}
 
 		return mergedBucket;
+	}
+
+	/*
+	 * This is a more sophisticated implementation where the program does not know the number of distinct keys in the
+	 * input array. If that is known, a simpler approach could use an array of length = max(key) + 1 and just use the
+	 * key as the index to the array. The values are going to be the frequencies of each key. The downside of that
+	 * approach is wastage of space if the keys are widely separated as most cells would contain zero.
+	 */
+	public static Integer[] countingSort(final int[] arr) {
+		final Map<Integer, Pair> countMap = new HashMap<>();
+
+		for (final int i : arr) {
+			Pair p = new Pair(i, 1);
+
+			if (countMap.containsKey(i)) {
+				p.value += countMap.get(i).value;
+			}
+
+			countMap.put(i, p);
+		}
+
+		BinarySearchTree<Pair> bst = new BinarySearchTree<>(countMap.values());
+
+		final List<Pair> sortedPairs = BinaryTreeWalker.recursiveInorder(bst.root());
+
+		return CollectionUtils.collect(sortedPairs, TransformerUtils.<Pair, Integer> invokerTransformer("getKey"))
+				.toArray(new Integer[] {});
+	}
+
+	public static class Pair implements Comparable<Pair> {
+		private int key;
+		private int value;
+
+		private Pair(int key, int value) {
+			this.key = key;
+			this.value = value;
+		}
+
+		public int getKey() {
+			return key;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		@Override
+		public int compareTo(Pair o) {
+			return Integer.valueOf(key).compareTo(o.key);
+		}
+
+		@Override
+		public String toString() {
+			return "Pair [key=" + key + ", value=" + value + "]";
+		}
 	}
 }
