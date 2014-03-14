@@ -99,6 +99,25 @@ public abstract class Heap<E extends Comparable<? super E>> {
 		return r < size ? heap[r] : null;
 	}
 
+	public E decreaseKey(final int index, final E newKey) {
+		return updateKey(index, newKey);
+	}
+
+	public E increaseKey(final int index, final E newKey) {
+		return updateKey(index, newKey);
+	}
+
+	private E updateKey(int index, E newKey) {
+		validateIndex(index);
+
+		E oldKey = heap[index];
+
+		heap[index] = newKey;
+		heapify(index);
+
+		return oldKey;
+	}
+
 	protected void validateIndex(final int index) {
 		if (index < 0 || index >= capacity) {
 			throw new ArrayIndexOutOfBoundsException("Index " + index + " is outside the valid range [0, " + capacity

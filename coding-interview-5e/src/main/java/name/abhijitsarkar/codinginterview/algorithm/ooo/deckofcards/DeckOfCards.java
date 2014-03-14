@@ -15,10 +15,7 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.algorithm.ooo.deckofcards;
 
-import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.AbstractList;
 
 /**
  * @author Abhijit Sarkar
@@ -26,9 +23,7 @@ import org.slf4j.LoggerFactory;
 /*
  * Q8.1: Design the data structures for a generic deck of cards.
  */
-public class DeckOfCards {
-	public static final Logger LOGGER = LoggerFactory.getLogger(DeckOfCards.class);
-
+public class DeckOfCards extends AbstractList<Card> {
 	public static final int NUM_CARDS = 52;
 
 	private Card[] cards = new Card[NUM_CARDS];
@@ -48,41 +43,29 @@ public class DeckOfCards {
 		}
 	}
 
-	public Card card(int index) {
-		validateIndex(index);
-
-		return cards[index];
-	}
-
 	private void validateIndex(int index) {
 		if (index < 0 || index >= NUM_CARDS) {
 			throw new IndexOutOfBoundsException("Index must be within the range [0, " + NUM_CARDS + "]");
 		}
 	}
 
-	public void shuffle() {
-		Random rand = new Random();
-		final int maxNumShuffles = rand.nextInt(25) + 1;
+	@Override
+	public Card get(int index) {
+		validateIndex(index);
 
-		LOGGER.debug("Shuffling {} times.", maxNumShuffles);
-
-		for (int numShuffle = 0; numShuffle < maxNumShuffles; numShuffle++) {
-			int firstCardIdx = rand.nextInt(52);
-			int secondCardIdx = rand.nextInt(52);
-
-			swap(firstCardIdx, secondCardIdx);
-		}
+		return cards[index];
 	}
 
-	private final void swap(int firstCardIdx, int secondCardIdx) {
-		if (firstCardIdx == secondCardIdx) {
-			return;
-		}
+	public Card set(int index, Card card) {
+		validateIndex(index);
 
-		Card temp = cards[firstCardIdx];
-		cards[firstCardIdx] = cards[secondCardIdx];
-		cards[secondCardIdx] = temp;
+		cards[index] = card;
 
-		LOGGER.debug("Swapped {} with {}.", temp, cards[firstCardIdx]);
+		return card;
+	}
+
+	@Override
+	public int size() {
+		return NUM_CARDS;
 	}
 }

@@ -30,18 +30,23 @@ public class DeckOfCardsTest {
 
 	@Test
 	public void testDeckOfCards() {
-		Assert.assertEquals(deck.card(0).getSuit(), deck.card(12).getSuit());
-		Assert.assertEquals(deck.card(13).getSuit(), deck.card(25).getSuit());
-		Assert.assertEquals(deck.card(26).getSuit(), deck.card(38).getSuit());
-		Assert.assertEquals(deck.card(39).getSuit(), deck.card(51).getSuit());
+		Assert.assertEquals(deck.get(0).getSuit(), deck.get(12).getSuit());
+		Assert.assertEquals(deck.get(13).getSuit(), deck.get(25).getSuit());
+		Assert.assertEquals(deck.get(26).getSuit(), deck.get(38).getSuit());
+		Assert.assertEquals(deck.get(39).getSuit(), deck.get(51).getSuit());
 
-		Assert.assertEquals(deck.card(0).getRank(), deck.card(13).getRank());
-		Assert.assertEquals(deck.card(0).getRank(), deck.card(26).getRank());
-		Assert.assertEquals(deck.card(0).getRank(), deck.card(39).getRank());
+		Assert.assertEquals(deck.get(0).getRank(), deck.get(13).getRank());
+		Assert.assertEquals(deck.get(0).getRank(), deck.get(26).getRank());
+		Assert.assertEquals(deck.get(0).getRank(), deck.get(39).getRank());
 	}
 
 	@Test
 	public void testShuffle() {
-		deck.shuffle();
+		new Dealer().shuffle();
+	}
+
+	@Test
+	public void testDeal() {
+		new Dealer().deal();
 	}
 }
