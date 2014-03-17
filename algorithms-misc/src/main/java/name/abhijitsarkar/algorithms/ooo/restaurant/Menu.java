@@ -1,4 +1,4 @@
-package name.abhijitsarkar.algorithms.restaurant;
+package name.abhijitsarkar.algorithms.ooo.restaurant;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package name.abhijitsarkar.algorithms.restaurant;
+package name.abhijitsarkar.algorithms.ooo.restaurant;
 
 public class CreditCardPayment extends Payment {
 
