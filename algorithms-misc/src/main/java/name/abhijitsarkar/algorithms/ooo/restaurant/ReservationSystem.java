@@ -11,7 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import name.abhijitsarkar.algorithms.ooo.restaurant.Table.SpecialFeature;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ReservationSystem {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationSystem.class);
+
 	private static final Map<String, List<Reservation>> allReservations;
 	private static final AtomicInteger reservationNumber;
 
@@ -21,41 +26,51 @@ public class ReservationSystem {
 		allReservations = new HashMap<String, List<Reservation>>();
 		reservationNumber = new AtomicInteger();
 
-		DATE_FORMAT = "yyyy-DD-dd";
+		DATE_FORMAT = "yyyy-MM-dd";
 	}
 
 	public static int makeReservation(final String customerName, final int seating, final Date date,
 			final SpecialFeature... specialFeatures) {
 		final Table table = TableManager.reserveTable(seating, specialFeatures);
-		String formattedDate = null;
+		final String formattedDate = format(date);
+
+		final StringBuilder message = new StringBuilder();
 
 		if (table != null) {
 			final Reservation r = new Reservation(reservationNumber.incrementAndGet(), customerName);
 			r.setTables(Arrays.asList(new Table[] { table }));
 			r.setDate(date);
 
-			formattedDate = format(date);
+			addToReservationsList(r, formattedDate);
 
-			synchronized (ReservationSystem.class) {
-				List<Reservation> allReservationsForADay = allReservations.get(formattedDate);
+			message.append("Made reservation for ").append(customerName).append(" for date ").append(formattedDate)
+					.append(" with seating ").append(seating).append(" and features ").append(specialFeatures)
+					.append(".");
 
-				if (allReservationsForADay == null) {
-					allReservationsForADay = new ArrayList<>();
-				}
-
-				allReservationsForADay.add(r);
-
-				allReservations.put(formattedDate, allReservationsForADay);
-			}
+			LOGGER.info(message.toString());
 
 			return r.reservationNumber();
 		}
 
-		final StringBuilder errorMessage = new StringBuilder();
-		errorMessage.append("No table is available on ").append(formattedDate).append(" with seating ").append(seating)
+		message.delete(0, message.length() + 1);
+
+		message.append("No table is available on ").append(formattedDate).append(" with seating ").append(seating)
 				.append(" and features ").append(specialFeatures).append(".");
 
-		throw new UnableToCompleteReservationException(errorMessage.toString());
+		throw new UnableToCompleteReservationException(message.toString());
+	}
+
+	synchronized private static void addToReservationsList(final Reservation r, final String formattedDate) {
+
+		List<Reservation> allReservationsForADay = allReservations.get(formattedDate);
+
+		if (allReservationsForADay == null) {
+			allReservationsForADay = new ArrayList<>();
+		}
+
+		allReservationsForADay.add(r);
+
+		allReservations.put(formattedDate, allReservationsForADay);
 	}
 
 	private static String format(final Date date) {
@@ -71,21 +86,48 @@ public class ReservationSystem {
 			final List<Reservation> allReservationsForADay = allReservations.get(formattedDate);
 
 			if (allReservationsForADay != null) {
-				for (final Reservation r : allReservationsForADay) {
-					if (isMatchingReservation(r, customerName, formattedDate)) {
-						allReservationsForADay.remove(r);
+				final Reservation r = lookUpReservation(customerName, date);
 
-						allReservations.put(formattedDate, allReservationsForADay);
+				if (r != null) {
+					final StringBuilder message = new StringBuilder();
 
-						cancelledReservation = true;
+					message.append("Cancelled reservation for ").append(customerName).append(" for date ")
+							.append(formattedDate).append(".");
 
-						break;
-					}
+					LOGGER.info(message.toString());
+
+					allReservationsForADay.remove(r);
+
+					cancelledReservation = true;
 				}
 			}
 		}
 
 		return cancelledReservation;
+	}
+
+	static Reservation lookUpReservation(final String customerName, final Date date) {
+		final String formattedDate = format(date);
+		Reservation res = null;
+
+		final List<Reservation> allReservationsForADay = allReservations.get(formattedDate);
+
+		for (final Reservation r : allReservationsForADay) {
+			if (isMatchingReservation(r, customerName, formattedDate)) {
+				final StringBuilder message = new StringBuilder();
+
+				message.append("Found reservation for ").append(customerName).append(" for date ")
+						.append(formattedDate).append(".");
+
+				LOGGER.info(message.toString());
+
+				res = r;
+
+				break;
+			}
+		}
+
+		return res;
 	}
 
 	private static boolean isMatchingReservation(final Reservation r, final String customerName,

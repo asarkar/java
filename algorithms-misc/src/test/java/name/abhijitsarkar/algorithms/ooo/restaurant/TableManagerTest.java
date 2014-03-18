@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestTableManager {
+public class TableManagerTest {
 	private Table blahTable;
 	private Table windowSideTable;
 

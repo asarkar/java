@@ -42,4 +42,9 @@ public class Reservation {
 		return customerName;
 	}
 
+	@Override
+	public String toString() {
+		return "Reservation [reservationNumber=" + reservationNumber + ", customerName=" + customerName + ", tables="
+				+ tables + ", date=" + date + "]";
+	}
 }
