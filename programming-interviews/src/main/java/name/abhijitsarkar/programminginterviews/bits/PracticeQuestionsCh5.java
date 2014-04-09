@@ -76,7 +76,7 @@ public class PracticeQuestionsCh5 {
 	}
 
 	/*
-	 * Q5.2: A 64-bit ineteger can be viewed as an array of 64 bits, with the bit at index 0 corresponding to the LSB,
+	 * Q5.2: A 64-bit integer can be viewed as an array of 64 bits, with the bit at index 0 corresponding to the LSB,
 	 * and the bit at index 63 corresponding to the MSB. Implement code that takes as input a 64-bit integer x and swaps
 	 * the bits at indices i and j.
 	 */
@@ -94,7 +94,7 @@ public class PracticeQuestionsCh5 {
 	}
 
 	/*
-	 * Q5.5: Implement a method that takes as input a set S of distinct elements, and prints the power ste of S. Print
+	 * Q5.5: Implement a method that takes as input a set S of distinct elements, and prints the power set of S. Print
 	 * subsets one per line, with elements separated by commas. Note: The power set is the set of all subsets of S,
 	 * including both the empty set Ø and S itself.
 	 */

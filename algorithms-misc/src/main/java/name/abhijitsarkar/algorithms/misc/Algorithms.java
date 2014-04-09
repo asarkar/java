@@ -38,7 +38,7 @@ public class Algorithms {
 			aSuffix = suffixArray[i];
 			anotherSuffix = suffixArray[i + 1];
 
-			if (aSuffix.trim().equals("") || anotherSuffix.trim().equals("")) {
+			if (aSuffix.trim().isEmpty() || anotherSuffix.trim().isEmpty()) {
 				continue;
 			} else if (anotherSuffix.startsWith(aSuffix)) {
 				LOGGER.debug("\"{}\" starts with \"{}\".", anotherSuffix, aSuffix);

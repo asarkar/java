@@ -79,7 +79,9 @@ public class PracticeQuestionsCh9 {
 		int len = s.length();
 
 		if (len <= 1) {
-			return stringToSet(s);
+			perms.add(s);
+			
+			return perms;
 		}
 
 		if (index < 0) {
@@ -114,12 +116,5 @@ public class PracticeQuestionsCh9 {
 		}
 
 		return buffer;
-	}
-
-	private static Set<String> stringToSet(String s) {
-		Set<String> perm = new HashSet<String>();
-		perm.addAll(Arrays.asList(s));
-
-		return perm;
 	}
 }
