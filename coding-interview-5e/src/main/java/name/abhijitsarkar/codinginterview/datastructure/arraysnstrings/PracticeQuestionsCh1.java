@@ -60,10 +60,10 @@ public class PracticeQuestionsCh1 {
 			 * = 7, 7th bit needs to be set. The result of the modulo operation can go from 0 to 31. Since each bit
 			 * represents a power of 2, left shift operator (multiplication by 2) should do the trick.
 			 * 
-			 * The least significant 5 bits of the result of the modulo 32 operation are the same as the result of the
-			 * bitwise 'and' operation below.
+			 * x % y, when y is a multiple of 2 is equivalent to x & (y - 1)
+			 * http://stackoverflow.com/questions/11076216/re-implement-modulo-using-bit-shifts
 			 */
-			int bitmask = 1 << (ch & 0x1f) - 1;
+			int bitmask = ch & 0x1f;
 
 			/*
 			 * The index in the bit vector is given by ch / 32, or right shift 5. We then do a bitwise 'and' to isolate
@@ -78,7 +78,7 @@ public class PracticeQuestionsCh1 {
 			}
 
 			/*
-			 * Set the corresponding bit keeping previously set bits intact
+			 * Set the corresponding bit by XOR keeping previously set bits intact.
 			 */
 			arr[bitVectorIdx] |= bitmask;
 		}

@@ -105,7 +105,6 @@ public class Searcher {
 		Set<BinaryTreeNode<E>> visited = new HashSet<BinaryTreeNode<E>>();
 
 		stack.push(startNode);
-		visited.add(startNode);
 
 		BinaryTreeNode<E> leftChild = null;
 		BinaryTreeNode<E> rightChild = null;
