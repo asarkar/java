@@ -123,7 +123,7 @@ public class PracticeQuestionsCh2Test {
 
 	@Test
 	public void testCountShortWords() {
-		String[] words = { "Java8ChangesEverything", "Java8IsAwesome", "Java8Rocks" };
+		String[] words = { "Java8ChangesEverything", "Java8IsAwesome", "Java8Rocks", "Java8FTW!!" };
 
 		AtomicInteger[] wordLenCounts = countShortWords(words, 25);
 
@@ -131,19 +131,19 @@ public class PracticeQuestionsCh2Test {
 
 		assertEquals(1, wordLenCounts[21].get());
 		assertEquals(1, wordLenCounts[13].get());
-		assertEquals(1, wordLenCounts[9].get());
+		assertEquals(2, wordLenCounts[9].get());
 	}
 
 	@Test
 	public void testFilterAndCountShortWords() {
-		String[] words = { "Java8ChangesEverything", "Java8IsAwesome", "Java8Rocks" };
+		String[] words = { "Java8ChangesEverything", "Java8IsAwesome", "Java8Rocks", "Java8FTW!!" };
 
-		Map<Object, Long> shortWords = filterAndCountShortWords(words, 25);
+		Map<Integer, Long> shortWords = filterAndCountShortWords(words, 25);
 
 		assertEquals(3, shortWords.size());
 
 		assertEquals(1, shortWords.get(22).intValue());
 		assertEquals(1, shortWords.get(14).intValue());
-		assertEquals(1, shortWords.get(10).intValue());
+		assertEquals(2, shortWords.get(10).intValue());
 	}
 }

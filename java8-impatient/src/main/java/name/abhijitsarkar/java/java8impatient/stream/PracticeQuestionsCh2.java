@@ -249,7 +249,7 @@ public class PracticeQuestionsCh2 {
 	 * 
 	 * @return A map where length of the word is the key and count of number of short words of that length is the value.
 	 */
-	public static Map<Object, Long> filterAndCountShortWords(String[] words, int shortWordMaxLength) {
+	public static Map<Integer, Long> filterAndCountShortWords(String[] words, int shortWordMaxLength) {
 		return Stream.of(words).filter(word -> {
 			final int wordLen = word.length();
 
