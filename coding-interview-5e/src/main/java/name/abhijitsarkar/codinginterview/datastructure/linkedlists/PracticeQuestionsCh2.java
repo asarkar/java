@@ -20,6 +20,7 @@ import java.util.Set;
 
 import name.abhijitsarkar.algorithms.core.datastructure.LinkedList;
 import name.abhijitsarkar.algorithms.core.datastructure.LinkedList.LinkedListNode;
+import name.abhijitsarkar.algorithms.core.datastructure.Stack;
 
 /**
  * @author Abhijit Sarkar
@@ -94,6 +95,51 @@ public class PracticeQuestionsCh2 {
 			}
 		}
 
+		return true;
+	}
+	
+	/*
+	 * Q2.7 variant: Implement a function to check if a linked list is a palindrome and the size of the list 
+	 * is not known in advance.
+	 */
+	
+	/*
+	 * We employ a slow pointer, fast pointer approach. When the fast pointer hits the end, the slow pointer would be
+	 * in the middle.
+	 * 
+	 * If the list has odd number of elements, like 1, 2, 1, there's no need to compare the element under the 
+	 * slow pointer with that on the top of the stack. We know the list has odd number of elements if the 
+	 * fast pointer isn't the tail but it's successor is.
+	 * 
+	 * If the list has even number of elements, like 1, 2, 2, 1, the element under the slow pointer needs to be compared
+	 * with the one on top of the stack. We know the list has even number of elements if the fast pointer is the tail.
+	 */
+	public static <E> boolean isPalindromeVariant(LinkedList<E> linkedList) {
+		LinkedListNode<E> slow = linkedList.head().successor();
+		LinkedListNode<E> fast = slow;
+		
+		Stack<E> stack = new Stack<E>();
+		
+		while (fast != linkedList.tail() && fast.successor() != linkedList.tail()) {
+			stack.push(slow.data());
+			
+			slow = slow.successor();
+			fast = fast.successor().successor();
+		}
+		
+		/* Even number of elements */
+		if (fast == linkedList.tail() && !slow.data().equals(stack.pop())) {
+			return false;
+		}
+		
+		do {
+			slow = slow.successor();
+					
+			if (!slow.data().equals(stack.pop())) {
+				return false;
+			}			
+		} while (slow.successor() != linkedList.tail());
+		
 		return true;
 	}
 }

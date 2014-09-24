@@ -15,7 +15,6 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.algorithm.recursion;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,12 +66,12 @@ public class PracticeQuestionsCh9 {
 	}
 
 	/* Q9.5: Write a method to compute all permutations of a string. */
-	public static String[] perm(String s) {
+	public static Set<String> perm(String s) {
 		Set<String> perms = new HashSet<String>();
 
 		recursivePerm(s, s.length() - 1, perms);
 
-		return perms.toArray(new String[] {});
+		return perms;
 	}
 
 	private static Set<String> recursivePerm(String s, int index, Set<String> perms) {

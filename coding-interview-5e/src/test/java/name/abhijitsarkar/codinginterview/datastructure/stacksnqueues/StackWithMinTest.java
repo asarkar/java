@@ -15,7 +15,8 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.datastructure.stacksnqueues;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ import org.junit.Test;
  * @author Abhijit Sarkar
  */
 public class StackWithMinTest {
-	StackWithMin<Integer> stack = new StackWithMin<Integer>();
+	private StackWithMin<Integer> stack = new StackWithMin<Integer>();
 
 	@Before
 	public void setUp() {
@@ -34,6 +35,6 @@ public class StackWithMinTest {
 
 	@Test
 	public void testMin() {
-		Assert.assertEquals(Integer.valueOf(1), stack.min());
+		assertEquals(Integer.valueOf(1), stack.min());
 	}
 }

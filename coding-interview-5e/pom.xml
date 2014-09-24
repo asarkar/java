@@ -5,7 +5,7 @@
   <parent>
     <groupId>name.abhijitsarkar</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
   </parent>
 
   <groupId>name.abhijitsarkar.codinginterview</groupId>

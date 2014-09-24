@@ -15,7 +15,15 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.datastructure.arraysnstrings;
 
-import org.junit.Assert;
+import static name.abhijitsarkar.codinginterview.datastructure.arraysnstrings.PracticeQuestionsCh1.encodeRepeatedChars;
+import static name.abhijitsarkar.codinginterview.datastructure.arraysnstrings.PracticeQuestionsCh1.fillIfZero;
+import static name.abhijitsarkar.codinginterview.datastructure.arraysnstrings.PracticeQuestionsCh1.isPermutation;
+import static name.abhijitsarkar.codinginterview.datastructure.arraysnstrings.PracticeQuestionsCh1.isRotation;
+import static name.abhijitsarkar.codinginterview.datastructure.arraysnstrings.PracticeQuestionsCh1.isUnique;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 /**
@@ -24,45 +32,44 @@ import org.junit.Test;
 public class PracticeQuestionsCh1Test {
 	@Test
 	public void testIsUnique() {
-		Assert.assertTrue(PracticeQuestionsCh1.isUnique("abc"));
-		Assert.assertFalse(PracticeQuestionsCh1.isUnique("aba"));
+		assertTrue(isUnique("abc"));
+		assertFalse(isUnique("aba"));
 	}
 
 	@Test
 	public void testIsPermutation() {
-		Assert.assertTrue(PracticeQuestionsCh1.isPermutation("abc", "cba"));
-		Assert.assertTrue(PracticeQuestionsCh1.isPermutation("aBc", "acB"));
-		Assert.assertFalse(PracticeQuestionsCh1.isPermutation("abc", "c"));
-		Assert.assertFalse(PracticeQuestionsCh1.isPermutation("abc", "def"));
+		assertTrue(isPermutation("abc", "cba"));
+		assertTrue(isPermutation("aBc", "acB"));
+		assertFalse(isPermutation("abc", "c"));
+		assertFalse(isPermutation("abc", "def"));
 	}
 
 	@Test
 	public void testEncodeRepeatedChars() {
-		Assert.assertEquals("a3b2",
-				PracticeQuestionsCh1.encodeRepeatedChars("aaabb"));
-		Assert.assertEquals("abc", PracticeQuestionsCh1.encodeRepeatedChars("abc"));
+		assertEquals("a3b2", encodeRepeatedChars("aaabb"));
+		assertEquals("abc", encodeRepeatedChars("abc"));
+		assertEquals("a3b3a1", encodeRepeatedChars("aaabbba"));
+		assertEquals("a1b3c3", encodeRepeatedChars("abbbccc"));
 	}
 
 	@Test
 	public void testFillIfZero() {
 		int[][] matrix = new int[][] { { 1, 2 }, { 3, 4 }, { 5, 0 } };
 
-		PracticeQuestionsCh1.fillIfZero(matrix);
+		fillIfZero(matrix);
 
-		Assert.assertEquals(0, matrix[0][1]);
-		Assert.assertEquals(0, matrix[1][1]);
-		Assert.assertEquals(0, matrix[2][0]);
-		Assert.assertEquals(0, matrix[2][1]);
+		assertEquals(0, matrix[0][1]);
+		assertEquals(0, matrix[1][1]);
+		assertEquals(0, matrix[2][0]);
+		assertEquals(0, matrix[2][1]);
 
-		Assert.assertEquals(1, matrix[0][0]);
-		Assert.assertEquals(3, matrix[1][0]);
+		assertEquals(1, matrix[0][0]);
+		assertEquals(3, matrix[1][0]);
 	}
 
 	@Test
 	public void testIsRotation() {
-		Assert.assertTrue(PracticeQuestionsCh1.isRotation("erbottlewat",
-				"waterbottle"));
-		Assert.assertFalse(PracticeQuestionsCh1.isRotation("erbottlewat",
-				"waterbottel"));
+		assertTrue(isRotation("erbottlewat", "waterbottle"));
+		assertFalse(isRotation("erbottlewat", "waterbottel"));
 	}
 }

@@ -15,15 +15,23 @@
  *******************************************************************************/
 package name.abhijitsarkar.algorithms.core.datastructure;
 
+import static java.lang.Math.max;
+
 import java.util.Collection;
 
 /**
  * @author Abhijit Sarkar
  */
+
+/*
+ * The depth of a node X in a tree T is defined as the length of the simple path (number of edges) from the root node of
+ * T to X. The height of a node Y is the number of edges on the longest downward simple path from Y to a leaf. The
+ * height of a tree is defined as the height of its root node. Note that a simple path is a path without repeat
+ * vertices. The height of a tree is equal to the max depth of a tree.
+ */
 public class BinarySearchTree<E extends Comparable<E>> {
 
 	private BinaryTreeNode<E> root = null;
-	private int depth = 0;
 
 	public BinarySearchTree() {
 	}
@@ -47,14 +55,12 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		if (node == null) {
 			node = new BinaryTreeNode<E>(value);
 
-			if (depth == 0) {
+			if (root == null) {
 				root = node;
 			}
 
 			return node;
 		}
-
-		incrementDepthIfNeeded(node);
 
 		if (value.compareTo(node.data()) < 0) {
 			node.setLeftChild(add(node.leftChild(), value));
@@ -65,14 +71,20 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return node;
 	}
 
-	private void incrementDepthIfNeeded(BinaryTreeNode<E> node) {
-		if (node.isLeaf()) {
-			depth++;
-		}
+	public int height() {
+		return height(root);
 	}
 
-	public int depth() {
-		return this.depth;
+	private int height(BinaryTreeNode<E> node) {
+		if (node == null || node.isLeaf()) {
+			return 0;
+		}
+
+		final int leftHeight = height(node.leftChild());
+
+		final int rightHeight = height(node.rightChild());
+
+		return max(leftHeight, rightHeight) + 1;
 	}
 
 	public BinaryTreeNode<E> root() {

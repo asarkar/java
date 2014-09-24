@@ -16,8 +16,8 @@
 package name.abhijitsarkar.codinginterview.datastructure.arraysnstrings;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,33 +117,54 @@ public class PracticeQuestionsCh1 {
 	 * example, the string aabcccccaaa would become a2blc5a3. If the "compressed" string would not become smaller than
 	 * the original string, your method should return the original string.
 	 */
-	public static String encodeRepeatedChars(String str) {
-		char[] charArr = str.toCharArray();
-		Map<Character, Integer> encodingMap = new HashMap<Character, Integer>();
-		StringBuilder buffer = new StringBuilder();
+	public static String encodeRepeatedChars(final String str) {
+		final AtomicInteger repeatCount = new AtomicInteger(1);
+		final StringBuilder previousChar = new StringBuilder(" ");
+		final StringBuilder buffer = new StringBuilder();
+		final int len = str.length() - 1;
 
-		for (char ch : charArr) {
-			ch = Character.toLowerCase(ch);
-
-			Integer repeatCount = encodingMap.get(ch);
-
-			if (repeatCount == null) {
-				repeatCount = 0;
-			}
-
-			encodingMap.put(ch, ++repeatCount);
-
-			// The map entrySet or ketSet may not preserve order thus using
-			// it may change the relative order of characters in the string
-
-			int idx = buffer.indexOf(String.valueOf(ch));
-
-			if (idx == -1) {
-				buffer.append(ch).append(repeatCount);
+		IntStream.range(0, str.length()).forEach(idx -> {
+			if (str.charAt(idx) == previousChar.charAt(0)) {
+				repeatCount.incrementAndGet();
 			} else {
-				buffer.replace(++idx, ++idx, String.valueOf(repeatCount));
+				if (idx != 0) {
+					buffer.append(previousChar.charAt(0)).append(repeatCount.get());
+				}
+				
+				repeatCount.set(1);
+				previousChar.setCharAt(0, str.charAt(idx));
 			}
-		}
+			
+			if (idx == len) {
+				buffer.append(str.charAt(idx)).append(repeatCount.get());
+			}
+		});
+
+		// char[] charArr = str.toCharArray();
+		// Map<Character, Integer> encodingMap = new HashMap<Character, Integer>();
+		//
+		// for (char ch : charArr) {
+		// ch = Character.toLowerCase(ch);
+		//
+		// Integer repeatCount = encodingMap.get(ch);
+		//
+		// if (repeatCount == null) {
+		// repeatCount = 0;
+		// }
+		//
+		// encodingMap.put(ch, ++repeatCount);
+		//
+		// // The map entrySet or ketSet may not preserve order thus using
+		// // it may change the relative order of characters in the string
+		//
+		// int idx = buffer.indexOf(String.valueOf(ch));
+		//
+		// if (idx == -1) {
+		// buffer.append(ch).append(repeatCount);
+		// } else {
+		// buffer.replace(++idx, ++idx, String.valueOf(repeatCount));
+		// }
+		// }
 
 		return buffer.length() < str.length() ? buffer.toString() : str;
 	}
@@ -195,8 +216,8 @@ public class PracticeQuestionsCh1 {
 
 	/*
 	 * Q1.8: Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings,
-	 * s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring
-	 * (e.g.,"waterbottle"is a rotation of"erbottlewat").
+	 * s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring (e.g.,"waterbottle"is
+	 * a rotation of"erbottlewat").
 	 */
 	public static boolean isRotation(String s1, String s2) {
 		int len = s1.length();

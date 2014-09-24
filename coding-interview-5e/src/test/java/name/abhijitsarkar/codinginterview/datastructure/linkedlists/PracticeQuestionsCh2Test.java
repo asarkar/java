@@ -15,9 +15,15 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.datastructure.linkedlists;
 
+import static name.abhijitsarkar.codinginterview.datastructure.linkedlists.PracticeQuestionsCh2.isPalindrome;
+import static name.abhijitsarkar.codinginterview.datastructure.linkedlists.PracticeQuestionsCh2.isPalindromeVariant;
+import static name.abhijitsarkar.codinginterview.datastructure.linkedlists.PracticeQuestionsCh2.partition;
+import static name.abhijitsarkar.codinginterview.datastructure.linkedlists.PracticeQuestionsCh2.removeDupes;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import name.abhijitsarkar.algorithms.core.datastructure.LinkedList;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -31,12 +37,12 @@ public class PracticeQuestionsCh2Test {
 		linkedList.add(2);
 		linkedList.add(1);
 
-		PracticeQuestionsCh2.removeDupes(linkedList);
+		removeDupes(linkedList);
 
-		Assert.assertEquals(2, linkedList.size());
-		Assert.assertEquals(Integer.valueOf(1), linkedList.remove());
-		Assert.assertEquals(Integer.valueOf(2), linkedList.remove());
-		Assert.assertEquals(0, linkedList.size());
+		assertEquals(2, linkedList.size());
+		assertEquals(Integer.valueOf(1), linkedList.remove());
+		assertEquals(Integer.valueOf(2), linkedList.remove());
+		assertEquals(0, linkedList.size());
 	}
 
 	@Test
@@ -47,13 +53,13 @@ public class PracticeQuestionsCh2Test {
 		linkedList.add(5);
 		linkedList.add(1);
 
-		PracticeQuestionsCh2.partition(linkedList, 4);
+		partition(linkedList, 4);
 
-		Assert.assertEquals(4, linkedList.size());
-		Assert.assertEquals(Integer.valueOf(2), linkedList.get(0));
-		Assert.assertEquals(Integer.valueOf(1), linkedList.get(1));
-		Assert.assertEquals(Integer.valueOf(4), linkedList.get(2));
-		Assert.assertEquals(Integer.valueOf(5), linkedList.get(3));
+		assertEquals(4, linkedList.size());
+		assertEquals(Integer.valueOf(2), linkedList.get(0));
+		assertEquals(Integer.valueOf(1), linkedList.get(1));
+		assertEquals(Integer.valueOf(4), linkedList.get(2));
+		assertEquals(Integer.valueOf(5), linkedList.get(3));
 	}
 
 	@Test
@@ -65,7 +71,7 @@ public class PracticeQuestionsCh2Test {
 		linkedList.add('i');
 		linkedList.add('c');
 
-		Assert.assertTrue(PracticeQuestionsCh2.isPalindrome(linkedList));
+		assertTrue(isPalindrome(linkedList));
 
 		linkedList = new LinkedList<Character>();
 		linkedList.add('a');
@@ -73,7 +79,7 @@ public class PracticeQuestionsCh2Test {
 		linkedList.add('n');
 		linkedList.add('a');
 
-		Assert.assertTrue(PracticeQuestionsCh2.isPalindrome(linkedList));
+		assertTrue(isPalindrome(linkedList));
 
 		linkedList = new LinkedList<Character>();
 		linkedList.add('a');
@@ -81,6 +87,34 @@ public class PracticeQuestionsCh2Test {
 		linkedList.add('m');
 		linkedList.add('a');
 
-		Assert.assertFalse(PracticeQuestionsCh2.isPalindrome(linkedList));
+		assertFalse(isPalindrome(linkedList));
+	}
+
+	@Test
+	public void testIsPalindromeVariant() {
+		LinkedList<Character> linkedList = new LinkedList<Character>();
+		linkedList.add('c');
+		linkedList.add('i');
+		linkedList.add('v');
+		linkedList.add('i');
+		linkedList.add('c');
+
+		assertTrue(isPalindromeVariant(linkedList));
+
+		linkedList = new LinkedList<Character>();
+		linkedList.add('a');
+		linkedList.add('n');
+		linkedList.add('n');
+		linkedList.add('a');
+
+		assertTrue(isPalindromeVariant(linkedList));
+
+		linkedList = new LinkedList<Character>();
+		linkedList.add('a');
+		linkedList.add('n');
+		linkedList.add('m');
+		linkedList.add('a');
+
+		assertFalse(isPalindromeVariant(linkedList));
 	}
 }

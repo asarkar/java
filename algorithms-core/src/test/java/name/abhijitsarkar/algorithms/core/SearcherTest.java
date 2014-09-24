@@ -42,7 +42,7 @@ public class SearcherTest {
 
 		Assert.assertEquals(Integer.valueOf(3), binTree.root().data());
 
-		Assert.assertEquals(3, binTree.depth());
+		Assert.assertEquals(2, binTree.height());
 	}
 
 	@Test

@@ -15,7 +15,14 @@
  *******************************************************************************/
 package name.abhijitsarkar.codinginterview.algorithm.recursion;
 
-import org.junit.Assert;
+import static java.util.Arrays.stream;
+import static name.abhijitsarkar.codinginterview.algorithm.recursion.PracticeQuestionsCh9.magicIndex;
+import static name.abhijitsarkar.codinginterview.algorithm.recursion.PracticeQuestionsCh9.perm;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Set;
+
 import org.junit.Test;
 
 /**
@@ -27,13 +34,11 @@ public class PracticeQuestionsCh9Test {
 	public void testMagicIndex() {
 		int[] array = new int[] { -1, 0, 2 };
 
-		Assert.assertEquals(2,
-				PracticeQuestionsCh9.magicIndex(array, 0, array.length));
+		assertEquals(2, magicIndex(array, 0, array.length));
 
 		array = new int[] { 1, 2, 3 };
 
-		Assert.assertEquals(-1,
-				PracticeQuestionsCh9.magicIndex(array, 0, array.length));
+		assertEquals(-1, PracticeQuestionsCh9.magicIndex(array, 0, array.length));
 	}
 
 	@Test
@@ -42,8 +47,10 @@ public class PracticeQuestionsCh9Test {
 
 		String[] expected = new String[] { "cab", "abc", "bac", "acb" };
 
-		String[] actual = PracticeQuestionsCh9.perm(s);
+		Set<String> allPerms = perm(s);
 
-		Assert.assertArrayEquals(expected, actual);
+		assertEquals(expected.length, allPerms.size());
+
+		stream(expected).forEach(aPerm -> assertTrue(allPerms.contains(aPerm)));
 	}
 }

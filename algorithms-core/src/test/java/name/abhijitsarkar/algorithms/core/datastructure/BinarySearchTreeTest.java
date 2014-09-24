@@ -15,8 +15,10 @@
  *******************************************************************************/
 package name.abhijitsarkar.algorithms.core.datastructure;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Abhijit Sarkar
@@ -33,9 +35,12 @@ public class BinarySearchTreeTest {
 		binTree.add(4);
 		binTree.add(1);
 		binTree.add(5);
+	}
 
-		Assert.assertEquals(Integer.valueOf(3), binTree.root().data());
+	@Test
+	public void testTree() {
+		assertEquals(Integer.valueOf(3), binTree.root().data());
 
-		Assert.assertEquals(3, binTree.depth());
+		assertEquals(2, binTree.height());
 	}
 }
