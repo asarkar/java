@@ -3,7 +3,6 @@ package name.abhijitsarkar.codinginterview.algorithm;
 import static name.abhijitsarkar.codinginterview.algorithm.OperatorToken.Associativity.LEFT;
 import static name.abhijitsarkar.codinginterview.algorithm.ParenthesisToken.LEFT_PARENTHESIS;
 import static name.abhijitsarkar.codinginterview.algorithm.ParenthesisToken.RIGHT_PARENTHESIS;
-import static name.abhijitsarkar.codinginterview.algorithm.TokenFactory.getTokenInstance;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -11,30 +10,18 @@ import java.util.Deque;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ShuntingYard {
+/* http://en.wikipedia.org/wiki/Shunting-yard_algorithm */
+public class ShuntingYard implements TokenHandler {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ShuntingYard.class);
 
 	private final StringBuilder output = new StringBuilder();
 	private final Deque<OperatorToken> operatorStack = new ArrayDeque<OperatorToken>();
 
-	/* http://en.wikipedia.org/wiki/Shunting-yard_algorithm */
-	public String convertToPostfix(String input) {
-		input.chars().mapToObj(i -> (char) i).forEach(i -> {
-			Token t = getTokenInstance(i);
-
-			LOGGER.debug("Token: {}", t.toString());
-
-			t.visit(this);
-		});
-
+	public String getOutput() {
 		while (!operatorStack.isEmpty()) {
 			appendToOutput(operatorStack.pop(), output);
 		}
 
-		return getOutput();
-	}
-
-	public String getOutput() {
 		final String finalOutput = output.toString().trim();
 
 		LOGGER.info("Final output: {}", finalOutput);

@@ -7,7 +7,7 @@ public class LetterOrDigitToken extends Token {
 	}
 	
 	@Override
-	public void visit(ShuntingYard handler) {
+	public void visit(TokenHandler handler) {
 		handler.handleToken(this);
 	}
 }

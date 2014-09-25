@@ -18,7 +18,7 @@ public class ArithmeticOperatorToken extends OperatorToken {
 	}
 	
 	@Override
-	public void visit(ShuntingYard handler) {
+	public void visit(TokenHandler handler) {
 		handler.handleToken(this);
 	}
 }

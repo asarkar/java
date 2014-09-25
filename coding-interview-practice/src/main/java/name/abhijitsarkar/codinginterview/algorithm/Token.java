@@ -11,7 +11,7 @@ public abstract class Token {
 		return symbol;
 	}
 
-	public abstract void visit(ShuntingYard handler);
+	public abstract void visit(TokenHandler handler);
 
 	@Override
 	public String toString() {
