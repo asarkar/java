@@ -1,6 +1,7 @@
 package name.abhijitsarkar.codinginterview.algorithm;
 
 import static org.junit.Assert.assertEquals;
+import name.abhijitsarkar.codinginterview.algorithm.expression.InfixToPostfixConverter;
 
 import org.junit.Test;
 

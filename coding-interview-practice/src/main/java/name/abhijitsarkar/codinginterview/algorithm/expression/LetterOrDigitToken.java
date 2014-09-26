@@ -1,4 +1,4 @@
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.codinginterview.algorithm.expression;
 
 public class LetterOrDigitToken extends Token {
 

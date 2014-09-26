@@ -1,11 +1,11 @@
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.codinginterview.algorithm.expression;
 
 import static java.lang.Character.isLetterOrDigit;
 import static java.lang.Character.isWhitespace;
-import static name.abhijitsarkar.codinginterview.algorithm.ArithmeticOperatorToken.isArithmeticOperator;
-import static name.abhijitsarkar.codinginterview.algorithm.OperatorTokenFactory.getArithmeticOperatorTokenInstance;
-import static name.abhijitsarkar.codinginterview.algorithm.OperatorTokenFactory.getParenthesisTokenInstance;
-import static name.abhijitsarkar.codinginterview.algorithm.ParenthesisToken.isParenthesis;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.ArithmeticOperatorToken.isArithmeticOperator;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.OperatorTokenFactory.getArithmeticOperatorTokenInstance;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.OperatorTokenFactory.getParenthesisTokenInstance;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.ParenthesisToken.isParenthesis;
 
 public class TokenFactory {
 	public static Token getTokenInstance(Character symbol) {

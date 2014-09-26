@@ -1,6 +1,6 @@
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.codinginterview.algorithm.expression;
 
-import static name.abhijitsarkar.codinginterview.algorithm.TokenFactory.getTokenInstance;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.TokenFactory.getTokenInstance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

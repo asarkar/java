@@ -1,4 +1,4 @@
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.codinginterview.algorithm.expression;
 
 public abstract class OperatorToken extends Token {
 	private final Associativity associativity;

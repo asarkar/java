@@ -1,4 +1,4 @@
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.codinginterview.algorithm.expression;
 
 public class ParenthesisToken extends OperatorToken {
 	public static final Character LEFT_PARENTHESIS = Character.valueOf('(');

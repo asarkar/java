@@ -1,8 +1,8 @@
-package name.abhijitsarkar.codinginterview.algorithm;
+package name.abhijitsarkar.codinginterview.algorithm.expression;
 
-import static name.abhijitsarkar.codinginterview.algorithm.OperatorToken.Associativity.LEFT;
-import static name.abhijitsarkar.codinginterview.algorithm.ParenthesisToken.LEFT_PARENTHESIS;
-import static name.abhijitsarkar.codinginterview.algorithm.ParenthesisToken.RIGHT_PARENTHESIS;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.OperatorToken.Associativity.LEFT;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.ParenthesisToken.LEFT_PARENTHESIS;
+import static name.abhijitsarkar.codinginterview.algorithm.expression.ParenthesisToken.RIGHT_PARENTHESIS;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
