@@ -18,9 +18,9 @@ public class Assignment {
 	 * but it can easily be implemented too.
 	 * 
 	 * We don't sort the input strings because that could be O(nlogn) time complexity and we can do better. Without
-	 * given additional information, we trade for performance over space.
+	 * given additional information, we trade space for performance.
 	 * 
-	 * There could be edge cases where n is greater than the length of the input list. This program throws an
+	 * There could be edge cases where n is greater than the length of the input list. The implementation throws a
 	 * NullPointerException in that case. It also throws a NullPointerException if a string in the list is null.
 	 * 
 	 * Lastly, in case there're several strings with the same length, only the first one is returned.
