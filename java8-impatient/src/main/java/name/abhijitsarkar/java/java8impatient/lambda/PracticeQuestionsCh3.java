@@ -28,14 +28,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,5 +257,38 @@ public class PracticeQuestionsCh3 {
      */
     public static <T, U> List<U> map(List<T> l, Function<T, U> f) {
 	return l.stream().map(f).collect(toList());
+    }
+
+    /**
+     * Q23: Define a {@code map} operation for a class {@code Pair<T>} that
+     * represents a pair of objects of type {@code T}.
+     * <p>
+     * Q24: Can you define a {@code flatMap} method for the {@code Pair<T>}? If
+     * so, what is it? If not, why not?
+     * <p>
+     * <b>Ans:</b> A {@code flatMap} operation replaces each element with a set
+     * of some other element, and then "flattens" the result to a single set of
+     * other elements. Since pair can only have 2 item, flattening is not
+     * applicable as it may result in more than 2 items. Consider a pair of
+     * lists of integers; flatMap may convert each item to a list of strings but
+     * if we flatten those, we're going to end up with more than 2 items.
+     * 
+     */
+    static class Pair<T> {
+	private T item1;
+	private T item2;
+
+	public Pair(T item1, T item2) {
+	    this.item1 = item1;
+	    this.item2 = item2;
+	}
+
+	public <U> Pair<U> map(final Function<? super T, ? extends U> mapper) {
+	    return new Pair<U>(mapper.apply(item1), mapper.apply(item2));
+	}
+
+	public Stream<T> stream() {
+	    return of(item1, item2);
+	}
     }
 }

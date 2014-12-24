@@ -25,6 +25,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+import name.abhijitsarkar.java.java8impatient.lambda.PracticeQuestionsCh3.Pair;
+
 import org.junit.Test;
 
 public class PracticeQuestionsCh3Test {
@@ -164,5 +166,12 @@ public class PracticeQuestionsCh3Test {
 
 	assertEquals(1, outputList.get(0).intValue());
 	assertEquals(2, outputList.get(1).intValue());
+    }
+
+    @Test
+    public void testPairMap() {
+	Pair<String> pairOfStrings = new Pair<>("1", "2");
+	assertEquals(3, pairOfStrings.map(s -> Integer.valueOf(s)).stream()
+		.flatMapToInt(i -> IntStream.of(i)).sum());
     }
 }
