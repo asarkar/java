@@ -19,18 +19,20 @@ import static java.lang.System.out;
 import static java.time.DayOfWeek.FRIDAY;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.DayOfWeek.SUNDAY;
+import static java.time.ZoneId.getAvailableZoneIds;
 import static java.time.temporal.TemporalAdjusters.firstDayOfNextMonth;
-import static java.time.temporal.TemporalAdjusters.ofDateAdjuster;
 import static java.util.stream.Collectors.toList;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjuster;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -197,27 +199,79 @@ public class PracticeQuestionsCh5 {
      * @return List of all Friday the 13th in the twentieth century.
      */
     public static List<LocalDate> fridayTheThirteenth() {
-	final LocalDate startDate = LocalDate.of(1899, 12, 13);
-	final LocalDate endDate = LocalDate.of(2000, 1, 13);
+	final LocalDate startDate = LocalDate.of(1900, 1, 13);
 
-	final UnaryOperator<LocalDate> nextFriDayTheThirteenth = (input) -> {
-	    LocalDate date = LocalDate.from(input).plusMonths(1);
+	return Stream.iterate(startDate, date -> date.plusMonths(1L))
+		.limit(100).filter(date -> date.getDayOfWeek() == FRIDAY)
+		.collect(toList());
 
-	    for (; date.getDayOfWeek() != FRIDAY; date = date.plusMonths(1))
-		;
+	/* Alternative implementation */
+	// final LocalDate startDate = LocalDate.of(1899, 12, 13);
+	// final LocalDate endDate = LocalDate.of(2000, 1, 13);
 
-	    return date;
-	};
+	// final UnaryOperator<LocalDate> nextFriDayTheThirteenth = (input) -> {
+	// LocalDate date = LocalDate.from(input).plusMonths(1);
+	//
+	// for (; date.getDayOfWeek() != FRIDAY; date = date.plusMonths(1))
+	// ;
+	//
+	// return date;
+	// };
 
-	final Stream.Builder<LocalDate> builder = Stream.builder();
+	// final Stream.Builder<LocalDate> builder = Stream.builder();
+	//
+	// for (LocalDate runningDate = startDate
+	// .with(ofDateAdjuster(nextFriDayTheThirteenth)); runningDate
+	// .isBefore(endDate); runningDate = runningDate
+	// .with(ofDateAdjuster(nextFriDayTheThirteenth))) {
+	// builder.add(runningDate);
+	// }
+	//
+	// return builder.build().collect(toList());
+    }
 
-	for (LocalDate runningDate = startDate
-		.with(ofDateAdjuster(nextFriDayTheThirteenth)); runningDate
-		.isBefore(endDate); runningDate = runningDate
-		.with(ofDateAdjuster(nextFriDayTheThirteenth))) {
-	    builder.add(runningDate);
-	}
+    /**
+     * Q8: Obtain the offsets of today's date in all supported time zones for
+     * the current time instant, turning {@code ZoneId.getAvailableIds} into a
+     * stream and using stream operations.
+     * 
+     * @return List of all offsets prefixed by zone ids.
+     */
+    public static List<String> getAllOffsets() {
+	final LocalDateTime now = LocalDateTime.now();
 
-	return builder.build().collect(toList());
+	return getAvailableZoneIds()
+		.stream()
+		.map(zoneId -> {
+		    final ZoneOffset offset = now.atZone(ZoneId.of(zoneId))
+			    .getOffset();
+
+		    return zoneId + " " + offset.toString();
+		}).sorted().collect(toList());
+    }
+
+    /**
+     * Q9: Again using stream operations, find all time zones whose offsets
+     * aren't full hours.
+     * 
+     * @return List of all offsets that aren't full hours prefixed by zone ids.
+     */
+    public static List<String> getAllOffsetsWithFractionalHours() {
+	final LocalDateTime now = LocalDateTime.now();
+
+	return getAvailableZoneIds()
+		.stream()
+		.filter(zoneId -> {
+		    final ZoneOffset offset = now.atZone(ZoneId.of(zoneId))
+			    .getOffset();
+
+		    return offset.getTotalSeconds() % 3600 != 0;
+		})
+		.map(zoneId -> {
+		    final ZoneOffset offset = now.atZone(ZoneId.of(zoneId))
+			    .getOffset();
+
+		    return zoneId + " " + offset.toString();
+		}).sorted().collect(toList());
     }
 }

@@ -2,6 +2,8 @@ package name.abhijitsarkar.java.java8impatient.datentime;
 
 import static name.abhijitsarkar.java.java8impatient.datentime.PracticeQuestionsCh5.cal;
 import static name.abhijitsarkar.java.java8impatient.datentime.PracticeQuestionsCh5.fridayTheThirteenth;
+import static name.abhijitsarkar.java.java8impatient.datentime.PracticeQuestionsCh5.getAllOffsets;
+import static name.abhijitsarkar.java.java8impatient.datentime.PracticeQuestionsCh5.getAllOffsetsWithFractionalHours;
 import static name.abhijitsarkar.java.java8impatient.datentime.PracticeQuestionsCh5.getProgrammersDayForYear;
 import static name.abhijitsarkar.java.java8impatient.datentime.PracticeQuestionsCh5.next;
 import static org.junit.Assert.assertEquals;
@@ -67,5 +69,15 @@ public class PracticeQuestionsCh5Test {
 	fridayTheThirteenth().forEach(
 		date -> System.out.println(DateTimeFormatter.ISO_DATE
 			.format(date)));
+    }
+
+    @Test
+    public void testGetAllOffsets() {
+	System.out.println(getAllOffsets());
+    }
+
+    @Test
+    public void testGetAllOffsetsWithFractionalHours() {
+	System.out.println(getAllOffsetsWithFractionalHours());
     }
 }
