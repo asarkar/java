@@ -15,12 +15,14 @@
  *******************************************************************************/
 package name.abhijitsarkar.java.java8impatient.concurrency;
 
+import static java.lang.Math.min;
+import static java.lang.Runtime.getRuntime;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.updateLongestString;
 
-import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -32,37 +34,36 @@ import org.slf4j.LoggerFactory;
  * @author Abhijit Sarkar
  */
 public class PracticeQuestionsCh6Test {
-	public static final Logger LOGGER = LoggerFactory
-			.getLogger(PracticeQuestionsCh6.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh6Test.class);
 
 	@Test
 	public void testUpdateLongestString() {
 		final String[] words = new String[] { "Java 8", "Java 8 is Awesome!",
-				"Java 8 is the Best thing Since Sliced Bread!",
-				"Java 8 Changes Everything!" };
+				"Java 8 is the Best thing Since Sliced Bread!", "Java 8 Changes Everything!" };
 		final int len = words.length;
 		final int stopAfter = 100;
 
-		final AtomicReference<String> longestString = new AtomicReference<>(
-				words[0]);
-		final AtomicInteger count = new AtomicInteger(0);
-		final Random rand = new Random();
+		final AtomicReference<String> longestString = new AtomicReference<>(words[0]);
+		final AtomicInteger count = new AtomicInteger(1);
 
 		class UpdateLongestStringTask extends RecursiveAction {
 			private static final long serialVersionUID = -2288401002001447054L;
 
+			private int id = -1;
+
+			private UpdateLongestStringTask(final int id) {
+				this.id = id;
+			}
+
 			@Override
 			protected void compute() {
-				final int c = count.getAndIncrement();
+				LOGGER.info("Executing task #: {}.", id);
 
-				LOGGER.info("Execution #: {}.", c);
-
-				if (c >= stopAfter) {
+				if (count.get() >= stopAfter) {
 					return;
 				}
 
-				final ForkJoinTask<Void> task = new UpdateLongestStringTask()
-						.fork();
+				final ForkJoinTask<Void> task = new UpdateLongestStringTask(count.incrementAndGet()).fork();
 
 				updateLongestString(longestString, words[randomIndex()]);
 
@@ -70,10 +71,18 @@ public class PracticeQuestionsCh6Test {
 			}
 
 			private int randomIndex() {
-				return rand.nextInt(len);
+				/*
+				 * From the Javadoc: "Instances of java.util.Random are threadsafe. However, the concurrent use of the
+				 * same java.util.Random instance across threads may encounter contention and consequent poor
+				 * performance. Consider instead using ThreadLocalRandom in multithreaded designs."
+				 */
+				return ThreadLocalRandom.current().nextInt(len);
 			}
 		}
 
-		new ForkJoinPool().invoke(new UpdateLongestStringTask());
+		/* Just because we can. */
+		final int parallelism = min(getRuntime().availableProcessors(), 4);
+
+		new ForkJoinPool(parallelism).invoke(new UpdateLongestStringTask(count.get()));
 	}
 }

@@ -23,13 +23,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PracticeQuestionsCh6 {
-	public static final Logger LOGGER = LoggerFactory
-			.getLogger(PracticeQuestionsCh6Test.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh6.class);
 
 	/**
-	 * Q1: Write a program that keeps track of the longest string that is
-	 * observed by a number of threads. Use an {@code AtomicReference} and an
-	 * appropriate accumulator.
+	 * Q1: Write a program that keeps track of the longest string that is observed by a number of threads. Use an
+	 * {@code AtomicReference} and an appropriate accumulator.
 	 * 
 	 * @param observed
 	 *            Longest string.
@@ -37,14 +35,13 @@ public class PracticeQuestionsCh6 {
 	 *            String value to be compared to the longest value.
 	 * @return Longest string.
 	 */
-	public static String updateLongestString(
-			final AtomicReference<String> observed, final String x) {
-		LOGGER.info("Received observed: {}, x: {}", observed, x);
+	public static String updateLongestString(final AtomicReference<String> observed, final String x) {
+		LOGGER.info("Received observed: {}, x: {}", observed.get(), x);
 
-		final String longestString = observed.accumulateAndGet(x, maxBy((str1,
-				str2) -> observed.get().length() - x.length()));
+		final String longestString = observed.accumulateAndGet(x,
+				maxBy((currentValue, givenUpdate) -> currentValue.length() - givenUpdate.length()));
 
-		LOGGER.info("New observed: {}.", longestString);
+		LOGGER.info("New observed: {}.", observed.get());
 
 		return longestString;
 	}
