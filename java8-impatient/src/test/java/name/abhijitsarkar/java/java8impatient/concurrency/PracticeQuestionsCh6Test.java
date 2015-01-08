@@ -23,7 +23,6 @@ import static java.nio.file.Paths.get;
 import static java.util.stream.Collectors.joining;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.fibonacci;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.getKeyWithMaxValue;
-import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.getURLs;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.incrementUsingAtomicLong;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.incrementUsingLongAdder;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.reverseIndexUsingMerge;
@@ -38,7 +37,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
@@ -49,6 +47,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.LongStream;
 
+import name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.WebCrawler;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -58,156 +58,167 @@ import org.slf4j.LoggerFactory;
  * @author Abhijit Sarkar
  */
 public class PracticeQuestionsCh6Test {
-	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh6Test.class);
+    public static final Logger LOGGER = LoggerFactory
+	    .getLogger(PracticeQuestionsCh6Test.class);
 
-	@Test
-	public void testUpdateLongestString() {
-		final String[] words = new String[] { "Java 8", "Java 8 is Awesome!",
-				"Java 8 is the Best thing Since Sliced Bread!", "Java 8 Changes Everything!" };
-		final int len = words.length;
-		final int stopAfter = 100;
+    @Test
+    public void testUpdateLongestString() {
+	final String[] words = new String[] { "Java 8", "Java 8 is Awesome!",
+		"Java 8 is the Best thing Since Sliced Bread!",
+		"Java 8 Changes Everything!" };
+	final int len = words.length;
+	final int stopAfter = 100;
 
-		final AtomicReference<String> longestString = new AtomicReference<>(words[0]);
-		final AtomicInteger count = new AtomicInteger(1);
+	final AtomicReference<String> longestString = new AtomicReference<>(
+		words[0]);
+	final AtomicInteger count = new AtomicInteger(1);
 
-		class UpdateLongestStringTask extends RecursiveAction {
-			private static final long serialVersionUID = -2288401002001447054L;
+	class UpdateLongestStringTask extends RecursiveAction {
+	    private static final long serialVersionUID = -2288401002001447054L;
 
-			private int id = -1;
+	    private int id = -1;
 
-			private UpdateLongestStringTask(final int id) {
-				this.id = id;
-			}
+	    private UpdateLongestStringTask(final int id) {
+		this.id = id;
+	    }
 
-			@Override
-			protected void compute() {
-				LOGGER.info("Executing task #: {}.", id);
+	    @Override
+	    protected void compute() {
+		LOGGER.info("Executing task #: {}.", id);
 
-				if (count.get() >= stopAfter) {
-					return;
-				}
-
-				final ForkJoinTask<Void> task = new UpdateLongestStringTask(count.incrementAndGet()).fork();
-
-				updateLongestString(longestString, words[randomIndex()]);
-
-				task.join();
-			}
-
-			private int randomIndex() {
-				/*
-				 * From the Javadoc: "Instances of java.util.Random are threadsafe. However, the concurrent use of the
-				 * same java.util.Random instance across threads may encounter contention and consequent poor
-				 * performance. Consider instead using ThreadLocalRandom in multithreaded designs."
-				 */
-				return ThreadLocalRandom.current().nextInt(len);
-			}
+		if (count.get() >= stopAfter) {
+		    return;
 		}
 
-		/* Just because we can. */
-		final int parallelism = min(getRuntime().availableProcessors(), 4);
+		final ForkJoinTask<Void> task = new UpdateLongestStringTask(
+			count.incrementAndGet()).fork();
 
-		new ForkJoinPool(parallelism).invoke(new UpdateLongestStringTask(count.get()));
+		updateLongestString(longestString, words[randomIndex()]);
+
+		task.join();
+	    }
+
+	    private int randomIndex() {
+		/*
+		 * From the Javadoc: "Instances of java.util.Random are
+		 * threadsafe. However, the concurrent use of the same
+		 * java.util.Random instance across threads may encounter
+		 * contention and consequent poor performance. Consider instead
+		 * using ThreadLocalRandom in multithreaded designs."
+		 */
+		return ThreadLocalRandom.current().nextInt(len);
+	    }
 	}
 
-	@Ignore("Takes too long")
-	public void testIncrementUsingAtomicLong() {
-		LOGGER.info("Warming up\n.");
+	/* Just because we can. */
+	final int parallelism = min(getRuntime().availableProcessors(), 4);
 
-		/* Warm up */
-		for (int i = 0; i < 5; i++) {
-			incrementUsingAtomicLong(new AtomicLong(0));
-		}
+	new ForkJoinPool(parallelism).invoke(new UpdateLongestStringTask(count
+		.get()));
+    }
 
-		LOGGER.info("Rest and cleanup\n.");
+    @Ignore("Takes too long")
+    public void testIncrementUsingAtomicLong() {
+	LOGGER.info("Warming up\n.");
 
-		restAndCleanup();
-
-		LOGGER.info("Do it now!\n");
-
-		AtomicLong counter = new AtomicLong(0);
-
-		incrementUsingAtomicLong(counter);
-
-		assertEquals(100000000, counter.get());
+	/* Warm up */
+	for (int i = 0; i < 5; i++) {
+	    incrementUsingAtomicLong(new AtomicLong(0));
 	}
 
-	@Ignore("Takes too long")
-	public void testIncrementUsingLongAdder() {
-		LOGGER.info("Warming up\n.");
+	LOGGER.info("Rest and cleanup\n.");
 
-		/* Warm up */
-		for (int i = 0; i < 5; i++) {
-			incrementUsingLongAdder(new LongAdder());
-		}
+	restAndCleanup();
 
-		LOGGER.info("Rest and cleanup\n.");
+	LOGGER.info("Do it now!\n");
 
-		restAndCleanup();
+	AtomicLong counter = new AtomicLong(0);
 
-		LOGGER.info("Do it now!\n");
+	incrementUsingAtomicLong(counter);
 
-		LongAdder counter = new LongAdder();
+	assertEquals(100000000, counter.get());
+    }
 
-		incrementUsingLongAdder(counter);
+    @Ignore("Takes too long")
+    public void testIncrementUsingLongAdder() {
+	LOGGER.info("Warming up\n.");
 
-		assertEquals(100000000, counter.longValue());
+	/* Warm up */
+	for (int i = 0; i < 5; i++) {
+	    incrementUsingLongAdder(new LongAdder());
 	}
 
-	@SuppressWarnings("static-access")
-	private void restAndCleanup() {
-		gc();
+	LOGGER.info("Rest and cleanup\n.");
 
-		try {
-			currentThread().sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	restAndCleanup();
+
+	LOGGER.info("Do it now!\n");
+
+	LongAdder counter = new LongAdder();
+
+	incrementUsingLongAdder(counter);
+
+	assertEquals(100000000, counter.longValue());
+    }
+
+    @SuppressWarnings("static-access")
+    private void restAndCleanup() {
+	gc();
+
+	try {
+	    currentThread().sleep(2000);
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
+	}
+    }
+
+    @Test
+    public void testReverseIndexUsingMerge() throws IOException,
+	    URISyntaxException {
+	Path p = get(getClass().getResource("/ch6").toURI());
+
+	Map<String, Set<File>> reverseIndex = reverseIndexUsingMerge(p);
+
+	String filesContainingTheWordJava = joinValues("Java", reverseIndex);
+
+	assertEquals("f1.txt,f2.txt,f3.txt", filesContainingTheWordJava);
+
+	String filesContainingTheWordIs = joinValues("is", reverseIndex);
+
+	assertEquals("f1.txt,f2.txt", filesContainingTheWordIs);
+    }
+
+    private String joinValues(String key, Map<String, Set<File>> map) {
+	if (!map.containsKey(key)) {
+	    throw new NoSuchElementException("No entry exists for key: " + key);
 	}
 
-	@Test
-	public void testReverseIndexUsingMerge() throws IOException, URISyntaxException {
-		Path p = get(getClass().getResource("/ch6").toURI());
+	return map.get(key).stream().map(File::getName).sorted()
+		.collect(joining(","));
+    }
 
-		Map<String, Set<File>> reverseIndex = reverseIndexUsingMerge(p);
+    @Test
+    public void testGetKeyWithMaxValue() {
+	ConcurrentHashMap<String, Long> map = new ConcurrentHashMap<>();
 
-		String filesContainingTheWordJava = joinValues("Java", reverseIndex);
+	LongStream.range(1, 10).forEach(l -> map.put(String.valueOf(l), l));
 
-		assertEquals("f1.txt,f2.txt,f3.txt", filesContainingTheWordJava);
+	String key = getKeyWithMaxValue(map);
 
-		String filesContainingTheWordIs = joinValues("is", reverseIndex);
+	assertEquals("9", key);
+    }
 
-		assertEquals("f1.txt,f2.txt", filesContainingTheWordIs);
-	}
+    @Test
+    public void testFibonacci() {
+	assertEquals(1, fibonacci(-1));
+	assertEquals(1, fibonacci(2));
+	assertEquals(8, fibonacci(6));
+    }
 
-	private String joinValues(String key, Map<String, Set<File>> map) {
-		if (!map.containsKey(key)) {
-			throw new NoSuchElementException("No entry exists for key: " + key);
-		}
-
-		return map.get(key).stream().map(File::getName).sorted().collect(joining(","));
-	}
-
-	@Test
-	public void testGetKeyWithMaxValue() {
-		ConcurrentHashMap<String, Long> map = new ConcurrentHashMap<>();
-
-		LongStream.range(1, 10).forEach(l -> map.put(String.valueOf(l), l));
-
-		String key = getKeyWithMaxValue(map);
-
-		assertEquals("9", key);
-	}
-
-	@Test
-	public void testFibonacci() {
-		assertEquals(1, fibonacci(-1));
-		assertEquals(1, fibonacci(2));
-		assertEquals(8, fibonacci(6));
-	}
-
-	@Test
-	public void testGetURLs() throws InterruptedException, ExecutionException {
-		getURLs("http://en.wikipedia.org/wiki/Java_%28programming_language%29").forEach(System.out::println);
-	}
+    @Test
+    public void testCrawl() {
+	new WebCrawler().crawl(
+		"http://en.wikipedia.org/wiki/Java_%28programming_language%29",
+		2, 10);
+    }
 }
