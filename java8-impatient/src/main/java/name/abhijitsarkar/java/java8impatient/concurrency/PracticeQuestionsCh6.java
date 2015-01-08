@@ -15,13 +15,18 @@
  *******************************************************************************/
 package name.abhijitsarkar.java.java8impatient.concurrency;
 
+import static java.lang.Runtime.getRuntime;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.isDirectory;
 import static java.nio.file.Files.lines;
+import static java.nio.file.Files.walk;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.function.BinaryOperator.maxBy;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.of;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +42,8 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -124,7 +131,9 @@ public class PracticeQuestionsCh6 {
 					try {
 					    task.run();
 					} catch (Exception e) {
-					    LOGGER.error("Something went wrong. Get the hell outta here.");
+					    LOGGER.error(
+						    "Something went wrong. Get the hell outta here.",
+						    e);
 
 					    break;
 					}
@@ -145,13 +154,99 @@ public class PracticeQuestionsCh6 {
 		runningTime.getSeconds(), runningTime.getNano());
     }
 
-    private static void reverseIndex(final Path p) {
-	try {
-	    Map<String, Set<File>> map = lines(p, UTF_8).collect(
-		    groupingBy(String::toString,
-			    mapping((String word) -> p.toFile(), toSet())));
-	} catch (IOException e) {
-	    e.printStackTrace();
+    /**
+     * Q5: Write an application in which multiple threads read all words from a
+     * collection of files. Use a {@code ConcurrentHashMap<String, Set<File>>}
+     * to track in which files each word occurs. Use the {@code merge} method to
+     * update the map.
+     * 
+     * @param path
+     *            Input File or root directory.
+     * @return Map containing entries for each word vs the files in which it
+     *         occurs.
+     * @throws IOException
+     */
+    public static Map<String, Set<File>> reverseIndexUsingMerge(final Path path)
+	    throws IOException {
+	final ForkJoinPool pool = new ForkJoinPool();
+
+	final ConcurrentHashMap<String, Set<File>> map = new ConcurrentHashMap<>();
+
+	final BiConsumer<? super String, ? super Set<File>> action = (key,
+		value) -> map.merge(key, value, (existingValue, newValue) -> {
+	    LOGGER.info("Received key: {}, existing value: {}, new value: {}.",
+		    key, existingValue, newValue);
+
+	    newValue.addAll(existingValue);
+
+	    return newValue;
+	});
+
+	pool.invokeAll(walk(path, 1).map(p -> new ReverseIndex(p, action))
+		.collect(toList()));
+
+	return unmodifiableMap(map);
+    }
+
+    static class ReverseIndex implements Callable<Void> {
+	private final Path p;
+	private final BiConsumer<? super String, ? super Set<File>> action;
+
+	private ReverseIndex(final Path p,
+		final BiConsumer<? super String, ? super Set<File>> action) {
+	    this.p = p;
+	    this.action = action;
 	}
+
+	@Override
+	public Void call() throws Exception {
+	    try {
+		LOGGER.info("Visited {}.", p);
+
+		if (isDirectory(p)) {
+		    return null;
+		}
+
+		reverseIndex().forEach(action);
+	    } catch (IOException ie) {
+		LOGGER.error("Something went wrong. Get the hell outta here.",
+			ie);
+	    }
+
+	    return null;
+	}
+
+	final Consumer<? super String> debugAction = word -> {
+	    final int count = p.getNameCount();
+
+	    LOGGER.info("File: {}, word: {}",
+		    p.getName(count > 0 ? count - 1 : 0), word);
+	};
+
+	private Map<String, Set<File>> reverseIndex() throws IOException {
+	    return lines(p, UTF_8).flatMap(line -> of(line.split("\\s")))
+	    // .peek(debugAction)
+		    .collect(
+			    groupingBy(String::toString,
+				    mapping(word -> p.toFile(), toSet())));
+	}
+    }
+
+    /**
+     * Q7: In a {@code ConcurrentHashMap<String, Long>}, find the key with the
+     * maximum value (breaking ties arbitrarily).
+     * 
+     * @param map
+     *            Map.
+     * @return Key that has the maximum value.
+     */
+    public static String getKeyWithMaxValue(
+	    final ConcurrentHashMap<String, Long> map) {
+	final int parallelismThreshold = getRuntime().availableProcessors();
+
+	return map.reduceEntries(
+		parallelismThreshold,
+		(e1, e2) -> e1.getValue().compareTo(e2.getValue()) > 0 ? e1
+			: e2).getKey();
     }
 }

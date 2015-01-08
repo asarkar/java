@@ -29,12 +29,12 @@ public class PracticeQuestionsCh1Test {
 
 	@Test
 	public void testListAllSubdirectoriesUsingLambda() {
-		testListAllSubdirectories(PracticeQuestionsCh1::listAllSubdirectoriesUsingLambda, "/dir");
+		testListAllSubdirectories(PracticeQuestionsCh1::listAllSubdirectoriesUsingLambda, "/ch1/dir");
 	}
 
 	@Test
 	public void testlistAllSubdirectoriesUsingMethodExpr() {
-		testListAllSubdirectories(PracticeQuestionsCh1::listAllSubdirectoriesUsingMethodExpr, "/dir");
+		testListAllSubdirectories(PracticeQuestionsCh1::listAllSubdirectoriesUsingMethodExpr, "/ch1/dir");
 	}
 
 	private void testListAllSubdirectories(Function<String, List<String>> func, String dir) {
@@ -58,7 +58,7 @@ public class PracticeQuestionsCh1Test {
 
 	@Test
 	public void testSortFiles() throws URISyntaxException {
-		URL dirURL = PracticeQuestionsCh1.class.getResource("/dir");
+		URL dirURL = PracticeQuestionsCh1.class.getResource("/ch1/dir");
 
 		assertNotNull(dirURL);
 

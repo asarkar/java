@@ -19,11 +19,23 @@ import static java.lang.Math.min;
 import static java.lang.Runtime.getRuntime;
 import static java.lang.System.gc;
 import static java.lang.Thread.currentThread;
+import static java.nio.file.Paths.get;
+import static java.util.stream.Collectors.joining;
+import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.getKeyWithMaxValue;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.incrementUsingAtomicLong;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.incrementUsingLongAdder;
+import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.reverseIndexUsingMerge;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.updateLongestString;
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
@@ -32,7 +44,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.stream.LongStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +114,7 @@ public class PracticeQuestionsCh6Test {
 		.get()));
     }
 
-    @Test
+    @Ignore("Takes too long")
     public void testIncrementUsingAtomicLong() {
 	LOGGER.info("Warming up\n.");
 
@@ -122,7 +136,7 @@ public class PracticeQuestionsCh6Test {
 	assertEquals(100000000, counter.get());
     }
 
-    @Test
+    @Ignore("Takes too long")
     public void testIncrementUsingLongAdder() {
 	LOGGER.info("Warming up\n.");
 
@@ -153,5 +167,41 @@ public class PracticeQuestionsCh6Test {
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
+    }
+
+    @Test
+    public void testReverseIndexUsingMerge() throws IOException,
+	    URISyntaxException {
+	Path p = get(getClass().getResource("/ch6").toURI());
+
+	Map<String, Set<File>> reverseIndex = reverseIndexUsingMerge(p);
+
+	String filesContainingTheWordJava = joinValues("Java", reverseIndex);
+
+	assertEquals("f1.txt,f2.txt,f3.txt", filesContainingTheWordJava);
+
+	String filesContainingTheWordIs = joinValues("is", reverseIndex);
+
+	assertEquals("f1.txt,f2.txt", filesContainingTheWordIs);
+    }
+
+    private String joinValues(String key, Map<String, Set<File>> map) {
+	if (!map.containsKey(key)) {
+	    throw new NoSuchElementException("No entry exists for key: " + key);
+	}
+
+	return map.get(key).stream().map(File::getName).sorted()
+		.collect(joining(","));
+    }
+
+    @Test
+    public void testGetKeyWithMaxValue() {
+	ConcurrentHashMap<String, Long> map = new ConcurrentHashMap<>();
+
+	LongStream.range(1, 10).forEach(l -> map.put(String.valueOf(l), l));
+
+	String key = getKeyWithMaxValue(map);
+
+	assertEquals("9", key);
     }
 }
