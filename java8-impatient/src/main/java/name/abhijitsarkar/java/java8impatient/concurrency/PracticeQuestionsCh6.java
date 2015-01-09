@@ -23,8 +23,8 @@ import static java.nio.file.Files.walk;
 import static java.util.Arrays.parallelPrefix;
 import static java.util.Arrays.parallelSetAll;
 import static java.util.Collections.unmodifiableMap;
-import static java.util.concurrent.CompletableFuture.allOf;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
+import static java.util.concurrent.ForkJoinPool.commonPool;
 import static java.util.function.BinaryOperator.maxBy;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
@@ -43,9 +43,11 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
@@ -54,365 +56,358 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PracticeQuestionsCh6 {
-    public static final Logger LOGGER = LoggerFactory
-	    .getLogger(PracticeQuestionsCh6.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh6.class);
 
-    /**
-     * Q1: Write a program that keeps track of the longest string that is
-     * observed by a number of threads. Use an {@code AtomicReference} and an
-     * appropriate accumulator.
-     * 
-     * @param observed
-     *            Longest string.
-     * @param x
-     *            String value to be compared to the longest value.
-     * @return Longest string.
-     */
-    public static String updateLongestString(
-	    final AtomicReference<String> observed, final String x) {
+	/**
+	 * Q1: Write a program that keeps track of the longest string that is observed by a number of threads. Use an
+	 * {@code AtomicReference} and an appropriate accumulator.
+	 * 
+	 * @param observed
+	 *            Longest string.
+	 * @param x
+	 *            String value to be compared to the longest value.
+	 * @return Longest string.
+	 */
+	public static String updateLongestString(final AtomicReference<String> observed, final String x) {
 
-	final String longestString = observed.accumulateAndGet(x, maxBy((
-		currentValue, givenUpdate) -> {
-	    LOGGER.info("Received current value: {}, given update: {}",
-		    currentValue, givenUpdate);
+		final String longestString = observed.accumulateAndGet(x, maxBy((currentValue, givenUpdate) -> {
+			LOGGER.info("Received current value: {}, given update: {}", currentValue, givenUpdate);
 
-	    return currentValue.length() - givenUpdate.length();
-	}));
+			return currentValue.length() - givenUpdate.length();
+		}));
 
-	LOGGER.info("New observed: {}.", longestString);
+		LOGGER.info("New observed: {}.", longestString);
 
-	return longestString;
-    }
+		return longestString;
+	}
 
-    /**
-     * Q2: Does a {@code LongAdder} help with yielding a sequence of increasing
-     * IDs? Why or why not?
-     * <p>
-     * <b>Ans:</b> No, it's not helpful. From the Javadoc of method {@code sum},
-     * <i>"The returned value is NOT an atomic snapshot."</i>. It appears that
-     * {@code LongAdder} is designed so that multiple threads update a common
-     * sum that is used for purposes such as collecting statistics, but the sum
-     * is expected to be calculated outside of the multithreaded code.
-     */
-    public void existsOnlyToGlorifyJavadoc() {
-    }
+	/**
+	 * Q2: Does a {@code LongAdder} help with yielding a sequence of increasing IDs? Why or why not?
+	 * <p>
+	 * <b>Ans:</b> No, it's not helpful. From the Javadoc of method {@code sum},
+	 * <i>"The returned value is NOT an atomic snapshot."</i>. It appears that {@code LongAdder} is designed so that
+	 * multiple threads update a common sum that is used for purposes such as collecting statistics, but the sum is
+	 * expected to be calculated outside of the multithreaded code.
+	 */
+	public void existsOnlyToGlorifyJavadoc() {
+	}
 
-    /**
-     * Q3: Generate 1,000 threads, each of which increments a counter 100,000
-     * times. Compare the performance of using {@code AtomicLong} versus
-     * {@code LongAdder}.
-     */
-    public static void incrementUsingAtomicLong(final AtomicLong counter) {
-	run(() -> {
-	    counter.getAndIncrement();
-	});
-    }
+	/**
+	 * Q3: Generate 1,000 threads, each of which increments a counter 100,000 times. Compare the performance of using
+	 * {@code AtomicLong} versus {@code LongAdder}.
+	 */
+	public static void incrementUsingAtomicLong(final AtomicLong counter) {
+		run(() -> {
+			counter.getAndIncrement();
+		});
+	}
 
-    /**
-     * Q3: Generate 1,000 threads, each of which increments a counter 100,000
-     * times. Compare the performance of using {@code AtomicLong} versus
-     * {@code LongAdder}.
-     */
-    public static void incrementUsingLongAdder(final LongAdder counter) {
-	run(() -> {
-	    counter.increment();
-	});
-    }
+	/**
+	 * Q3: Generate 1,000 threads, each of which increments a counter 100,000 times. Compare the performance of using
+	 * {@code AtomicLong} versus {@code LongAdder}.
+	 */
+	public static void incrementUsingLongAdder(final LongAdder counter) {
+		run(() -> {
+			counter.increment();
+		});
+	}
 
-    @SuppressWarnings("unchecked")
-    private static void run(final Runnable task) {
-	final Instant start = Instant.now();
+	@SuppressWarnings("unchecked")
+	private static void run(final Runnable task) {
+		final Instant start = Instant.now();
 
-	LOGGER.info("Starting execution.");
+		LOGGER.info("Starting execution.");
 
-	new ForkJoinPool()
-		.invokeAll((Collection<? extends Callable<Void>>) IntStream
-			.range(0, 1000).mapToObj(i -> {
-			    return new Callable<Void>() {
+		new ForkJoinPool().invokeAll((Collection<? extends Callable<Void>>) IntStream.range(0, 1000).mapToObj(i -> {
+			return new Callable<Void>() {
 				@Override
 				public Void call() {
-				    for (int j = 0; j < 100000; j++) {
-					try {
-					    task.run();
-					} catch (Exception e) {
-					    LOGGER.error(
-						    "Something went wrong. Get the hell outta here.",
-						    e);
+					for (int j = 0; j < 100000; j++) {
+						try {
+							task.run();
+						} catch (Exception e) {
+							LOGGER.error("Something went wrong. Get the hell outta here.", e);
 
-					    break;
+							break;
+						}
 					}
-				    }
 
-				    return null;
+					return null;
 				}
-			    };
-			}).collect(toList()));
+			};
+		}).collect(toList()));
 
-	LOGGER.info("Finished execution.");
+		LOGGER.info("Finished execution.");
 
-	final Instant end = Instant.now();
+		final Instant end = Instant.now();
 
-	final Duration runningTime = Duration.between(start, end);
+		final Duration runningTime = Duration.between(start, end);
 
-	LOGGER.info("Running time: {} seconds {} nanoseconds.",
-		runningTime.getSeconds(), runningTime.getNano());
-    }
-
-    /**
-     * Q5: Write an application in which multiple threads read all words from a
-     * collection of files. Use a {@code ConcurrentHashMap<String, Set<File>>}
-     * to track in which files each word occurs. Use the {@code merge} method to
-     * update the map.
-     * 
-     * @param path
-     *            Input File or root directory.
-     * @return Map containing entries for each word vs the files in which it
-     *         occurs.
-     * @throws IOException
-     */
-    public static Map<String, Set<File>> reverseIndexUsingMerge(final Path path)
-	    throws IOException {
-	final ForkJoinPool pool = new ForkJoinPool();
-
-	final ConcurrentHashMap<String, Set<File>> map = new ConcurrentHashMap<>();
-
-	final BiConsumer<? super String, ? super Set<File>> action = (key,
-		value) -> map.merge(key, value, (existingValue, newValue) -> {
-	    LOGGER.info("Received key: {}, existing value: {}, new value: {}.",
-		    key, existingValue, newValue);
-
-	    newValue.addAll(existingValue);
-
-	    return newValue;
-	});
-
-	pool.invokeAll(walk(path, 1).map(p -> new ReverseIndex(p, action))
-		.collect(toList()));
-
-	return unmodifiableMap(map);
-    }
-
-    private static class ReverseIndex implements Callable<Void> {
-	private final Path p;
-	private final BiConsumer<? super String, ? super Set<File>> action;
-
-	private ReverseIndex(final Path p,
-		final BiConsumer<? super String, ? super Set<File>> action) {
-	    this.p = p;
-	    this.action = action;
+		LOGGER.info("Running time: {} seconds {} nanoseconds.", runningTime.getSeconds(), runningTime.getNano());
 	}
 
-	@Override
-	public Void call() throws Exception {
-	    try {
-		LOGGER.info("Visited {}.", p);
-
-		if (isDirectory(p)) {
-		    return null;
-		}
-
-		reverseIndex().forEach(action);
-	    } catch (IOException ie) {
-		LOGGER.error("Something went wrong. Get the hell outta here.",
-			ie);
-	    }
-
-	    return null;
-	}
-
-	final Consumer<? super String> debugAction = word -> {
-	    final int count = p.getNameCount();
-
-	    LOGGER.info("File: {}, word: {}",
-		    p.getName(count > 0 ? count - 1 : 0), word);
-	};
-
-	private Map<String, Set<File>> reverseIndex() throws IOException {
-	    return lines(p, UTF_8).flatMap(line -> of(line.split("\\s")))
-	    // .peek(debugAction)
-		    .collect(
-			    groupingBy(String::toString,
-				    mapping(word -> p.toFile(), toSet())));
-	}
-    }
-
-    /**
-     * Q7: In a {@code ConcurrentHashMap<String, Long>}, find the key with the
-     * maximum value (breaking ties arbitrarily).
-     * 
-     * @param map
-     *            Map.
-     * @return Key that has the maximum value.
-     */
-    public static String getKeyWithMaxValue(
-	    final ConcurrentHashMap<String, Long> map) {
-	final int parallelismThreshold = getRuntime().availableProcessors();
-
-	return map.reduceEntries(
-		parallelismThreshold,
-		(e1, e2) -> e1.getValue().compareTo(e2.getValue()) > 0 ? e1
-			: e2).getKey();
-    }
-
-    /**
-     * You can use the {@code parallelPrefix} method to parallelize the
-     * computation of Fibonacci numbers. We use the fact that the nth Fibonacci
-     * number is the top left coefficient of F<sup>n</sup>, where F = (1, 1, 1,
-     * 0). Make an array filled with 2 x 2 matrices. Define a {@code Matrix}
-     * class with a multiplication method, use {@code parallelSetAll} to make an
-     * array of matrices, and use {@code parallelPefix} to multiply them.
-     * <p>
-     * Fibonacci series: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
-     * 
-     * @param n
-     *            The index of the Fibonacci number to return.
-     * @return The nth Fibonacci number.
-     */
-    public static int fibonacci(final int n) {
-	if (n <= 2) {
-	    return 1;
-	}
-
-	final TwoByTwoMatrix[] matrices = new TwoByTwoMatrix[n - 1];
-
-	parallelSetAll(matrices, i -> new TwoByTwoMatrix());
-
-	LOGGER.info("Matrix array after parallelSetAll.\n");
-	printMatrices(matrices);
-
-	parallelPrefix(matrices, TwoByTwoMatrix::multiply);
-
-	LOGGER.info("Matrix array after parallelPrefix.\n");
-	printMatrices(matrices);
-
-	/*
-	 * The last matrix in the array is the product of multiplying all
-	 * elements in the array.
+	/**
+	 * Q5: Write an application in which multiple threads read all words from a collection of files. Use a
+	 * {@code ConcurrentHashMap<String, Set<File>>} to track in which files each word occurs. Use the {@code merge}
+	 * method to update the map.
+	 * 
+	 * @param path
+	 *            Input File or root directory.
+	 * @return Map containing entries for each word vs the files in which it occurs.
+	 * @throws IOException
 	 */
-	return matrices[n - 2].topLeftCoefficient;
-    }
+	public static Map<String, Set<File>> reverseIndexUsingMerge(final Path path) throws IOException {
+		final ForkJoinPool pool = new ForkJoinPool();
 
-    private static void printMatrices(final TwoByTwoMatrix[] matrices) {
-	for (int i = 0; i < matrices.length; i++) {
-	    LOGGER.info("[{}] -> {}.", i, matrices[i]);
-	}
-    }
+		final ConcurrentHashMap<String, Set<File>> map = new ConcurrentHashMap<>();
 
-    private static class TwoByTwoMatrix {
-	private int topLeftCoefficient;
-	private int topRightCoefficient;
-	private int bottomLeftCoefficient;
-	private int bottomRightCoefficient;
+		final BiConsumer<? super String, ? super Set<File>> action = (key, value) -> map.merge(key, value, (
+				existingValue, newValue) -> {
+			LOGGER.info("Received key: {}, existing value: {}, new value: {}.", key, existingValue, newValue);
 
-	TwoByTwoMatrix() {
-	    this(1, 1, 1, 0);
-	}
+			newValue.addAll(existingValue);
 
-	TwoByTwoMatrix(final int topLeftCoefficient,
-		final int topRightCoefficient, final int bottomLeftCoefficient,
-		final int bottomRightCoefficient) {
-	    this.topLeftCoefficient = topLeftCoefficient;
-	    this.topRightCoefficient = topRightCoefficient;
-	    this.bottomLeftCoefficient = bottomLeftCoefficient;
-	    this.bottomRightCoefficient = bottomRightCoefficient;
+			return newValue;
+		});
+
+		pool.invokeAll(walk(path, 1).map(p -> new ReverseIndex(p, action)).collect(toList()));
+
+		return unmodifiableMap(map);
 	}
 
-	/* https://www.youtube.com/watch?v=xMNOI8YRQIo */
-	TwoByTwoMatrix multiply(final TwoByTwoMatrix other) {
-	    final int productTopLeftCoefficient = topLeftCoefficient
-		    * other.topLeftCoefficient + topRightCoefficient
-		    * other.bottomLeftCoefficient;
-	    final int productTopRightCoefficient = topLeftCoefficient
-		    * other.topRightCoefficient + topRightCoefficient
-		    * other.bottomRightCoefficient;
-	    final int productBottomLeftCoefficient = bottomLeftCoefficient
-		    * other.topLeftCoefficient + bottomRightCoefficient
-		    * other.bottomLeftCoefficient;
-	    final int productBottomRightCoefficient = bottomLeftCoefficient
-		    * other.topRightCoefficient + bottomRightCoefficient
-		    * other.bottomRightCoefficient;
+	private static class ReverseIndex implements Callable<Void> {
+		private final Path p;
+		private final BiConsumer<? super String, ? super Set<File>> action;
 
-	    return new TwoByTwoMatrix(productTopLeftCoefficient,
-		    productTopRightCoefficient, productBottomLeftCoefficient,
-		    productBottomRightCoefficient);
-	}
-
-	@Override
-	public String toString() {
-	    return "TwoByTwoMatrix [[0,0]=" + topLeftCoefficient + ", [0,1]="
-		    + topRightCoefficient + ", [1,0]=" + bottomLeftCoefficient
-		    + ", [1,1]=" + bottomRightCoefficient + "]";
-	}
-    }
-
-    static class WebCrawler {
-	static {
-	    System.setProperty("http.proxyHost", "127.0.0.1");
-	    System.setProperty("http.proxyPort", "3128");
-	}
-
-	CompletableFuture<Void> crawl(final String startingUrl,
-		final int depth, final int breadth) {
-	    if (depth <= 0) {
-		return completedFuture(startingUrl, depth);
-	    }
-
-	    final CompletableFuture<Void> allDoneFuture = allOf((CompletableFuture[]) of(
-		    startingUrl)
-		    .map(url -> supplyAsync(getContent(url)))
-		    .map(docFuture -> docFuture.thenApply(getURLs(breadth)))
-		    .map(urlsFuture -> urlsFuture.thenApply(doForEach(depth,
-			    breadth)))
-		    .toArray(size -> new CompletableFuture[size]));
-
-	    allDoneFuture.join();
-
-	    return allDoneFuture;
-	}
-
-	private CompletableFuture<Void> completedFuture(
-		final String startingUrl, final int depth) {
-	    LOGGER.info("Link: {}, depth: {}.", startingUrl, depth);
-
-	    CompletableFuture<Void> future = new CompletableFuture<>();
-	    future.complete(null);
-
-	    return future;
-	}
-
-	private Supplier<Document> getContent(final String url) {
-	    return () -> {
-		try {
-		    return connect(url).get();
-		} catch (IOException e) {
-		    throw new UncheckedIOException(
-			    " Something went wrong trying to fetch the contents of the URL: "
-				    + url, e);
+		private ReverseIndex(final Path p, final BiConsumer<? super String, ? super Set<File>> action) {
+			this.p = p;
+			this.action = action;
 		}
-	    };
+
+		@Override
+		public Void call() throws Exception {
+			try {
+				LOGGER.info("Visited {}.", p);
+
+				if (isDirectory(p)) {
+					return null;
+				}
+
+				reverseIndex().forEach(action);
+			} catch (IOException ie) {
+				LOGGER.error("Something went wrong. Get the hell outta here.", ie);
+			}
+
+			return null;
+		}
+
+		final Consumer<? super String> debugAction = word -> {
+			final int count = p.getNameCount();
+
+			LOGGER.info("File: {}, word: {}", p.getName(count > 0 ? count - 1 : 0), word);
+		};
+
+		private Map<String, Set<File>> reverseIndex() throws IOException {
+			return lines(p, UTF_8).flatMap(line -> of(line.split("\\s")))
+			// .peek(debugAction)
+					.collect(groupingBy(String::toString, mapping(word -> p.toFile(), toSet())));
+		}
 	}
 
-	private Function<Document, Set<String>> getURLs(final int limit) {
-	    return doc -> {
-		LOGGER.info("Getting URLs for document: {}.", doc.baseUri());
+	/**
+	 * Q7: In a {@code ConcurrentHashMap<String, Long>}, find the key with the maximum value (breaking ties
+	 * arbitrarily).
+	 * 
+	 * @param map
+	 *            Map.
+	 * @return Key that has the maximum value.
+	 */
+	public static String getKeyWithMaxValue(final ConcurrentHashMap<String, Long> map) {
+		final int parallelismThreshold = getRuntime().availableProcessors();
 
-		return doc.select("a[href]").stream()
-			.map(link -> link.attr("abs:href")).limit(limit)
-			.peek(LOGGER::info).collect(toSet());
-	    };
+		return map
+				.reduceEntries(parallelismThreshold, (e1, e2) -> e1.getValue().compareTo(e2.getValue()) > 0 ? e1 : e2)
+				.getKey();
 	}
 
-	private Function<Set<String>, Stream<CompletableFuture<Void>>> doForEach(
-		final int depth, final int breadth) {
-	    return urls -> urls.stream().map(
-		    url -> crawl(url, depth - 1, breadth));
+	/**
+	 * You can use the {@code parallelPrefix} method to parallelize the computation of Fibonacci numbers. We use the
+	 * fact that the nth Fibonacci number is the top left coefficient of F<sup>n</sup>, where F = (1, 1, 1, 0). Make an
+	 * array filled with 2 x 2 matrices. Define a {@code Matrix} class with a multiplication method, use
+	 * {@code parallelSetAll} to make an array of matrices, and use {@code parallelPefix} to multiply them.
+	 * <p>
+	 * Fibonacci series: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
+	 * 
+	 * @param n
+	 *            The index of the Fibonacci number to return.
+	 * @return The nth Fibonacci number.
+	 */
+	public static int fibonacci(final int n) {
+		if (n <= 2) {
+			return 1;
+		}
+
+		final TwoByTwoMatrix[] matrices = new TwoByTwoMatrix[n - 1];
+
+		parallelSetAll(matrices, i -> new TwoByTwoMatrix());
+
+		LOGGER.info("Matrix array after parallelSetAll.\n");
+		printMatrices(matrices);
+
+		parallelPrefix(matrices, TwoByTwoMatrix::multiply);
+
+		LOGGER.info("Matrix array after parallelPrefix.\n");
+		printMatrices(matrices);
+
+		/*
+		 * The last matrix in the array is the product of multiplying all elements in the array.
+		 */
+		return matrices[n - 2].topLeftCoefficient;
 	}
-    }
+
+	private static void printMatrices(final TwoByTwoMatrix[] matrices) {
+		for (int i = 0; i < matrices.length; i++) {
+			LOGGER.info("[{}] -> {}.", i, matrices[i]);
+		}
+	}
+
+	private static class TwoByTwoMatrix {
+		private int topLeftCoefficient;
+		private int topRightCoefficient;
+		private int bottomLeftCoefficient;
+		private int bottomRightCoefficient;
+
+		TwoByTwoMatrix() {
+			this(1, 1, 1, 0);
+		}
+
+		TwoByTwoMatrix(final int topLeftCoefficient, final int topRightCoefficient, final int bottomLeftCoefficient,
+				final int bottomRightCoefficient) {
+			this.topLeftCoefficient = topLeftCoefficient;
+			this.topRightCoefficient = topRightCoefficient;
+			this.bottomLeftCoefficient = bottomLeftCoefficient;
+			this.bottomRightCoefficient = bottomRightCoefficient;
+		}
+
+		/* https://www.youtube.com/watch?v=xMNOI8YRQIo */
+		TwoByTwoMatrix multiply(final TwoByTwoMatrix other) {
+			final int productTopLeftCoefficient = topLeftCoefficient * other.topLeftCoefficient + topRightCoefficient
+					* other.bottomLeftCoefficient;
+			final int productTopRightCoefficient = topLeftCoefficient * other.topRightCoefficient + topRightCoefficient
+					* other.bottomRightCoefficient;
+			final int productBottomLeftCoefficient = bottomLeftCoefficient * other.topLeftCoefficient
+					+ bottomRightCoefficient * other.bottomLeftCoefficient;
+			final int productBottomRightCoefficient = bottomLeftCoefficient * other.topRightCoefficient
+					+ bottomRightCoefficient * other.bottomRightCoefficient;
+
+			return new TwoByTwoMatrix(productTopLeftCoefficient, productTopRightCoefficient,
+					productBottomLeftCoefficient, productBottomRightCoefficient);
+		}
+
+		@Override
+		public String toString() {
+			return "TwoByTwoMatrix [[0,0]=" + topLeftCoefficient + ", [0,1]=" + topRightCoefficient + ", [1,0]="
+					+ bottomLeftCoefficient + ", [1,1]=" + bottomRightCoefficient + "]";
+		}
+	}
+
+	static class WebCrawler {
+		// static {
+		// System.setProperty("http.proxyHost", "127.0.0.1");
+		// System.setProperty("http.proxyPort", "3128");
+		// }
+
+		WebCrawler() {
+			commonPool().awaitQuiescence(10, TimeUnit.SECONDS);
+		}
+
+		private final ConcurrentLinkedQueue<String> visited = new ConcurrentLinkedQueue<>();
+
+		/**
+		 * Q10: Write a program that asks the user for a URL, then reads the web page at that URL, and then displays all
+		 * the links. Use a {@code CompletableFuture} for each stage. Don't call {@code get}. To prevent your program
+		 * from terminating prematurely, call
+		 * 
+		 * <pre>
+		 * <code>
+		 * ForkJoinPool.commonPool().awaitQuiescence(10, TimeUnit.SECONDS);
+		 * </pre>
+		 * 
+		 * </code>
+		 * 
+		 * @param startingUrl
+		 *            URL that's content to be read.
+		 * @param depth
+		 *            Recursion depth. 0 means only this URL is printed, 1 means this URL and all URLS on this page are
+		 *            printed, so on and so forth.
+		 * @param breadth
+		 *            Number of URLs to print on a page. For example, a breadth of 10 will print 10 URLs regardless of
+		 *            how many are actually present on the page.
+		 */
+		void crawl(final String startingUrl, final int depth, final int breadth) {
+			if (isMaximumDepthReached(depth)) { // Prevent too deep recursion.
+				LOGGER.info("Reached maximum allowed depth. Not going to crawl URL: {}.", startingUrl);
+
+				return;
+			} else if (isAlreadyVisited(startingUrl)) { // Prevent cycles; not foolproof.
+				LOGGER.info("Already visited URL: {}.", startingUrl);
+
+				return;
+			}
+
+			LOGGER.info("\n");
+			LOGGER.info("URL: {}, depth: {}.", startingUrl, depth);
+
+			visited.add(startingUrl);
+
+			of(startingUrl).map(url -> supplyAsync(getContent(url)))
+					.map(docFuture -> docFuture.thenApply(getURLs(breadth)))
+					.map(urlsFuture -> urlsFuture.thenAccept(doForEach(depth, breadth))).findFirst()
+					.orElseThrow(completionException("Something went wrong when crawling URL: " + startingUrl)).join();
+		}
+
+		private boolean isMaximumDepthReached(final int depth) {
+			return depth <= 0;
+		}
+
+		private boolean isAlreadyVisited(final String url) {
+			return visited.contains(url);
+		}
+
+		private Supplier<RuntimeException> completionException(final String message) {
+			return () -> new CompletionException(new RuntimeException(message));
+		}
+
+		private Supplier<Document> getContent(final String url) {
+			return () -> {
+				try {
+					return connect(url).get();
+				} catch (IOException e) {
+					throw new UncheckedIOException(
+							"Something went wrong when fetching the contents of the URL: " + url, e);
+				}
+			};
+		}
+
+		private Function<Document, Set<String>> getURLs(final int limit) {
+			return doc -> {
+				LOGGER.info("\n");
+
+				LOGGER.info("Getting URLs for document: {}.", doc.baseUri());
+
+				return doc.select("a[href]").stream().map(link -> link.attr("abs:href")).limit(limit)
+						.peek(LOGGER::info).collect(toSet());
+			};
+		}
+
+		private Consumer<Set<String>> doForEach(final int depth, final int breadth) {
+			return urls -> urls.stream().forEach(url -> crawl(url, depth - 1, breadth));
+		}
+	}
 }
