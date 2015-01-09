@@ -43,7 +43,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ForkJoinPool;
@@ -56,6 +56,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -350,15 +351,15 @@ public class PracticeQuestionsCh6 {
 		 *            Number of URLs to print on a page. For example, a breadth of 10 will print 10 URLs regardless of
 		 *            how many are actually present on the page.
 		 */
-		void crawl(final String startingUrl, final int depth, final int breadth) {
+		CompletableFuture<Void> crawl(final String startingUrl, final int depth, final int breadth) {
 			if (isMaximumDepthReached(depth)) { // Prevent too deep recursion.
 				LOGGER.info("Reached maximum allowed depth. Not going to crawl URL: {}.", startingUrl);
 
-				return;
+				return completedFuture();
 			} else if (isAlreadyVisited(startingUrl)) { // Prevent cycles; not foolproof.
 				LOGGER.info("Already visited URL: {}.", startingUrl);
 
-				return;
+				return completedFuture();
 			}
 
 			LOGGER.info("\n");
@@ -366,10 +367,20 @@ public class PracticeQuestionsCh6 {
 
 			visited.add(startingUrl);
 
-			of(startingUrl).map(url -> supplyAsync(getContent(url)))
-					.map(docFuture -> docFuture.thenApply(getURLs(breadth)))
-					.map(urlsFuture -> urlsFuture.thenAccept(doForEach(depth, breadth))).findFirst()
-					.orElseThrow(completionException("Something went wrong when crawling URL: " + startingUrl)).join();
+			final CompletableFuture<Void> allDoneFuture = supplyAsync(getContent(startingUrl))
+					.thenApply(getURLs(breadth)).thenApply(doForEach(depth, breadth))
+					.thenApply(futures -> futures.toArray(CompletableFuture[]::new))
+					.thenAccept(CompletableFuture::allOf);
+
+			allDoneFuture.join();
+
+			return allDoneFuture;
+
+			/* Alternative implementation */
+			// of(startingUrl).map(url -> supplyAsync(getContent(url)))
+			// .map(docFuture -> docFuture.thenApply(getURLs(breadth)))
+			// .map(urlsFuture -> urlsFuture.thenAccept(doForEach(depth, breadth))).findFirst()
+			// .orElseThrow(completionException("Something went wrong when crawling URL: " + startingUrl)).join();
 		}
 
 		private boolean isMaximumDepthReached(final int depth) {
@@ -380,9 +391,17 @@ public class PracticeQuestionsCh6 {
 			return visited.contains(url);
 		}
 
-		private Supplier<RuntimeException> completionException(final String message) {
-			return () -> new CompletionException(new RuntimeException(message));
+		private CompletableFuture<Void> completedFuture() {
+			CompletableFuture<Void> future = new CompletableFuture<>();
+			future.complete(null);
+
+			return future;
 		}
+
+		/* Alternative implementation */
+		// private Supplier<RuntimeException> completionException(final String message) {
+		// return () -> new CompletionException(new RuntimeException(message));
+		// }
 
 		private Supplier<Document> getContent(final String url) {
 			return () -> {
@@ -406,8 +425,13 @@ public class PracticeQuestionsCh6 {
 			};
 		}
 
-		private Consumer<Set<String>> doForEach(final int depth, final int breadth) {
-			return urls -> urls.stream().forEach(url -> crawl(url, depth - 1, breadth));
+		/* Alternative implementation */
+		// private Consumer<Set<String>> doForEach(final int depth, final int breadth) {
+		// return urls -> urls.stream().forEach(url -> crawl(url, depth - 1, breadth));
+		// }
+
+		private Function<Set<String>, Stream<CompletableFuture<Void>>> doForEach(final int depth, final int breadth) {
+			return urls -> urls.stream().map(url -> crawl(url, depth - 1, breadth));
 		}
 	}
 }
