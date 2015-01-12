@@ -52,8 +52,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.LongStream;
 
-import name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.WebCrawler;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -63,183 +61,189 @@ import org.slf4j.LoggerFactory;
  * @author Abhijit Sarkar
  */
 public class PracticeQuestionsCh6Test {
-	public static final Logger LOGGER = LoggerFactory.getLogger(PracticeQuestionsCh6Test.class);
+    public static final Logger LOGGER = LoggerFactory
+	    .getLogger(PracticeQuestionsCh6Test.class);
 
-	@Test
-	public void testUpdateLongestString() {
-		final String[] words = new String[] { "Java 8", "Java 8 is Awesome!",
-				"Java 8 is the Best thing Since Sliced Bread!", "Java 8 Changes Everything!" };
-		final int len = words.length;
-		final int stopAfter = 100;
+    @Test
+    public void testUpdateLongestString() {
+	final String[] words = new String[] { "Java 8", "Java 8 is Awesome!",
+		"Java 8 is the Best thing Since Sliced Bread!",
+		"Java 8 Changes Everything!" };
+	final int len = words.length;
+	final int stopAfter = 100;
 
-		final AtomicReference<String> longestString = new AtomicReference<>(words[0]);
-		final AtomicInteger count = new AtomicInteger(1);
+	final AtomicReference<String> longestString = new AtomicReference<>(
+		words[0]);
+	final AtomicInteger count = new AtomicInteger(1);
 
-		class UpdateLongestStringTask extends RecursiveAction {
-			private static final long serialVersionUID = -2288401002001447054L;
+	class UpdateLongestStringTask extends RecursiveAction {
+	    private static final long serialVersionUID = -2288401002001447054L;
 
-			private int id = -1;
+	    private int id = -1;
 
-			private UpdateLongestStringTask(final int id) {
-				this.id = id;
-			}
+	    private UpdateLongestStringTask(final int id) {
+		this.id = id;
+	    }
 
-			@Override
-			protected void compute() {
-				LOGGER.info("Executing task #: {}.", id);
+	    @Override
+	    protected void compute() {
+		LOGGER.info("Executing task #: {}.", id);
 
-				if (count.get() >= stopAfter) {
-					return;
-				}
-
-				final ForkJoinTask<Void> task = new UpdateLongestStringTask(count.incrementAndGet()).fork();
-
-				updateLongestString(longestString, words[randomIndex()]);
-
-				task.join();
-			}
-
-			private int randomIndex() {
-				/*
-				 * From the Javadoc: "Instances of java.util.Random are threadsafe. However, the concurrent use of the
-				 * same java.util.Random instance across threads may encounter contention and consequent poor
-				 * performance. Consider instead using ThreadLocalRandom in multithreaded designs."
-				 */
-				return current().nextInt(len);
-			}
+		if (count.get() >= stopAfter) {
+		    return;
 		}
 
-		/* Just because we can. */
-		final int parallelism = min(getRuntime().availableProcessors(), 4);
+		final ForkJoinTask<Void> task = new UpdateLongestStringTask(
+			count.incrementAndGet()).fork();
 
-		new ForkJoinPool(parallelism).invoke(new UpdateLongestStringTask(count.get()));
+		updateLongestString(longestString, words[randomIndex()]);
+
+		task.join();
+	    }
+
+	    private int randomIndex() {
+		/*
+		 * From the Javadoc: "Instances of java.util.Random are
+		 * threadsafe. However, the concurrent use of the same
+		 * java.util.Random instance across threads may encounter
+		 * contention and consequent poor performance. Consider instead
+		 * using ThreadLocalRandom in multithreaded designs."
+		 */
+		return current().nextInt(len);
+	    }
 	}
 
-	@Ignore("Takes too long")
-	public void testIncrementUsingAtomicLong() {
-		LOGGER.info("Warming up\n.");
+	/* Just because we can. */
+	final int parallelism = min(getRuntime().availableProcessors(), 4);
 
-		/* Warm up */
-		for (int i = 0; i < 5; i++) {
-			incrementUsingAtomicLong(new AtomicLong(0));
-		}
+	new ForkJoinPool(parallelism).invoke(new UpdateLongestStringTask(count
+		.get()));
+    }
 
-		LOGGER.info("Rest and cleanup\n.");
+    @Ignore("Takes too long")
+    public void testIncrementUsingAtomicLong() {
+	LOGGER.info("Warming up\n.");
 
-		restAndCleanup();
-
-		LOGGER.info("Do it now!\n");
-
-		AtomicLong counter = new AtomicLong(0);
-
-		incrementUsingAtomicLong(counter);
-
-		assertEquals(100000000, counter.get());
+	/* Warm up */
+	for (int i = 0; i < 5; i++) {
+	    incrementUsingAtomicLong(new AtomicLong(0));
 	}
 
-	@Ignore("Takes too long")
-	public void testIncrementUsingLongAdder() {
-		LOGGER.info("Warming up\n.");
+	LOGGER.info("Rest and cleanup\n.");
 
-		/* Warm up */
-		for (int i = 0; i < 5; i++) {
-			incrementUsingLongAdder(new LongAdder());
-		}
+	restAndCleanup();
 
-		LOGGER.info("Rest and cleanup\n.");
+	LOGGER.info("Do it now!\n");
 
-		restAndCleanup();
+	AtomicLong counter = new AtomicLong(0);
 
-		LOGGER.info("Do it now!\n");
+	incrementUsingAtomicLong(counter);
 
-		LongAdder counter = new LongAdder();
+	assertEquals(100000000, counter.get());
+    }
 
-		incrementUsingLongAdder(counter);
+    @Ignore("Takes too long")
+    public void testIncrementUsingLongAdder() {
+	LOGGER.info("Warming up\n.");
 
-		assertEquals(100000000, counter.longValue());
+	/* Warm up */
+	for (int i = 0; i < 5; i++) {
+	    incrementUsingLongAdder(new LongAdder());
 	}
 
+	LOGGER.info("Rest and cleanup\n.");
+
+	restAndCleanup();
+
+	LOGGER.info("Do it now!\n");
+
+	LongAdder counter = new LongAdder();
+
+	incrementUsingLongAdder(counter);
+
+	assertEquals(100000000, counter.longValue());
+    }
+
+    @SuppressWarnings("static-access")
+    private void restAndCleanup() {
+	gc();
+
+	try {
+	    currentThread().sleep(2000);
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
+	}
+    }
+
+    @Test
+    public void testReverseIndexUsingMerge() throws IOException,
+	    URISyntaxException {
+	Path p = get(getClass().getResource("/ch6").toURI());
+
+	Map<String, Set<File>> reverseIndex = reverseIndexUsingMerge(p);
+
+	String filesContainingTheWordJava = joinValues("Java", reverseIndex);
+
+	assertEquals("f1.txt,f2.txt,f3.txt", filesContainingTheWordJava);
+
+	String filesContainingTheWordIs = joinValues("is", reverseIndex);
+
+	assertEquals("f1.txt,f2.txt", filesContainingTheWordIs);
+    }
+
+    private String joinValues(String key, Map<String, Set<File>> map) {
+	if (!map.containsKey(key)) {
+	    throw new NoSuchElementException("No entry exists for key: " + key);
+	}
+
+	return map.get(key).stream().map(File::getName).sorted()
+		.collect(joining(","));
+    }
+
+    @Test
+    public void testGetKeyWithMaxValue() {
+	ConcurrentHashMap<String, Long> map = new ConcurrentHashMap<>();
+
+	LongStream.range(1, 10).forEach(l -> map.put(String.valueOf(l), l));
+
+	String key = getKeyWithMaxValue(map);
+
+	assertEquals("9", key);
+    }
+
+    @Test
+    public void testFibonacci() {
+	assertEquals(1, fibonacci(-1));
+	assertEquals(1, fibonacci(2));
+	assertEquals(8, fibonacci(6));
+    }
+
+    @Test
+    public void testRepeat() {
+	Supplier<PasswordAuthentication> action = () -> {
+	    final String[] passwordVault = new String[] { "password", "secret",
+		    "secretPassword" };
+
+	    final int len = passwordVault.length;
+
+	    return new PasswordAuthentication("mickeyMouse",
+		    passwordVault[current().nextInt(len)].toCharArray());
+	};
 	@SuppressWarnings("static-access")
-	private void restAndCleanup() {
-		gc();
+	Predicate<PasswordAuthentication> until = passwordAuth -> {
+	    try {
+		currentThread().sleep(1000);
+	    } catch (InterruptedException e) {
+		fail(e.getMessage());
+	    }
 
-		try {
-			currentThread().sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+	    final String password = String.valueOf(passwordAuth.getPassword());
 
-	@Test
-	public void testReverseIndexUsingMerge() throws IOException, URISyntaxException {
-		Path p = get(getClass().getResource("/ch6").toURI());
+	    LOGGER.info("Received password: {}.", password);
 
-		Map<String, Set<File>> reverseIndex = reverseIndexUsingMerge(p);
+	    return password.equals("secret");
+	};
 
-		String filesContainingTheWordJava = joinValues("Java", reverseIndex);
-
-		assertEquals("f1.txt,f2.txt,f3.txt", filesContainingTheWordJava);
-
-		String filesContainingTheWordIs = joinValues("is", reverseIndex);
-
-		assertEquals("f1.txt,f2.txt", filesContainingTheWordIs);
-	}
-
-	private String joinValues(String key, Map<String, Set<File>> map) {
-		if (!map.containsKey(key)) {
-			throw new NoSuchElementException("No entry exists for key: " + key);
-		}
-
-		return map.get(key).stream().map(File::getName).sorted().collect(joining(","));
-	}
-
-	@Test
-	public void testGetKeyWithMaxValue() {
-		ConcurrentHashMap<String, Long> map = new ConcurrentHashMap<>();
-
-		LongStream.range(1, 10).forEach(l -> map.put(String.valueOf(l), l));
-
-		String key = getKeyWithMaxValue(map);
-
-		assertEquals("9", key);
-	}
-
-	@Test
-	public void testFibonacci() {
-		assertEquals(1, fibonacci(-1));
-		assertEquals(1, fibonacci(2));
-		assertEquals(8, fibonacci(6));
-	}
-
-	@Test
-	public void testCrawl() {
-		new WebCrawler().crawl("http://en.wikipedia.org/wiki/Java_(programming_language)", 3, 10);
-	}
-
-	@Test
-	public void testRepeat() {
-		Supplier<PasswordAuthentication> action = () -> {
-			final String[] passwordVault = new String[] { "password", "secret", "secretPassword" };
-
-			final int len = passwordVault.length;
-
-			return new PasswordAuthentication("mickeyMouse", passwordVault[current().nextInt(len)].toCharArray());
-		};
-		@SuppressWarnings("static-access")
-		Predicate<PasswordAuthentication> until = passwordAuth -> {
-			try {
-				currentThread().sleep(1000);
-			} catch (InterruptedException e) {
-				fail(e.getMessage());
-			}
-
-			final String password = String.valueOf(passwordAuth.getPassword());
-
-			LOGGER.info("Received password: {}.", password);
-
-			return password.equals("secret");
-		};
-
-		repeat(action, until);
-	}
+	repeat(action, until);
+    }
 }
