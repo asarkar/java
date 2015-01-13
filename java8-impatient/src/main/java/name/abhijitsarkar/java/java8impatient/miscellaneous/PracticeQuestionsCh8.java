@@ -15,6 +15,10 @@
  *******************************************************************************/
 package name.abhijitsarkar.java.java8impatient.miscellaneous;
 
+import static java.lang.Math.floorMod;
+
+import java.util.function.IntBinaryOperator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,4 +26,12 @@ public class PracticeQuestionsCh8 {
     public static final Logger LOGGER = LoggerFactory
 	    .getLogger(PracticeQuestionsCh8.class);
 
+    public static int gcd(final int a, final int b,
+	    final IntBinaryOperator remainderOperator) {
+	return b > 0 ? remainderOperator.applyAsInt(a, b) : a;
+    }
+
+    static final IntBinaryOperator REM_OPERATOR = (a, b) -> a % b;
+    static final IntBinaryOperator FLOOR_MOD_OPERATOR = (a, b) -> floorMod(a, b);
+    static final IntBinaryOperator REM_FUNCTION_OPERATOR = (a, b) -> a % b;
 }
