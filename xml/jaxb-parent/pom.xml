@@ -1,141 +1,137 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>name.abhijitsarkar</groupId>
-    <artifactId>maven-parent</artifactId>
-    <version>1.0</version>
-  </parent>
+	<parent>
+		<groupId>name.abhijitsarkar</groupId>
+		<artifactId>maven-parent</artifactId>
+		<version>2.0</version>
+	</parent>
 
-  <groupId>name.abhijitsarkar.xml.jaxb</groupId>
-  <artifactId>jaxb-parent</artifactId>
-  <packaging>pom</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+	<groupId>name.abhijitsarkar.xml.jaxb</groupId>
+	<artifactId>jaxb-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
 
-  <name>jaxb-parent</name>
+	<name>jaxb-parent</name>
 
-  <description>
+	<description>
     This project is intended to manage the dependencies and plugins for Web Services practice code
   </description>
 
-  <properties>
-    <project.build.sourceLevel>1.7</project.build.sourceLevel>
-    <project.build.targetLevel>1.7</project.build.targetLevel>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceLevel>1.7</project.build.sourceLevel>
+		<project.build.targetLevel>1.7</project.build.targetLevel>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.2.3</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>2.2.4-1</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>2.2.3</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>2.2.4-1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <configuration>
-          <rules>
-            <requireJavaVersion>
-              <version>[1.7,)</version>
-            </requireJavaVersion>
-            <requireMavenVersion>
-              <!-- There is a bug in Maven 3.1 which now bundles Plexus that conflicts 
-                with Weld at runtime -->
-              <!-- https://java.net/jira/browse/GLASSFISH-20802 -->
-              <version>[3.0, 3.1)</version>
-              <message>There is a bug in Maven 3.1 - c.f. GLASSFISH-20802</message>
-            </requireMavenVersion>
-          </rules>
-        </configuration>
-        <executions>
-          <execution>
-            <id>enforce-versions</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<configuration>
+					<rules>
+						<requireJavaVersion>
+							<version>[1.7,)</version>
+						</requireJavaVersion>
+						<requireMavenVersion>
+							<version>[3.0,)</version>
+						</requireMavenVersion>
+					</rules>
+				</configuration>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.1</version>
-          <configuration>
-            <compilerVersion>${project.build.sourceLevel}</compilerVersion>
-            <source>${project.build.sourceLevel}</source>
-            <target>${project.build.targetLevel}</target>
-            <encoding>${project.build.sourceEncoding}</encoding>
-            <showDeprecation>true</showDeprecation>
-            <showWarnings>true</showWarnings>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>1.3.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.jvnet.jaxb2.maven2</groupId>
-          <artifactId>maven-jaxb2-plugin</artifactId>
-          <version>0.8.3</version>
-          <inherited>true</inherited>
-          <configuration>
-            <forceRegenerate>true</forceRegenerate>
-            <generateDirectory>${project.basedir}/src/main/java</generateDirectory>
-            <extension>false</extension>
-            <specVersion>2.1</specVersion>
-            <strict>true</strict>
-          </configuration>
-        </plugin>
-        <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
-          <version>1.2.1</version> <inherited>true</inherited> </plugin> -->
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>jaxb2-maven-plugin</artifactId>
-          <version>1.5</version>
-        </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. 
-          It has no influence on the Maven build itself. -->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <versionRange>[1.3.1,)</versionRange>
-                    <goals>
-                      <goal>enforce</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<compilerVersion>${project.build.sourceLevel}</compilerVersion>
+						<source>${project.build.sourceLevel}</source>
+						<target>${project.build.targetLevel}</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>1.3.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<version>0.8.3</version>
+					<inherited>true</inherited>
+					<configuration>
+						<forceRegenerate>true</forceRegenerate>
+						<generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+						<extension>false</extension>
+						<specVersion>2.1</specVersion>
+						<strict>true</strict>
+					</configuration>
+				</plugin>
+				<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+					<version>1.2.1</version> <inherited>true</inherited> </plugin> -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>jaxb2-maven-plugin</artifactId>
+					<version>1.5</version>
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.3.1,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 
-  </build>
+	</build>
 
 </project>
