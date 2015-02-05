@@ -20,82 +20,78 @@ import name.abhijitsarkar.xml.security.exception.NoSuchKeyException;
 
 public class KeyStoreManager {
 
-	public static KeyPair getKeyPair(String keystore, String storePassword,
-			String keyPassword, String alias) throws Exception {
-		KeyStore ks = loadKeyStore(keystore, storePassword);
-		Key key = getKey(keystore, storePassword, keyPassword, alias);
+    public static KeyPair getKeyPair(String keystore, String storePassword,
+	    String keyPassword, String alias) throws Exception {
+	KeyStore ks = loadKeyStore(keystore, storePassword);
+	Key key = getKey(keystore, storePassword, keyPassword, alias);
 
-		PublicKey publicKey = null;
-		PrivateKey privateKey = null;
+	PublicKey publicKey = null;
+	PrivateKey privateKey = null;
 
-		key = ks.getKey(alias, keyPassword.toCharArray());
+	key = ks.getKey(alias, keyPassword.toCharArray());
 
-		if (key instanceof PrivateKey) {
-			Certificate cert = ks.getCertificate(alias);
-			publicKey = cert.getPublicKey();
-			privateKey = (PrivateKey) key;
+	if (key instanceof PrivateKey) {
+	    Certificate cert = ks.getCertificate(alias);
+	    publicKey = cert.getPublicKey();
+	    privateKey = (PrivateKey) key;
 
-			return new KeyPair(publicKey, privateKey);
-		}
-
-		throw new NoSuchKeyException("Alias '" + alias
-				+ "' does not exist in keystore '" + keystore + "'.");
+	    return new KeyPair(publicKey, privateKey);
 	}
 
-	public static SecretKey getSecKey(String keystore, String storePassword,
-			String keyPassword, String alias) throws Exception {
-		KeyStore ks = loadKeyStore(keystore, storePassword);
-		Key key = getKey(keystore, storePassword, keyPassword, alias);
+	throw new NoSuchKeyException("Alias '" + alias
+		+ "' does not exist in keystore '" + keystore + "'.");
+    }
 
-		key = ks.getKey(alias, keyPassword.toCharArray());
+    public static SecretKey getSecKey(String keystore, String storePassword,
+	    String keyPassword, String alias) throws Exception {
+	Key key = getKey(keystore, storePassword, keyPassword, alias);
 
-		if (key instanceof SecretKey) {
-
-			return (SecretKey) key;
-		}
-
-		throw new NoSuchKeyException("Alias '" + alias
-				+ "' does not exist in keystore '" + keystore + "'.");
+	if (key instanceof SecretKey) {
+	    return (SecretKey) key;
 	}
 
-	public static KeyInfo createKeyInfo(final XMLSignatureFactory fac,
-			final String certificateFile) throws Exception {
-		KeyInfoFactory kif = fac.getKeyInfoFactory();
+	throw new NoSuchKeyException("Alias '" + alias
+		+ "' does not exist in keystore '" + keystore + "'.");
+    }
 
-		Certificate cert = getCertificate(certificateFile);
+    public static KeyInfo createKeyInfo(final XMLSignatureFactory fac,
+	    final String certificateFile) throws Exception {
+	KeyInfoFactory kif = fac.getKeyInfoFactory();
 
-		X509Data x509d = kif.newX509Data(Collections.singletonList(cert));
+	Certificate cert = getCertificate(certificateFile);
 
-		return kif.newKeyInfo(Collections.singletonList(x509d));
+	X509Data x509d = kif.newX509Data(Collections.singletonList(cert));
+
+	return kif.newKeyInfo(Collections.singletonList(x509d));
+    }
+
+    public static Certificate getCertificate(final String certificateFile)
+	    throws Exception {
+	CertificateFactory cf = CertificateFactory.getInstance("X.509");
+	FileInputStream fis = new FileInputStream(certificateFile);
+	Certificate cert = cf.generateCertificate(fis);
+	fis.close();
+
+	return cert;
+    }
+
+    private static Key getKey(String keystore, String storePassword,
+	    String keyPassword, String alias) throws Exception {
+	KeyStore ks = loadKeyStore(keystore, storePassword);
+
+	if (ks.containsAlias(alias)) {
+	    return ks.getKey(alias, keyPassword.toCharArray());
 	}
 
-	public static Certificate getCertificate(final String certificateFile)
-			throws Exception {
-		CertificateFactory cf = CertificateFactory.getInstance("X.509");
-		FileInputStream fis = new FileInputStream(certificateFile);
-		Certificate cert = cf.generateCertificate(fis);
-		fis.close();
+	throw new NoSuchKeyException("Alias '" + alias
+		+ "' does not exist in keystore '" + keystore + "'.");
+    }
 
-		return cert;
-	}
-
-	private static Key getKey(String keystore, String storePassword,
-			String keyPassword, String alias) throws Exception {
-		KeyStore ks = loadKeyStore(keystore, storePassword);
-
-		if (ks.containsAlias(alias)) {
-			return ks.getKey(alias, keyPassword.toCharArray());
-		}
-
-		throw new NoSuchKeyException("Alias '" + alias
-				+ "' does not exist in keystore '" + keystore + "'.");
-	}
-
-	private static KeyStore loadKeyStore(String keystore, String storePassword)
-			throws Exception {
-		// Load the KeyStore and get the signing key and certificate.
-		KeyStore ks = KeyStore.getInstance("JCEKS");
-		ks.load(new FileInputStream(keystore), storePassword.toCharArray());
-		return ks;
-	}
+    private static KeyStore loadKeyStore(String keystore, String storePassword)
+	    throws Exception {
+	// Load the KeyStore and get the signing key and certificate.
+	KeyStore ks = KeyStore.getInstance("JCEKS");
+	ks.load(new FileInputStream(keystore), storePassword.toCharArray());
+	return ks;
+    }
 }
