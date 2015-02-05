@@ -38,6 +38,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -174,8 +175,7 @@ public class PracticeQuestionsCh6 {
      *         occurs.
      * @throws IOException
      */
-    public static Map<String, Set<File>> reverseIndexUsingMerge(final Path path)
-	    throws IOException {
+    public static Map<String, Set<File>> reverseIndexUsingMerge(final Path path) {
 	final ConcurrentHashMap<String, Set<File>> map = new ConcurrentHashMap<>();
 
 	final BiConsumer<? super String, ? super Set<File>> action = (key,
@@ -194,10 +194,50 @@ public class PracticeQuestionsCh6 {
 	 * picking everything and then throwing away directories.
 	 */
 	commonPool().invokeAll(
-		find(path, 1,
-			(p, fileAttributes) -> fileAttributes.isRegularFile())
-			.map(p -> new ReverseIndex(p, action))
-			.collect(toList()));
+		findAllFilesInDirectory(path).map(
+			p -> new ReverseIndex(p, action)).collect(toList()));
+
+	return unmodifiableMap(map);
+    }
+
+    private static Stream<Path> findAllFilesInDirectory(final Path path) {
+	try {
+	    return find(path, 1,
+		    (p, fileAttributes) -> fileAttributes.isRegularFile());
+	} catch (IOException e) {
+	    throw new UncheckedIOException(e);
+	}
+    }
+
+    /**
+     * Q6: Repeat the previous exercise, but use {@code computeIfAbsent}
+     * instead. What is the advantage of this approach?
+     * 
+     * @param path
+     *            Input File or root directory.
+     * @return Map containing entries for each word vs the files in which it
+     *         occurs.
+     * @throws IOException
+     */
+    public static Map<String, Set<File>> reverseIndexUsingComputeIfAbsent(
+	    final Path path) {
+	final ConcurrentHashMap<String, Set<File>> map = new ConcurrentHashMap<>();
+
+	final BiConsumer<? super String, ? super Set<File>> action = (key,
+		value) -> map.computeIfAbsent(key, k -> {
+	    LOGGER.info("No mapping found for key: {}.", k);
+
+	    return new HashSet<File>();
+	}).addAll(value);
+
+	/*
+	 * Use find instead of walk, it's a little better performant. Also
+	 * design wise, it's better to work with just what we want instead of
+	 * picking everything and then throwing away directories.
+	 */
+	commonPool().invokeAll(
+		findAllFilesInDirectory(path).map(
+			p -> new ReverseIndex(p, action)).collect(toList()));
 
 	return unmodifiableMap(map);
     }
