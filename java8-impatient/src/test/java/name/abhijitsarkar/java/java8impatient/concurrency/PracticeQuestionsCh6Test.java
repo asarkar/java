@@ -27,13 +27,11 @@ import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestio
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.incrementUsingAtomicLong;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.incrementUsingLongAdder;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.repeat;
-import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.reverseIndexUsingMerge;
 import static name.abhijitsarkar.java.java8impatient.concurrency.PracticeQuestionsCh6.updateLongestString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.PasswordAuthentication;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -48,6 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.LongStream;
@@ -176,22 +175,33 @@ public class PracticeQuestionsCh6Test {
     }
 
     @Test
-    public void testReverseIndexUsingMerge() throws IOException,
-	    URISyntaxException {
+    public void testReverseIndexUsingMerge() throws URISyntaxException {
+	testReverseIndex(PracticeQuestionsCh6::reverseIndexUsingMerge);
+    }
+
+    @Test
+    public void testReverseIndexUsingComputeIfAbsent() throws URISyntaxException {
+	testReverseIndex(PracticeQuestionsCh6::reverseIndexUsingComputeIfAbsent);
+    }
+
+    private void testReverseIndex(
+	    Function<Path, Map<String, Set<File>>> function)
+	    throws URISyntaxException {
 	Path p = get(getClass().getResource("/ch6").toURI());
 
-	Map<String, Set<File>> reverseIndex = reverseIndexUsingMerge(p);
+	Map<String, Set<File>> reverseIndex = function.apply(p);
 
-	String filesContainingTheWordJava = joinValues("Java", reverseIndex);
+	String filesContainingTheWordJava = joinValuesForKey("Java",
+		reverseIndex);
 
 	assertEquals("f1.txt,f2.txt,f3.txt", filesContainingTheWordJava);
 
-	String filesContainingTheWordIs = joinValues("is", reverseIndex);
+	String filesContainingTheWordIs = joinValuesForKey("is", reverseIndex);
 
 	assertEquals("f1.txt,f2.txt", filesContainingTheWordIs);
     }
 
-    private String joinValues(String key, Map<String, Set<File>> map) {
+    private String joinValuesForKey(String key, Map<String, Set<File>> map) {
 	if (!map.containsKey(key)) {
 	    throw new NoSuchElementException("No entry exists for key: " + key);
 	}
