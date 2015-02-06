@@ -15,6 +15,17 @@
  *******************************************************************************/
 package name.abhijitsarkar.java.java8impatient.miscellaneous;
 
+import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.FLOOR_MOD_OPERATOR;
+import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.REM_FUNCTION_OPERATOR;
+import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.REM_OPERATOR;
+import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.comparePoint2D;
+import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.gcd;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.awt.Point;
+
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,4 +36,38 @@ public class PracticeQuestionsCh8Test {
     public static final Logger LOGGER = LoggerFactory
 	    .getLogger(PracticeQuestionsCh8Test.class);
 
+    @Test
+    public void testGcdUsingRemOperator() {
+	assertEquals(1, gcd(4, 3, REM_OPERATOR));
+	/* Incorrect because if -1 is the gcd, so is 1 and 1 > -1 */
+	assertEquals(-1, gcd(-4, 3, REM_OPERATOR));
+	assertEquals(1, gcd(4, -3, REM_OPERATOR));
+	/* Incorrect because if -1 is the gcd, so is 1 and 1 > -1 */
+	assertEquals(-1, gcd(-4, -3, REM_OPERATOR));
+    }
+
+    @Test
+    public void testGcdUsingFloorModOperator() {
+	assertEquals(1, gcd(4, 3, FLOOR_MOD_OPERATOR));
+	assertEquals(1, gcd(-4, 3, FLOOR_MOD_OPERATOR));
+	/* Incorrect because if -1 is the gcd, so is 1 and 1 > -1 */
+	assertEquals(-1, gcd(4, -3, FLOOR_MOD_OPERATOR));
+	/* Incorrect because if -1 is the gcd, so is 1 and 1 > -1 */
+	assertEquals(-1, gcd(-4, -3, FLOOR_MOD_OPERATOR));
+    }
+
+    @Test
+    public void testGcdUsingRemFunctionOperator() {
+	assertEquals(1, gcd(4, 3, REM_FUNCTION_OPERATOR));
+	assertEquals(1, gcd(-4, 3, REM_FUNCTION_OPERATOR));
+	assertEquals(1, gcd(4, -3, REM_FUNCTION_OPERATOR));
+	assertEquals(1, gcd(-4, -3, REM_FUNCTION_OPERATOR));
+    }
+
+    @Test
+    public void testComparePoint2D() {
+	assertTrue(comparePoint2D(new Point(1, 1), new Point(1, 2)) < 0);
+	assertTrue(comparePoint2D(new Point(1, 2), new Point(1, 1)) > 0);
+	assertEquals(0, comparePoint2D(new Point(1, 1), new Point(1, 1)));
+    }
 }
