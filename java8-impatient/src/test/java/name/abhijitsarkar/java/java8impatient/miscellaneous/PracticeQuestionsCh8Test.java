@@ -15,15 +15,24 @@
  *******************************************************************************/
 package name.abhijitsarkar.java.java8impatient.miscellaneous;
 
+import static java.util.Arrays.sort;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.FLOOR_MOD_OPERATOR;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.REM_FUNCTION_OPERATOR;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.REM_OPERATOR;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.comparePoint2D;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.gcd;
+import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.grep;
+import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.naturalOrderReversedWithNullsFirst;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -69,5 +78,25 @@ public class PracticeQuestionsCh8Test {
 	assertTrue(comparePoint2D(new Point(1, 1), new Point(1, 2)) < 0);
 	assertTrue(comparePoint2D(new Point(1, 2), new Point(1, 1)) > 0);
 	assertEquals(0, comparePoint2D(new Point(1, 1), new Point(1, 1)));
+    }
+
+    @Test
+    public void testNaturalOrderReversed() {
+	String[] words = new String[] { "a", "c", "b", null };
+	String[] expected = new String[] { null, "c", "b", "a" };
+
+	sort(words, naturalOrderReversedWithNullsFirst());
+
+	assertArrayEquals(expected, words);
+    }
+
+    @Test
+    public void testGrep() throws URISyntaxException {
+	URI uri = getClass().getResource("/grep-test-fixture.txt").toURI();
+	List<String> matchingLines = grep(Paths.get(uri), "^\\d+$");
+
+	assertNotNull(matchingLines);
+	assertEquals(1, matchingLines.size());
+	assertEquals("123", matchingLines.get(0));
     }
 }

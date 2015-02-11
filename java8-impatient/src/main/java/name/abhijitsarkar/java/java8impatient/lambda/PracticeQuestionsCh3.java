@@ -75,7 +75,7 @@ public class PracticeQuestionsCh3 {
 	} catch (Exception e) {
 	    LOGGER.error(
 		    "An error occurred trying to determine if logging is enabled for level {}.",
-		    level);
+		    level, e);
 	}
 
 	return isEnabled;
@@ -97,7 +97,7 @@ public class PracticeQuestionsCh3 {
 
 	    isLoggingSuccessful = true;
 	} catch (Exception e) {
-	    LOGGER.error("An error occurred trying to log at level {}.", level);
+	    LOGGER.error("An error occurred trying to log at level {}.", level, e);
 	}
 
 	return isLoggingSuccessful;

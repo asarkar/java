@@ -4,6 +4,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.countLongWordsUsingStreams;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.PracticeQuestionsCh8.countLongWordsWithoutUsingStreams;
 import static org.openjdk.jmh.annotations.Mode.AverageTime;
+import static org.openjdk.jmh.annotations.Scope.Benchmark;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,9 @@ import java.util.Random;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.State;
 
+@State(Benchmark)
 public class PracticeQuestionsCh8Benchmark {
     private static final int NUM_WORDS = 10000;
     private static final int LONG_WORD_MIN_LEN = 10;

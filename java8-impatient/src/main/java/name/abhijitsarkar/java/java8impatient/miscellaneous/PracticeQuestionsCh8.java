@@ -17,12 +17,22 @@ package name.abhijitsarkar.java.java8impatient.miscellaneous;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.floorMod;
+import static java.nio.file.Files.isDirectory;
+import static java.nio.file.Files.lines;
 import static java.util.Comparator.comparingDouble;
+import static java.util.Comparator.nullsFirst;
+import static java.util.stream.Collectors.toList;
 
 import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.IntBinaryOperator;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +144,39 @@ public class PracticeQuestionsCh8 {
 		.thenComparingDouble(Point2D::getY).compare(p1, p2);
     }
 
-    // public static <T> Comparator<T> reversed() {
-    // nullsFirst(naturalOrder()).compare(y.compareTo(x));
-    // }
+    /**
+     * Q7: Express {@code nullsFirst(naturalOrder()).reversed()} without calling
+     * {@code reversed}.
+     * 
+     * @return Comparator that compares by natural order reversed.
+     */
+    public static <T> Comparator<T> naturalOrderReversedWithNullsFirst() {
+	return nullsFirst(Collections.reverseOrder());
+    }
+
+    /**
+     * Using {@code Files.lines} and {@code Pattern.asPredicate}, write a
+     * program that acts like the {@code grep} utility, printing all lines that
+     * contain a match for a regular expression.
+     * 
+     * @param path
+     *            File path.
+     * @param regex
+     *            Regular expression.
+     * @return Matching lines.
+     */
+    public static List<String> grep(final Path path, final String regex) {
+	if (isDirectory(path)) {
+	    throw new IllegalArgumentException(
+		    "Sorry, cannot handle directories.");
+	}
+
+	final Pattern p = Pattern.compile(regex);
+
+	try {
+	    return lines(path).filter(p.asPredicate()).collect(toList());
+	} catch (IOException e) {
+	    throw new UncheckedIOException(e);
+	}
+    }
 }

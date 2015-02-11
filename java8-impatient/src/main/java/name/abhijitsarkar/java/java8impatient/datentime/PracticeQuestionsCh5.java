@@ -112,7 +112,7 @@ public class PracticeQuestionsCh5 {
 		 */
 		int width = (20 - monthYear.length()) / 2 + monthYear.length();
 
-		out.printf("\n%" + width + "s\n", monthYear);
+		out.printf("\n%" + width + "s%n", monthYear);
 
 		for (DayOfWeek day : DayOfWeek.values()) {
 			/*
@@ -121,7 +121,7 @@ public class PracticeQuestionsCh5 {
 			 */
 			out.printf("%" + (day.getValue() > 1 ? 3 : 2) + "s", day.toString().substring(0, 2));
 		}
-		out.printf("\n");
+		out.printf("%n");
 
 		final LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
 		final LocalDate firstDayOfNextMonth = firstDayOfMonth.with(firstDayOfNextMonth());
@@ -157,7 +157,7 @@ public class PracticeQuestionsCh5 {
 			}
 
 			/* Output, breaking the line after Sun. */
-			out.printf("%" + width + (dayOfWeek != SUNDAY ? "s" : "s\n"), dayOfMonth);
+			out.printf("%" + width + (dayOfWeek != SUNDAY ? "s" : "s%n"), dayOfMonth);
 		}
 	}
 
