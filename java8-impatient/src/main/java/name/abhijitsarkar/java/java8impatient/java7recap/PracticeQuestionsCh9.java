@@ -13,7 +13,7 @@
  * A copy of the GNU General Public License accompanies this software, 
  * and is also available at http://www.gnu.org/licenses.
  *******************************************************************************/
-package name.abhijitsarkar.java.java8impatient.java7;
+package name.abhijitsarkar.java.java8impatient.java7recap;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -68,10 +68,13 @@ public class PracticeQuestionsCh9 {
 	} finally {
 	    try {
 		if (!attemptToClose(in) || in.ioException() != null) {
-
 		    /*
-		     * There was a problem with closing the Scanner, try to
-		     * close the InputStream instead.
+		     * Scanner could have an IOException from any of the method
+		     * calls made on it or from a failure to close it. We don't
+		     * care so in either case, we try to close the underlying
+		     * InputStream. If it's already been closed as part of
+		     * successfully closing the Scanner, this attempt has no
+		     * effect.
 		     */
 		    attemptToClose(is);
 		}
@@ -79,14 +82,18 @@ public class PracticeQuestionsCh9 {
 	    /* There may be an exception from closing the InputStream */
 	    catch (final IOException ioe) {
 		/* Log and suck it up; we got work to do. */
-		LOGGER.error("There was a problem with closing the InputStream.");
+		LOGGER.error("There was a problem with closing the InputStream. Moving on.");
 	    }
 
 	    try {
 		if (!attemptToClose(out) || out.checkError()) {
 		    /*
-		     * There was a problem with closing the PrintWriter, try to
-		     * close the InputStream instead.
+		     * PrintWriter could have an IOException from any of the
+		     * method calls made on it or from a failure to close it. We
+		     * don't care so in either case, we try to close the
+		     * underlying OutputStream. If it's already been closed as
+		     * part of successfully closing the PrintWriter, this
+		     * attempt has no effect.
 		     */
 		    attemptToClose(os);
 		}
@@ -104,8 +111,13 @@ public class PracticeQuestionsCh9 {
 	if (resource != null) {
 	    resource.close();
 
+	    LOGGER.debug("Closed resource of type: {}.", resource.getClass()
+		    .getName());
+
 	    return true;
 	}
+
+	LOGGER.warn("Cannot close null resource.");
 
 	return false;
     }
@@ -171,7 +183,7 @@ public class PracticeQuestionsCh9 {
 	     * attempt has no effect.
 	     */
 	    try {
-		if (!attemptToClose(out) || out.checkError()) {
+		if (!attemptToClose(out)) {
 		    attemptToClose(os);
 		}
 	    } catch (final IOException ioe) {

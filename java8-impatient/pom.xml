@@ -14,7 +14,32 @@
 
 	<description>Practice code from "JAVA SE 8 for the Really Impatient", ISBN 0321927761</description>
 
+	<properties>
+		<jmockit.version>1.14</jmockit.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<disableXmlReport>true</disableXmlReport>
+					<!-- http://stackoverflow.com/questions/2905735/jmockit-initialization-problem -->
+					<argLine>-javaagent:${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar</argLine>
+					<useSystemClassLoader>true</useSystemClassLoader>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
+		<!-- JMockit must be before JUnit in the classpath -->
+		<dependency>
+			<groupId>org.jmockit</groupId>
+			<artifactId>jmockit</artifactId>
+			<version>${jmockit.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
