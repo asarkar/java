@@ -1,10 +1,10 @@
-package name.abhijitsarkar.java.java8impatient.miscellaneous;
+package name.abhijitsarkar.java.java8impatient.webutil;
 
 import static java.util.stream.Collectors.toList;
-import static name.abhijitsarkar.java.java8impatient.miscellaneous.SimpleHttpServer.PORT;
-import static name.abhijitsarkar.java.java8impatient.miscellaneous.SimpleHttpServer.newInstance;
-import static name.abhijitsarkar.java.java8impatient.miscellaneous.URLContentReader.getContent;
-import static name.abhijitsarkar.java.java8impatient.miscellaneous.URLContentReader.openConnection;
+import static name.abhijitsarkar.java.java8impatient.webutil.SimpleHttpServer.PORT;
+import static name.abhijitsarkar.java.java8impatient.webutil.SimpleHttpServer.newInstance;
+import static name.abhijitsarkar.java.java8impatient.webutil.URLContentReader.getContent;
+import static name.abhijitsarkar.java.java8impatient.webutil.URLContentReader.openConnection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

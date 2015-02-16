@@ -92,7 +92,7 @@ public class PracticeQuestionsCh8Test {
 
     @Test
     public void testGrep() throws URISyntaxException {
-	URI uri = getClass().getResource("/grep-test-fixture.txt").toURI();
+	URI uri = getClass().getResource("/ch8/grep-test-fixture.txt").toURI();
 	List<String> matchingLines = grep(Paths.get(uri), "^\\d+$");
 
 	assertNotNull(matchingLines);

@@ -15,14 +15,38 @@
  *******************************************************************************/
 package name.abhijitsarkar.java.java8impatient.java7recap;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.copy;
+import static java.nio.file.Files.createTempFile;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Files.readAllLines;
+import static java.nio.file.Files.write;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.WRITE;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsFirst;
+import static java.util.Objects.requireNonNull;
+import static name.abhijitsarkar.java.java8impatient.webutil.URLContentReader.getContentAsStream;
+import static name.abhijitsarkar.java.java8impatient.webutil.URLContentReader.openConnection;
+
 import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -240,5 +264,299 @@ public class PracticeQuestionsCh9 {
 
     private void doSomeFileOperation() throws FileNotFoundException {
 	throw new FileNotFoundException();
+    }
+
+    /**
+     * Q5: Write a program that reads all characters of a file and writes them
+     * out in reverse order. Use {@code Files.readAllBytes} and
+     * {@code Files.write}.
+     * 
+     * @param readFrom
+     *            Path to read from.
+     * @param writeTo
+     *            Path to write to.
+     */
+    public static void writeBytesReversed(final Path readFrom,
+	    final Path writeTo) {
+	try {
+	    write(writeTo, readAllBytesReversed(readFrom), CREATE, WRITE,
+		    APPEND);
+	} catch (IOException e) {
+	    throw new UncheckedIOException(e);
+	}
+    }
+
+    static byte[] readAllBytesReversed(final Path readFrom) throws IOException {
+	final byte[] arr = readAllBytes(readFrom);
+
+	final int len = arr.length;
+	final int mid = len >> 1;
+
+	for (int i = 0; i < mid; i++) {
+	    swap(arr, i, len - 1 - i);
+	}
+
+	return arr;
+    }
+
+    private static void swap(final byte[] arr, final int i, final int j) {
+	final int len = arr.length;
+
+	byte temp = arr[i];
+	arr[i] = arr[len - i - 1];
+	arr[len - i - 1] = temp;
+    }
+
+    /**
+     * Q6: Write a program that reads all lines of a file and writes them out in
+     * reverse order. Use {@code Files.readAllLines} and {@code Files.write}.
+     * 
+     * @param readFrom
+     *            Path to read from.
+     * @param writeTo
+     *            Path to write to.
+     */
+    public static void writeLinesReversed(final Path readFrom,
+	    final Path writeTo) {
+
+	try {
+	    /*
+	     * Instead of getting a list and reversing it, we implement a
+	     * reverse Iterable. It's more code but likely to perform better for
+	     * long lists.
+	     */
+	    write(writeTo, new UnmodifiableLinesReversed(readFrom), UTF_8,
+		    CREATE, WRITE, APPEND);
+	} catch (IOException e) {
+	    throw new UncheckedIOException(e);
+	}
+    }
+
+    static class UnmodifiableLinesReversed implements Iterable<String> {
+	private final List<String> lines;
+
+	UnmodifiableLinesReversed(final Path readFrom) {
+	    try {
+		lines = unmodifiableList(readAllLines(readFrom, UTF_8));
+	    } catch (IOException e) {
+		throw new UncheckedIOException(e);
+	    }
+	}
+
+	@Override
+	public Iterator<String> iterator() {
+	    return new UnmodifiableReverseListIterator(lines);
+	}
+    }
+
+    static class UnmodifiableReverseListIterator implements
+	    ListIterator<String> {
+	private final List<String> lines;
+	private int index = 0;
+
+	UnmodifiableReverseListIterator(final List<String> lines) {
+	    this.lines = lines;
+	    index = lines.size();
+	}
+
+	@Override
+	public boolean hasNext() {
+	    return hasPrevious();
+	}
+
+	@Override
+	public String next() {
+	    return previous();
+	}
+
+	@Override
+	public boolean hasPrevious() {
+	    return previousIndex() >= 0;
+	}
+
+	@Override
+	public String previous() {
+	    return lines.get(--index);
+	}
+
+	@Override
+	public int nextIndex() {
+	    return previousIndex();
+	}
+
+	@Override
+	public int previousIndex() {
+	    return index - 1;
+	}
+
+	@Override
+	public void remove() {
+	    throw new UnsupportedOperationException(
+		    "This operation is not supported.");
+	}
+
+	@Override
+	public void set(String e) {
+	    throw new UnsupportedOperationException(
+		    "This operation is not supported.");
+	}
+
+	@Override
+	public void add(String e) {
+	    throw new UnsupportedOperationException(
+		    "This operation is not supported.");
+	}
+    }
+
+    /**
+     * Q7: Write a program that reads the contents of a web page and saves it to
+     * a file. Use {@code URL.openStream} and {@code Files.copy}.
+     * 
+     * @param readFrom
+     *            URL to read contents from.
+     * @param writeTo
+     *            Path to copy the contents to.
+     * @return Number of bytes copied.
+     */
+    public static long writeContentTo(final URL readFrom, final Path writeTo) {
+	try {
+	    return copy(getContentAsStream(openConnection(readFrom, false)),
+		    writeTo);
+	} catch (IOException e) {
+	    throw new UncheckedIOException(e);
+	}
+    }
+
+    /**
+     * Q9: Given a class
+     * 
+     * <pre>
+     * <code>
+     * public static class LabeledPoint {
+     *     private String label;
+     *     private int x;
+     *     private int y;
+     *     ...
+     * }
+     * </pre>
+     * 
+     * </code> implement the {@code equals} and {@code hashCode} methods.
+     * 
+     * @author Abhijit Sarkar
+     *
+     */
+    public static class LabeledPoint implements Comparable<LabeledPoint> {
+	private String label;
+	private int x;
+	private int y;
+
+	@Override
+	public int hashCode() {
+	    final int prime = 31;
+	    int result = 1;
+
+	    result = prime * result + Objects.hashCode(label);
+	    result = prime * result + x;
+	    result = prime * result + y;
+
+	    return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+	    if (this == obj) {
+		return true;
+	    }
+
+	    if (obj == null) {
+		return false;
+	    }
+
+	    if (!(obj instanceof LabeledPoint)) {
+		return false;
+	    }
+
+	    final LabeledPoint otherPoint = (LabeledPoint) obj;
+
+	    return Objects.equals(this.label, otherPoint.label)
+		    && this.x == otherPoint.x && this.y == otherPoint.y;
+	}
+
+	/**
+	 * Q10: Implement a {@code compareTo} method for the
+	 * {@code LabeledPoint} class of the preceding exercise.
+	 */
+	@Override
+	public int compareTo(final LabeledPoint otherPoint) {
+	    int result = Objects.compare(this, otherPoint,
+		    nullsFirst(naturalOrder()));
+
+	    if (result == 0 && otherPoint != null) {
+		result = Integer.compare(this.x, otherPoint.x);
+
+		if (result == 0) {
+		    result = Integer.compare(this.y, otherPoint.y);
+		}
+	    }
+
+	    return result;
+	}
+    }
+
+    /**
+     * Q11: Using the {@code ProcessBuilder} class, write a program that calls
+     * {@code grep -r} to look for credit card numbers in all files in any
+     * subdirectory of the user's home directory. Collect the numbers that you
+     * found in a file.
+     * 
+     * @param p
+     *            Path where to start the search.
+     * @return Path where the output file is located.
+     * @throws Exception
+     */
+    public static Path findCreditCardNumbers(final Path p) throws Exception {
+	requireNonNull(p);
+
+	if (isWindows()) {
+	    throw new UnsupportedOperationException(
+		    "Sorry, this method only works in Unix OS.");
+	}
+
+	final String creditCardNumberRegex = getCreditCardNumberRegex();
+
+	final Path output = createTempFile("q11-", ".tmp");
+
+	LOGGER.info("Looking for credit card number recursively in: {}.",
+		p.toString());
+
+	/* 'r' for recursive, 'P' for accepting non-capturing groups. */
+	ProcessBuilder builder = new ProcessBuilder("grep", "-rP",
+		creditCardNumberRegex, p.toString());
+
+	builder.redirectOutput(output.toFile());
+
+	builder.start().waitFor(2, TimeUnit.SECONDS);
+
+	return output;
+    }
+
+    private static String getCreditCardNumberRegex() {
+	StringBuilder regex = new StringBuilder();
+
+	/* c.f. http://www.regular-expressions.info/creditcard.html */
+	regex.append("^(?:").append("(4[0-9]{12}(?:[0-9]{3})?)|") // visa, old
+								  // ones may've
+								  // 13
+								  // characters,
+								  // new ones 16
+		.append("(5[1-5][0-9]{14})|") // mastercard
+		.append("(6(?:011|5[0-9]{2})[0-9]{12})|") // discover
+		.append("(3[47][0-9]{13})").append(")$"); // amex
+
+	return regex.toString();
+    }
+
+    private static boolean isWindows() {
+	return System.getProperty("os.name").toLowerCase().contains("win");
     }
 }

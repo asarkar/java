@@ -1,12 +1,13 @@
-package name.abhijitsarkar.java.java8impatient.miscellaneous;
+package name.abhijitsarkar.java.java8impatient.webutil;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Base64.getEncoder;
 import static name.abhijitsarkar.java.java8impatient.miscellaneous.ScannerDecorator.lines;
-import static name.abhijitsarkar.java.java8impatient.miscellaneous.SimpleHttpServer.PASSWORD;
-import static name.abhijitsarkar.java.java8impatient.miscellaneous.SimpleHttpServer.USERNAME;
+import static name.abhijitsarkar.java.java8impatient.webutil.SimpleHttpServer.PASSWORD;
+import static name.abhijitsarkar.java.java8impatient.webutil.SimpleHttpServer.USERNAME;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -30,6 +31,16 @@ public class URLContentReader {
 	    }
 
 	    return connection;
+	} catch (IOException e) {
+	    throw new UncheckedIOException(e);
+	}
+    }
+
+    public static InputStream getContentAsStream(final URLConnection connection) {
+	try {
+	    connection.connect();
+
+	    return connection.getInputStream();
 	} catch (IOException e) {
 	    throw new UncheckedIOException(e);
 	}

@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.java8impatient.miscellaneous;
+package name.abhijitsarkar.java.java8impatient.webutil;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
