@@ -1,6 +1,9 @@
 package name.abhijitsarkar.java.java8impatient.java7recap;
 
+import static name.abhijitsarkar.java.java8impatient.java7recap.PracticeQuestionsCh9.improvedReadAndWrite;
 import static name.abhijitsarkar.java.java8impatient.java7recap.PracticeQuestionsCh9.readAndWrite;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +15,6 @@ import java.util.Scanner;
 import mockit.Expectations;
 import mockit.Mocked;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class PracticeQuestionsCh9Test {
@@ -57,7 +59,7 @@ public class PracticeQuestionsCh9Test {
 	readAndWrite(is, os);
     }
 
-    @Test(expected = UncheckedIOException.class)
+    @Test
     public void testReadAndWriteWhenScannerCloseThrowsException(
 	    @Mocked InputStream is, @Mocked OutputStream os, @Mocked Scanner sc) {
 	new Expectations(PrintWriter.class) {
@@ -65,14 +67,14 @@ public class PracticeQuestionsCh9Test {
 		sc.hasNext();
 		returns(false);
 
-		sc.close();
-		result = new UncheckedIOException("close burped.",
-			new IOException("close burped"));
+		sc.ioException();
+		returns(new IOException("close burped."));
 	    }
 	};
 	readAndWrite(is, os);
     }
 
+    @Test
     public void testImprovedReadAndWriteWhenScannerHasNextAndCloseThrowExceptions(
 	    @Mocked InputStream is, @Mocked OutputStream os, @Mocked Scanner sc) {
 	new Expectations(PrintWriter.class) {
@@ -81,18 +83,85 @@ public class PracticeQuestionsCh9Test {
 		result = new UncheckedIOException("hasNext burped.",
 			new IOException("hasNext burped"));
 
-		sc.close();
-		result = new UncheckedIOException("close burped.",
-			new IOException("close burped"));
+		sc.ioException();
+		returns(new IOException("close burped."));
 	    }
 	};
-	
+
 	try {
-	    readAndWrite(is, os);
+	    improvedReadAndWrite(is, os);
 	} catch (Exception e) {
 	    assertEquals("hasNext burped.", e.getMessage());
-	    assertNotNull();
-	    assertEquals("close burped.", e.getSuppressed().getMessage());
-	}	
+	    assertNotNull(e.getSuppressed());
+	    assertEquals(1, e.getSuppressed().length);
+	    assertEquals("close burped.", e.getSuppressed()[0].getMessage());
+	}
+    }
+
+    @Test
+    public void testImprovedReadAndWriteWhenScannerHasNextAndCloseAndInputStreamCloseThrowExceptions(
+	    @Mocked InputStream is, @Mocked OutputStream os, @Mocked Scanner sc)
+	    throws IOException {
+	new Expectations(PrintWriter.class) {
+	    {
+		sc.hasNext();
+		result = new UncheckedIOException("hasNext burped.",
+			new IOException("hasNext burped"));
+
+		sc.ioException();
+		returns(new IOException("Scanner close burped."));
+
+		is.close();
+		result = new IOException("InputStream close burped.");
+	    }
+	};
+
+	try {
+	    improvedReadAndWrite(is, os);
+	} catch (Exception e) {
+	    assertEquals("hasNext burped.", e.getMessage());
+	    assertNotNull(e.getSuppressed());
+	    assertEquals(2, e.getSuppressed().length);
+	    assertEquals("Scanner close burped.",
+		    e.getSuppressed()[0].getMessage());
+	    assertEquals("InputStream close burped.",
+		    e.getSuppressed()[1].getMessage());
+	}
+    }
+
+    @Test
+    public void testImprovedReadAndWriteWhenScannerHasNextAndCloseAndInputStreamCloseAndOutputStreamCloseThrowExceptions(
+	    @Mocked InputStream is, @Mocked OutputStream os, @Mocked Scanner sc)
+	    throws IOException {
+	new Expectations(PrintWriter.class) {
+	    {
+		sc.hasNext();
+		result = new UncheckedIOException("hasNext burped.",
+			new IOException("hasNext burped"));
+
+		sc.ioException();
+		returns(new IOException("Scanner close burped."));
+
+		is.close();
+		result = new IOException("InputStream close burped.");
+
+		os.close();
+		result = new IOException("OutputStream close burped.");
+	    }
+	};
+
+	try {
+	    improvedReadAndWrite(is, os);
+	} catch (Exception e) {
+	    assertEquals("hasNext burped.", e.getMessage());
+	    assertNotNull(e.getSuppressed());
+	    assertEquals(3, e.getSuppressed().length);
+	    assertEquals("Scanner close burped.",
+		    e.getSuppressed()[0].getMessage());
+	    assertEquals("InputStream close burped.",
+		    e.getSuppressed()[1].getMessage());
+	    assertEquals("OutputStream close burped.",
+		    e.getSuppressed()[2].getMessage());
+	}
     }
 }

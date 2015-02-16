@@ -16,10 +16,12 @@
 package name.abhijitsarkar.java.java8impatient.java7recap;
 
 import java.io.Closeable;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -154,6 +156,10 @@ public class PracticeQuestionsCh9 {
 	} finally {
 	    try {
 		if (!attemptToClose(in) || in.ioException() != null) {
+		    if (in.ioException() != null) {
+			ex = addSuppressedOrAssignTo(ex, in.ioException());
+		    }
+
 		    attemptToClose(is);
 		}
 	    }
@@ -162,20 +168,18 @@ public class PracticeQuestionsCh9 {
 	     * close the OutputStream.
 	     */
 	    catch (final IOException ioe1) {
+		ex = addSuppressedOrAssignTo(ex, ioe1);
+
 		try {
 		    if (!attemptToClose(out) || out.checkError()) {
 			attemptToClose(os);
 		    }
 		} catch (final IOException ioe2) {
 		    /*
-		     * There was a problem with closing the OutputStream, add
-		     * the suppressed exception to the one thrown by InputStream
-		     * close.
+		     * There was a problem with closing the OutputStream.
 		     */
-		    ioe1.addSuppressed(ioe2);
+		    ex = addSuppressedOrAssignTo(ex, ioe2);
 		}
-
-		ex = addSuppressedOrAssignTo(ex, ioe1);
 	    }
 
 	    /*
@@ -208,5 +212,33 @@ public class PracticeQuestionsCh9 {
 	}
 
 	return e;
+    }
+
+    /**
+     * Q3: When you rethrow an exception that you caught in a multi-{@code catch}
+     * clause, how do you declare its type in the {@code throws} declaration of
+     * the ambient method?
+     * <p>
+     * <b>Ans:</b> Declare the common superclass, which is {@code Exception}, if
+     * not anything else.
+     * 
+     * @throws Exception
+     */
+    public void process() throws Exception {
+	try {
+	    doSomeFileOperation();
+	    doSomeNetworkOperation();
+	} catch (URISyntaxException | FileNotFoundException e) {
+	    throw e;
+	}
+    }
+
+    private void doSomeNetworkOperation() throws URISyntaxException {
+	throw new URISyntaxException(null, null);
+
+    }
+
+    private void doSomeFileOperation() throws FileNotFoundException {
+	throw new FileNotFoundException();
     }
 }
