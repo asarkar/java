@@ -31,11 +31,13 @@ import static java.util.Objects.requireNonNull;
 import static name.abhijitsarkar.java.java8impatient.webutil.URLContentReader.getContentAsStream;
 import static name.abhijitsarkar.java.java8impatient.webutil.URLContentReader.openConnection;
 
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
@@ -85,8 +87,9 @@ public class PracticeQuestionsCh9 {
 	PrintWriter out = null;
 
 	try {
-	    in = new Scanner(is);
-	    out = new PrintWriter(os);
+	    in = new Scanner(is, UTF_8.name());
+	    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(os,
+		    UTF_8)));
 
 	    while (in.hasNext()) {
 		out.println(in.next().toLowerCase());
@@ -169,8 +172,9 @@ public class PracticeQuestionsCh9 {
 	PrintWriter out = null;
 
 	try {
-	    in = new Scanner(is);
-	    out = new PrintWriter(os);
+	    in = new Scanner(is, UTF_8.name());
+	    out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(os,
+		    UTF_8)));
 
 	    while (in.hasNext()) {
 		out.println(in.next().toLowerCase());
@@ -445,10 +449,16 @@ public class PracticeQuestionsCh9 {
      * @author Abhijit Sarkar
      *
      */
-    public static class LabeledPoint implements Comparable<LabeledPoint> {
-	private String label;
-	private int x;
-	private int y;
+    static class LabeledPoint implements Comparable<LabeledPoint> {
+	private final String label;
+	private final int x;
+	private final int y;
+
+	public LabeledPoint(final String label, final int x, final int y) {
+	    this.label = label;
+	    this.x = x;
+	    this.y = y;
+	}
 
 	@Override
 	public int hashCode() {
@@ -529,8 +539,8 @@ public class PracticeQuestionsCh9 {
 	LOGGER.info("Looking for credit card number recursively in: {}.",
 		p.toString());
 
-	/* 'r' for recursive, 'P' for accepting non-capturing groups. */
-	ProcessBuilder builder = new ProcessBuilder("grep", "-rP",
+	/* 'r' for recursive, 'E' for extended regex. */
+	ProcessBuilder builder = new ProcessBuilder("grep", "-rE",
 		creditCardNumberRegex, p.toString());
 
 	builder.redirectOutput(output.toFile());
