@@ -18,6 +18,10 @@
     The following is a good start:
     http://hadoop.apache.org/docs/current1/single_node_setup.html
     
+    Note: Even though most of the following instructions are still valid, with Hadoop 2, there's no mapred-site.xml.
+    Also the file system commands have changed. The latest commands may be found here:
+    http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html
+    
     The 4 most important Hadoop configurations files are core-site.xml, hdfs-site.xml, mapred-site.xml and hadoop-env.sh.
     An archived conf directory is available in src/site of this project for reference. The above-mentioned files
     have been modified within the archived conf directory to customize the installation.

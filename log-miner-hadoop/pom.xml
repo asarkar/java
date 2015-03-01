@@ -8,6 +8,9 @@
   <description>
     MapReduce code to mine access logs. HDFS file system commands may be found here:
     http://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html
+    
+    The MySQL driver needs to be copied to $HADOOP_HOME/share/hadoop/common/lib. Packing it with the jar doesn't work.
+    'libjars' option or distributed cache may also be used.
   </description>
 
   <properties>
