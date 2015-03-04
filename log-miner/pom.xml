@@ -7,8 +7,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>log-miner</name>
 	<description>
-		MapReduce code to mine access logs.
+		Proxy setting:
+		1) If you're behind a proxy, set up the Maven to be able to download dependencies from Maven central.
+		http://maven.apache.org/guides/mini/guide-encryption.html		
+		2) Download the following jars from Maven Central and drop in your Maven installation/lib/ext folder 
+		   (Go to http://search.maven.org, search for the names, then download the latest jars.) 
+		   wagon-http-lightweight and wagon-http-shared
+		   
+		3) The build is self-sufficient such that it fails with a message is the prerequisites are not met.	
+		4) Run 'mvn clean test' to run unit tests, 'mvn clean integration-test' to run unit and integration tests
+		   and 'mvn jar_path log_dir_path log_type' to run the program. log_type can only be one of 'rp' or 'nbp'.			
 		
+		MapReduce code to mine access logs.		
 		Good sample code for Spring Data JPA: https://github.com/spring-projects/spring-boot/tree/v1.2.2.RELEASE/spring-boot-samples/spring-boot-sample-data-jpa
 	</description>
 
@@ -20,10 +30,16 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<integrationTest.pattern>**/*IntegrationTest.java</integrationTest.pattern>
 		<springBoot.version>1.2.2.RELEASE</springBoot.version>
+		<slf4j.version>1.7.10</slf4j.version>
+		<logback.version>1.1.2</logback.version>
 		<application.mainClass>name.abhijitsarkar.java.logminer.LogMinerApp</application.mainClass>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -41,6 +57,21 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
@@ -123,6 +154,10 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<configuration>
 						<disableXmlReport>true</disableXmlReport>
+						<systemPropertyVariables>
+							<path>${project.basedir}src/test/resources/rp</path>
+							<type>rp</type>
+						</systemPropertyVariables>
 					</configuration>
 					<executions>
 						<!-- Override default goal to exclude integ tests -->

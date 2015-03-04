@@ -3,8 +3,6 @@ package name.abhijitsarkar.java.logminer.repo;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.lines;
 import static java.nio.file.Paths.get;
-import static java.util.stream.StreamSupport.stream;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -24,6 +22,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+//@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+//@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = LogMinerApp.class)
 @ActiveProfiles("test")
@@ -33,7 +33,7 @@ public class LogRepositoryIntegrationTest {
     @Autowired
     private LogRepository<ReverseProxyLogRecord> repo;
 
-    @Value("classpath:/access.log")
+    @Value("classpath:/rp/rp.txt")
     private Resource logFile;
 
     @PostConstruct
@@ -50,9 +50,8 @@ public class LogRepositoryIntegrationTest {
 
 	repo.save(rec);
 
-	String root = stream(repo.findAll().spliterator(), false).findFirst()
-		.get().getRoot();
-
-	assertEquals("PersonalLines", root);
+	repo.findByRoot("PersonalLines").stream()
+		.filter(r -> "PersonalLines".equals(r.getRoot())).findFirst()
+		.get();
     }
 }

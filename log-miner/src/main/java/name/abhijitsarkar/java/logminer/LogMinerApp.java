@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.Async;
 
 @SpringBootApplication
 public class LogMinerApp implements CommandLineRunner {
@@ -35,7 +34,7 @@ public class LogMinerApp implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-	findAllFilesInDirectory(get(path)).forEach(this::digIt);
+	findAllFilesInDirectory(get(path)).forEach(miner::mine);
     }
 
     private Stream<Path> findAllFilesInDirectory(final Path path) {
@@ -47,10 +46,5 @@ public class LogMinerApp implements CommandLineRunner {
 
 	    return Stream.empty();
 	}
-    }
-
-    @Async
-    private void digIt(Path p) {
-	miner.mine(p);
     }
 }
