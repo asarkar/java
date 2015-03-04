@@ -9,4 +9,5 @@ CREATE TABLE `log`.`log` (
   `status` INT(3) NULL,
   `size` BIGINT(10) NULL,
   `id` BIGINT(10) NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(3) NULL,
   PRIMARY KEY (id));

@@ -4,14 +4,10 @@ import static java.nio.file.Files.exists;
 import static java.nio.file.Files.find;
 import static java.nio.file.Files.isDirectory;
 import static java.nio.file.Paths.get;
-import static java.util.concurrent.ForkJoinPool.commonPool;
-import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ForkJoinTask;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -22,54 +18,48 @@ public class Driver {
 
     private final LogMiner miner;
 
-    public Driver() {
-	miner = new LogMiner();
+    public Driver(String logRecordType) {
+	miner = new LogMiner(getLogRecordType(logRecordType));
+    }
+
+    private Class<? extends SkippableLogRecord> getLogRecordType(
+	    String logRecordType) {
+	switch (logRecordType) {
+	case "rp":
+	    return ReverseProxyLogRecord.class;
+	case "nbp":
+	    return NetbiosProxyLogRecord.class;
+	}
+
+	throw new IllegalArgumentException(
+		"Log record type can only be 'rp' or 'nbp'.");
     }
 
     public static void main(String[] args) {
 	Path path = null;
 
-	if (args.length == 0 || !exists(path = get(args[0]))
+	if (args.length < 2 || !exists(path = get(args[0]))
 		|| !isDirectory(path)) {
-	    System.err.println("Usage: java -jar <jar-name> <log-directory>");
+	    System.err
+		    .println("Usage: java -jar <jar-name> <log-directory> [rp|nbp]");
 	} else {
-	    new Driver().run(path);
+	    new Driver(args[1]).run(path);
 	}
     }
 
     private void run(Path path) {
-	ForkJoinPool pool = commonPool();
-	pool.awaitQuiescence(1, TimeUnit.HOURS);
-
-	pool.invokeAll(findAllFilesInDirectory(path).map(Mine::new).collect(
-		toList()));
+	findAllFilesInDirectory(path).forEach(
+		p -> ForkJoinTask.adapt(() -> miner.mine(p)).invoke());
     }
 
     private Stream<Path> findAllFilesInDirectory(final Path path) {
 	try {
-	    Stream<Path> files = find(path, 1,
+	    return find(path, 1,
 		    (p, fileAttributes) -> fileAttributes.isRegularFile());
-
-	    return files;
 	} catch (IOException e) {
 	    LOGGER.error("There was an error processing path: {}.", path);
 
 	    return Stream.empty();
-	}
-    }
-
-    private class Mine implements Callable<Void> {
-	private final Path path;
-
-	Mine(Path p) {
-	    this.path = p;
-	}
-
-	@Override
-	public Void call() throws Exception {
-	    miner.mine(path);
-
-	    return null;
 	}
     }
 }

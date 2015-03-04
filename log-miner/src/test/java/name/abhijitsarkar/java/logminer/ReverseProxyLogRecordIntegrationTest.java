@@ -19,15 +19,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import name.abhijitsarkar.java.logminer.SkippableLogRecord;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SkippableLogRecordIntegrationTest {
+public class ReverseProxyLogRecordIntegrationTest {
     private static String LINE;
 
     private static EntityManagerFactory emf;
@@ -40,8 +38,8 @@ public class SkippableLogRecordIntegrationTest {
 	emf = Persistence.createEntityManagerFactory("test-pu");
 	em = emf.createEntityManager();
 
-	Path logFile = get(SkippableLogRecordIntegrationTest.class.getResource(
-		"/access.log").toURI());
+	Path logFile = get(ReverseProxyLogRecordIntegrationTest.class
+		.getResource("/rp/rp.log").toURI());
 
 	LINE = lines(logFile, UTF_8).findFirst().get();
     }
@@ -66,7 +64,7 @@ public class SkippableLogRecordIntegrationTest {
 
     @Test
     public void testInsert() {
-	SkippableLogRecord rec = new SkippableLogRecord(LINE);
+	ReverseProxyLogRecord rec = new ReverseProxyLogRecord(LINE);
 
 	assertFalse(rec.isSkipped());
 
@@ -77,14 +75,13 @@ public class SkippableLogRecordIntegrationTest {
 
 	CriteriaBuilder cb = em.getCriteriaBuilder();
 
-	CriteriaQuery<SkippableLogRecord> cq = cb
-		.createQuery(SkippableLogRecord.class);
-	Root<SkippableLogRecord> e = cq.from(SkippableLogRecord.class);
+	CriteriaQuery<ReverseProxyLogRecord> cq = cb
+		.createQuery(ReverseProxyLogRecord.class);
+	Root<ReverseProxyLogRecord> e = cq.from(ReverseProxyLogRecord.class);
 	cq.where(cb.equal(e.get("root"), "PersonalLines"));
 
 	rec = em.createQuery(cq).getSingleResult();
 
-	assertNotNull(rec);
 	assertEquals("startquote.cfm?ratingAction=yourQuoteAndFeature",
 		rec.getFilename());
     }
