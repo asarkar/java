@@ -14,9 +14,10 @@
 		   (Go to http://search.maven.org, search for the names, then download the latest jars.) 
 		   wagon-http-lightweight and wagon-http-shared
 		   
-		3) The build is self-sufficient such that it fails with a message is the prerequisites are not met.	
+		3) The build is self-sufficient such that it fails with a message is the prerequisites are not met.	The execution
+		   puts the data in a DB. Any DB should work, just change the properties in the src/man/resources/application.properties.
 		4) Run 'mvn clean test' to run unit tests, 'mvn clean integration-test' to run unit and integration tests
-		   and 'mvn jar_path log_dir_path log_type' to run the program. log_type can only be one of 'rp' or 'nbp'.			
+		   and 'mvn jar_path --path=log_dir_path --type=log_type' to run the program. log_type can only be one of 'rp' or 'nbp'.			
 		
 		MapReduce code to mine access logs.		
 		Good sample code for Spring Data JPA: https://github.com/spring-projects/spring-boot/tree/v1.2.2.RELEASE/spring-boot-samples/spring-boot-sample-data-jpa
@@ -154,10 +155,6 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<configuration>
 						<disableXmlReport>true</disableXmlReport>
-						<systemPropertyVariables>
-							<path>${project.basedir}src/test/resources/rp</path>
-							<type>rp</type>
-						</systemPropertyVariables>
 					</configuration>
 					<executions>
 						<!-- Override default goal to exclude integ tests -->

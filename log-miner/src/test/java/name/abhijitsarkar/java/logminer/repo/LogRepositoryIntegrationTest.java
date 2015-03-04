@@ -22,10 +22,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-//@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-//@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = LogMinerApp.class)
+@SpringApplicationConfiguration(classes = {
+	ReverseProxyTestPropertySourceConfig.class, LogMinerApp.class })
 @ActiveProfiles("test")
 public class LogRepositoryIntegrationTest {
     private String line;
