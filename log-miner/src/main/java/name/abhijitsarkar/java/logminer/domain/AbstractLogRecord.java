@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.logminer;
+package name.abhijitsarkar.java.logminer.domain;
 
 import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.InheritanceType.SINGLE_TABLE;

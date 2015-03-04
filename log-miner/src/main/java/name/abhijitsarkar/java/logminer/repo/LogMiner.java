@@ -1,51 +1,51 @@
-package name.abhijitsarkar.java.logminer;
+package name.abhijitsarkar.java.logminer.repo;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.Files.lines;
-import static javax.persistence.Persistence.createEntityManagerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
+import name.abhijitsarkar.java.logminer.domain.SkippableLogRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 public class LogMiner {
     private static final Logger LOGGER = LoggerFactory
 	    .getLogger(LogMiner.class);
 
-    private final EntityManagerFactory emf;
-    private final EntityManager em;
+    @SuppressWarnings("rawtypes")
+    @Autowired
+    private LogRepository logRepo;
 
     private final Class<? extends SkippableLogRecord> clazz;
 
-    public LogMiner(Class<? extends SkippableLogRecord> clazz) {
-	emf = createEntityManagerFactory("log-miner-pu");
-	em = emf.createEntityManager();
+    public LogMiner() {
+	this(null);
+    }
 
+    public LogMiner(Class<? extends SkippableLogRecord> clazz) {
 	this.clazz = clazz;
     }
 
+    @SuppressWarnings("unchecked")
+    @Transactional
     public boolean mine(Path path) {
-	EntityTransaction tx = em.getTransaction();
-	tx.begin();
-
 	boolean isSuccessful = true;
 
 	try (Stream<String> s = lines(path, UTF_8)) {
 	    s.parallel().map(this::newLogInstance)
-		    .filter(rec -> !rec.isSkipped()).forEach(this::persist);
+		    .filter(rec -> !rec.isSkipped()).forEach(logRepo::save);
 	} catch (IOException e) {
 	    LOGGER.error("There was an error processing path: {}.", path);
 
 	    isSuccessful = false;
-	} finally {
-	    tx.commit();
 	}
 
 	return isSuccessful;
@@ -58,11 +58,5 @@ public class LogMiner {
 	    throw new RuntimeException("There was an error instantiating type "
 		    + clazz.getName());
 	}
-    }
-
-    private <T extends SkippableLogRecord> void persist(T rec) {
-	LOGGER.debug("Persisting {}.", rec.getPath());
-
-	em.persist(rec);
     }
 }

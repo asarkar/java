@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.logminer;
+package name.abhijitsarkar.java.logminer.domain;
 
 import static java.net.URLDecoder.decode;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

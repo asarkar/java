@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.logminer;
+package name.abhijitsarkar.java.logminer.domain;
 
 public interface SkippableLogRecord {
 
@@ -21,6 +21,6 @@ public interface SkippableLogRecord {
     public int getStatus();
 
     public long getSize();
-    
+
     public boolean isSkipped();
 }
