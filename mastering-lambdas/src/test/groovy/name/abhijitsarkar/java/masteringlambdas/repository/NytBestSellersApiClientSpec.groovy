@@ -1,13 +1,12 @@
 package name.abhijitsarkar.java.masteringlambdas.repository
-
 import name.abhijitsarkar.java.masteringlambdas.domain.NytBestSellersList
 import spock.lang.Shared
 import spock.lang.Specification
 
 import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.countDuplicates
 import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.countDuplicates2
+import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.countDuplicates3
 import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.findDuplicates
-
 /**
  * @author Abhijit Sarkar
  */
@@ -40,8 +39,10 @@ class NytBestSellersApiClientSpec extends Specification {
     }
 
     def "groups duplicates by ISBN-13 and verifies that all groups have an ISBN"() {
-        when:
+        setup:
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
+
+        when:
         Map<String, Collection<String>> duplicates = findDuplicates(lists)
 
         then:
@@ -53,37 +54,39 @@ class NytBestSellersApiClientSpec extends Specification {
     }
 
     def "counts duplicates by ISBN-13 using counting"() {
-        when:
+        setup:
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
+
+        when:
         Map<String, Long> duplicates = countDuplicates(lists)
 
         then:
-        assert duplicates
-
-        assert !duplicates.find { it.key?.empty }
-
-        assert duplicates['9781594633669'] == 1
+        countsDuplicates(duplicates)
     }
 
     def "counts duplicates by ISBN-13 using summingLong"() {
-        when:
+        setup:
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
+
+        when:
         Map<String, Long> duplicates = countDuplicates2(lists)
 
         then:
-        assert duplicates
-
-        assert !duplicates.find { it.key?.empty }
-
-        assert duplicates['9781594633669'] == 1
+        countsDuplicates(duplicates)
     }
 
     def "counts duplicates by ISBN-13 using reducing"() {
-        when:
+        setup:
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
-        Map<String, Long> duplicates = countDuplicates2(lists)
+
+        when:
+        Map<String, Long> duplicates = countDuplicates3(lists)
 
         then:
+        countsDuplicates(duplicates)
+    }
+
+    void countsDuplicates(Map<String, Long> duplicates) {
         assert duplicates
 
         assert !duplicates.find { it.key?.empty }
