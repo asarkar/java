@@ -1,15 +1,19 @@
-package name.abhijitsarkar.java.masteringlambdas.repository
+package name.abhijitsarkar.java.masteringlambdas.service
 
 import name.abhijitsarkar.java.masteringlambdas.domain.NytBestSellersList
+import name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient
+import name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClientFactory
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.groupByRank
+import static name.abhijitsarkar.java.masteringlambdas.service.BestSellersService.groupByRank
+import static name.abhijitsarkar.java.masteringlambdas.service.BestSellersService.rankWithMaxNumBooks
+import static name.abhijitsarkar.java.masteringlambdas.service.BestSellersService.rankWithMaxNumBooks2
 
 /**
  * @author Abhijit Sarkar
  */
-class NytBestSellersApiClientSpec extends Specification {
+class BestSellersServiceSpec extends Specification {
     @Shared
     NytBestSellersApiClient nytApiClient;
 
@@ -19,22 +23,6 @@ class NytBestSellersApiClientSpec extends Specification {
 
     def cleanupSpec() {
         nytApiClient.close()
-    }
-
-    def "retrieves best sellers lists"() {
-        when:
-        Collection<String> lists = nytApiClient.bestSellersListsNames()
-
-        then:
-        assert lists
-    }
-
-    def "retrieves best sellers lists overview"() {
-        when:
-        Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
-
-        then:
-        assert lists
     }
 
     def "groups by rank"() {
@@ -65,7 +53,7 @@ class NytBestSellersApiClientSpec extends Specification {
         expect:
         Map<Integer, Long> groups = NytBestSellersApiClient."$method"(lists)
         assert (groups && groups.size() == 5)
-        groups.each { assert it.value > 1 }
+        groups.each { assert it.value == 43 }
 
         where:
         method         | _
@@ -73,5 +61,21 @@ class NytBestSellersApiClientSpec extends Specification {
         'countByRank2' | _
         'countByRank3' | _
         'countByRank4' | _
+    }
+
+    def "rank with max number of books"() {
+        setup:
+        Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
+
+        expect:
+        assert rankWithMaxNumBooks(lists) == 5
+    }
+
+    def "rank with max number of books using custom collector"() {
+        setup:
+        Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
+
+        expect:
+        assert rankWithMaxNumBooks2(lists) == 5
     }
 }

@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'groovy'
     id 'net.franz-becker.gradle-lombok' version '1.5'
 }
@@ -20,8 +19,6 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:${project['jackson.version']}"
     compile "com.fasterxml.jackson.core:jackson-databind:${project['jackson.version']}"
     compile "com.fasterxml.jackson.core:jackson-annotations:${project['jackson.version']}"
-//    compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${project['jackson.version']}"
-//    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${project['jackson.version']}"
 
     testCompile "org.hamcrest:hamcrest-core:${project['hamcrest.version']}"
     testCompile "org.spockframework:spock-core:${project['spock.version']}"
