@@ -1,12 +1,11 @@
 package name.abhijitsarkar.java.masteringlambdas.repository
+
 import name.abhijitsarkar.java.masteringlambdas.domain.NytBestSellersList
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.countDuplicates
-import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.countDuplicates2
-import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.countDuplicates3
-import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.findDuplicates
+import static name.abhijitsarkar.java.masteringlambdas.repository.NytBestSellersApiClient.groupByRank
+
 /**
  * @author Abhijit Sarkar
  */
@@ -38,59 +37,41 @@ class NytBestSellersApiClientSpec extends Specification {
         assert lists
     }
 
-    def "groups duplicates by ISBN-13 and verifies that all groups have an ISBN"() {
+    def "groups by rank"() {
         setup:
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
 
         when:
-        Map<String, Collection<String>> duplicates = findDuplicates(lists)
+        Map<Integer, Collection<String>> groups = groupByRank(lists)
 
         then:
-        assert duplicates
+        assert (groups && groups.size() == 5)
 
-        assert !duplicates.find { it.key?.empty }
-
-        assert duplicates['9781594633669'] == ['THE GIRL ON THE TRAIN'] as Set
+        [
+                1: 'THE GIRL ON THE TRAIN',
+                2: 'THE MARTIAN',
+                3: 'ROGUE LAWYER',
+                4: 'HUMANS OF NEW YORK: STORIES',
+                5: 'THE BOOK WITH NO PICTURES'
+        ].each {
+            assert groups[it.key].contains(it.value)
+        }
     }
 
-    def "counts duplicates by ISBN-13 using counting"() {
+    def "counts by rank"() {
         setup:
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
 
-        when:
-        Map<String, Long> duplicates = countDuplicates(lists)
+        expect:
+        Map<Integer, Long> groups = NytBestSellersApiClient."$method"(lists)
+        assert (groups && groups.size() == 5)
+        groups.each { assert it.value > 1 }
 
-        then:
-        countsDuplicates(duplicates)
-    }
-
-    def "counts duplicates by ISBN-13 using summingLong"() {
-        setup:
-        Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
-
-        when:
-        Map<String, Long> duplicates = countDuplicates2(lists)
-
-        then:
-        countsDuplicates(duplicates)
-    }
-
-    def "counts duplicates by ISBN-13 using reducing"() {
-        setup:
-        Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
-
-        when:
-        Map<String, Long> duplicates = countDuplicates3(lists)
-
-        then:
-        countsDuplicates(duplicates)
-    }
-
-    void countsDuplicates(Map<String, Long> duplicates) {
-        assert duplicates
-
-        assert !duplicates.find { it.key?.empty }
-
-        assert duplicates['9781594633669'] == 1
+        where:
+        method         | _
+        'countByRank'  | _
+        'countByRank2' | _
+        'countByRank3' | _
+        'countByRank4' | _
     }
 }
