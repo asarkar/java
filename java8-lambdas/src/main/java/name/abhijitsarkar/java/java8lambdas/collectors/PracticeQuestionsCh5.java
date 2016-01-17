@@ -21,18 +21,37 @@ public class PracticeQuestionsCh5 {
             .boxed()
             .collect(toConcurrentMap(identity(), val -> Integer.toUnsignedLong(val - 1)));
 
+    /**
+     * Q2a: Find the artist with the longest name using a Collector.
+     *
+     * @param artists People or groups.
+     * @return Longest name.
+     */
     public static String findArtistWithLongestName(Collection<Artist> artists) {
         return artists.stream()
                 .flatMap(artist -> artist.getMembers().stream())
                 .collect(maxBy(comparingInt(String::length))).get();
     }
 
+    /**
+     * Q2a: Find the artist with the longest name using the higher-order function reduce.
+     *
+     * @param artists People or groups.
+     * @return Longest name.
+     */
     public static String findArtistWithLongestName2(Collection<Artist> artists) {
         return artists.stream()
                 .flatMap(artist -> artist.getMembers().stream())
                 .collect(reducing("", BinaryOperator.maxBy(comparingInt(String::length))));
     }
 
+    /**
+     * Q3: Efficiently calculate a Fibonacci sequence using just the computeIfAbsent method on a Map.
+     * By "efficiently", I mean that you don't repeatedly recalculate the Fibonacci sequence of smaller numbers.
+     *
+     * @param index The index of a number in the Fibonacci sequence.
+     * @return A Fibonacci number corresponding to the given index.
+     */
     public static long fibonacci(int index) {
         if (index < 3) {
             return FIBONACCI_MAP.getOrDefault(index, 0l);
