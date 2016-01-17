@@ -19,10 +19,19 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:${project['jackson.version']}"
     compile "com.fasterxml.jackson.core:jackson-databind:${project['jackson.version']}"
     compile "com.fasterxml.jackson.core:jackson-annotations:${project['jackson.version']}"
+    compile "org.jsoup:jsoup:${project['jsoup.version']}"
 
     testCompile "org.hamcrest:hamcrest-core:${project['hamcrest.version']}"
     testCompile "org.spockframework:spock-core:${project['spock.version']}"
     testCompile "org.codehaus.groovy:groovy-all:${project['groovy.version']}"
+
+    compile "org.slf4j:slf4j-api:${project['slf4j.version']}"
+    runtime "ch.qos.logback:logback-core:${project['logback.version']}"
+    runtime "ch.qos.logback:logback-classic:${project['logback.version']}"
+}
+
+lombok {
+    version = "${project['lombok.version']}"
 }
 
 test {
