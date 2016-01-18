@@ -1,5 +1,6 @@
 package name.abhijitsarkar.java.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @Getter
 @ToString
+@EqualsAndHashCode(exclude = "parentUrl")
 public class UrlNode {
     private final int depth;
     private final String url;

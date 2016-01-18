@@ -24,9 +24,10 @@ public class NytBestSellersApiLiveClient extends AbstractNytBestSellersApiClient
 
     @Override
     public Collection<String> bestSellersListsNames() {
-        try (InputStream body = target.path("/svc/books/v2/lists/names.json").request().
-                accept(APPLICATION_JSON_TYPE).
-                <InputStream>get(InputStream.class)) {
+        try (InputStream body = target.path("/svc/books/v2/lists/names.json")
+                .request()
+                .accept(APPLICATION_JSON_TYPE)
+                .<InputStream>get(InputStream.class)) {
             return bestSellersListsNames(body);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -35,9 +36,10 @@ public class NytBestSellersApiLiveClient extends AbstractNytBestSellersApiClient
 
     @Override
     public Collection<NytBestSellersList> bestSellersListsOverview() {
-        try (InputStream body = target.path("/svc/books/v2/lists/overview.json").request().
-                accept(APPLICATION_JSON_TYPE).
-                <InputStream>get(InputStream.class)) {
+        try (InputStream body = target.path("/svc/books/v2/lists/overview.json")
+                .request()
+                .accept(APPLICATION_JSON_TYPE)
+                .<InputStream>get(InputStream.class)) {
             return bestSellersListsOverview(body);
         } catch (IOException e) {
             throw new UncheckedIOException(e);

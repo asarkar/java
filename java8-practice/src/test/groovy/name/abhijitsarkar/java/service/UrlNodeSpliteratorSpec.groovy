@@ -39,7 +39,7 @@ class UrlNodeSpliteratorSpec extends Specification {
 
         when:
         Spliterator<UrlNode> split = spliterator.trySplit()
-        NavigableSet<UrlNode> nodes = split?.nodes
+        Queue<UrlNode> nodes = split?.nodes
 
         then:
         assert split
