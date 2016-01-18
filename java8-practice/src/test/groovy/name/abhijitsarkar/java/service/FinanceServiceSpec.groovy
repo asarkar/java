@@ -5,6 +5,7 @@ import name.abhijitsarkar.java.repository.YahooApiLiveClient
 import name.abhijitsarkar.java.repository.YahooApiStubClient
 import spock.lang.Ignore
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.util.function.Function
 import java.util.stream.Stream
@@ -12,35 +13,33 @@ import java.util.stream.Stream
 import static java.nio.file.Files.lines
 import static java.nio.file.Paths.get
 import static java.util.stream.Collectors.toMap
+import static spock.util.matcher.HamcrestMatchers.closeTo
 
 /**
  * @author Abhijit Sarkar
  */
 class FinanceServiceSpec extends Specification {
-    def "calculates net asset for stub client using Spliterator"() {
+    @Unroll
+    def "calculates net asset for stub client using #method"() {
         setup:
         YahooApiClient client = new YahooApiStubClient()
         FinanceService service = new FinanceService(client)
         Map<String, Integer> stocks = ['YHOO': 1, 'AAPL': 2, 'GOOG': 5, 'MSFT': 1]
 
         when:
-        double netAsset = service.netAsset(stocks)
+        double netAsset = service."$method"(stocks)
+        double expectedNetAsset = 29.35d + 97.17d * 2 + 695.99d * 5 + 51.09d
+
+        println("Net assert: $netAsset")
 
         then:
-        assert netAsset == 29.35 + 97.17 * 2 + 695.99 * 5 + 51.09
-    }
+        assert netAsset, closeTo(expectedNetAsset, 0.1d)
 
-    def "calculates net asset for stub client using CompletableFuture"() {
-        setup:
-        YahooApiClient client = new YahooApiStubClient()
-        FinanceService service = new FinanceService(client)
-        Map<String, Integer> stocks = ['YHOO': 1, 'AAPL': 2, 'GOOG': 5, 'MSFT': 1]
-
-        when:
-        double netAsset = service.netAsset2(stocks)
-
-        then:
-        assert netAsset == 29.35 + 97.17 * 2 + 695.99 * 5 + 51.09
+        where:
+        method      | _
+        'netAsset'  | _
+        'netAsset2' | _
+        'netAsset3' | _
     }
 
     def "calculates net asset for live client using Spliterator"() {

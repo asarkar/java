@@ -3,6 +3,9 @@ package name.abhijitsarkar.java.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import name.abhijitsarkar.java.repository.YahooApiClient;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.DoubleAdder;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
@@ -60,9 +64,9 @@ public class FinanceService {
         Collection<CompletableFuture<Map<String, Double>>> futures =
                 IntStream.range(0, stocks.size())
                         .collect(ArrayList::new, (acc, i) -> {
-                                    if (i > 0 && (i % TICKER_SUBSET_SIZE == 0)) {
+                                    if (isTickersSubsetBoundary(i)) {
                                         acc.add(toFuture(tickersSubset(true, tickers)));
-                                    } else if (i == stocks.size() - 1) {
+                                    } else if (isLast(i, stocks)) {
                                         acc.add(toFuture(tickersSubset(false, tickers)));
                                     }
                                 }, (v1, v2) -> {
@@ -83,20 +87,22 @@ public class FinanceService {
 
         DoubleAdder adder = new DoubleAdder();
 
-        prices.thenAccept(all -> all.entrySet().stream().forEach(entry -> {
-            int numShares = stocks.get(entry.getKey());
-            double price = entry.getValue();
-
-            adder.add(numShares * price);
-        }));
-
         try {
-            prices.get();
+            prices.thenAccept(new NetAssetComputer(adder, stocks))
+                    .get();
         } catch (Exception e) {
             log.error("Failed to calculate net asset.", e);
         }
 
         return adder.doubleValue();
+    }
+
+    private boolean isTickersSubsetBoundary(int idx) {
+        return idx > 0 && (idx % TICKER_SUBSET_SIZE == 0);
+    }
+
+    private boolean isLast(int idx, Map<String, Integer> stocks) {
+        return idx == stocks.size() - 1;
     }
 
     private Collection<String> tickersSubset(boolean boundary, Iterator<String> tickers) {
@@ -117,8 +123,63 @@ public class FinanceService {
 
     private CompletableFuture<Map<String, Double>> toFuture(Collection<String> tickersSubset) {
         return supplyAsync(() -> {
-            log.debug("CompletableFuture invoked with tickersSubset: {}.", tickersSubset);
             return client.getPrice(tickersSubset);
         });
+    }
+
+
+    @RequiredArgsConstructor
+    private static class NetAssetComputer implements Consumer<Map<String, Double>>, Action1<Map<String, Double>> {
+        private final DoubleAdder adder;
+        private final Map<String, Integer> stocks;
+
+        @Override
+        public void accept(Map<String, Double> prices) {
+            prices.entrySet().stream()
+                    .forEach(entry -> {
+                        int numShares = stocks.get(entry.getKey());
+                        double price = entry.getValue();
+
+                        adder.add(numShares * price);
+                    });
+        }
+
+        @Override
+        public void call(Map<String, Double> prices) {
+            accept(prices);
+        }
+    }
+
+    public double netAsset3(Map<String, Integer> stocks) {
+        Iterator<String> tickers = stocks.keySet().iterator();
+
+        /* Splits the stocks into TICKER_SUBSET_SIZE sized chunks and assigns each chunk to a new task. */
+        ArrayList<Observable<Map<String, Double>>> observables = IntStream.range(0, stocks.size())
+                .collect(ArrayList::new, (acc, i) -> {
+                            if (isTickersSubsetBoundary(i)) {
+                                acc.add(toAsyncObservable(tickersSubset(true, tickers)));
+                            } else if (isLast(i, stocks)) {
+                                acc.add(toAsyncObservable(tickersSubset(false, tickers)));
+                            }
+                        }, (v1, v2) -> {
+                            // Not called. Not sure why.
+                        }
+                );
+
+        DoubleAdder adder = new DoubleAdder();
+        NetAssetComputer compute = new NetAssetComputer(adder, stocks);
+
+        /* As long as the Observables being merged are async, they will all be executed concurrently.
+         * 'flatMap' could be used too.
+         */
+        Observable.merge(observables)
+                .toBlocking()
+                .forEach(compute);
+
+        return adder.doubleValue();
+    }
+
+    private Observable<Map<String, Double>> toAsyncObservable(Collection<String> tickersSubset) {
+        return Observable.just(tickersSubset).map(client::getPrice).subscribeOn(Schedulers.io());
     }
 }
