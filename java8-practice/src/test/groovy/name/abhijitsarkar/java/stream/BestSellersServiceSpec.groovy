@@ -1,15 +1,13 @@
-package name.abhijitsarkar.java.service
-
+package name.abhijitsarkar.java.stream
 import name.abhijitsarkar.java.domain.NytBestSellersList
-import name.abhijitsarkar.java.repository.NytBestSellersApiClientFactory
 import name.abhijitsarkar.java.repository.NytBestSellersApiClient
+import name.abhijitsarkar.java.repository.NytBestSellersApiStubClient
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static BestSellersService.groupByRank
-import static BestSellersService.rankWithMaxNumBooks
-import static BestSellersService.rankWithMaxNumBooks2
-
+import static name.abhijitsarkar.java.stream.BestSellersService.groupByRank
+import static name.abhijitsarkar.java.stream.BestSellersService.rankWithMaxNumBooks
+import static name.abhijitsarkar.java.stream.BestSellersService.rankWithMaxNumBooks2
 /**
  * @author Abhijit Sarkar
  */
@@ -18,7 +16,7 @@ class BestSellersServiceSpec extends Specification {
     NytBestSellersApiClient nytApiClient;
 
     def setupSpec() {
-        nytApiClient = NytBestSellersApiClientFactory.getInstance(false)
+        nytApiClient = new NytBestSellersApiStubClient()
     }
 
     def cleanupSpec() {
@@ -33,7 +31,7 @@ class BestSellersServiceSpec extends Specification {
         Map<Integer, Collection<String>> groups = groupByRank(lists)
 
         then:
-        assert (groups && groups.size() == 5)
+        (groups && groups.size() == 5)
 
         [
                 1: 'THE GIRL ON THE TRAIN',
@@ -50,9 +48,11 @@ class BestSellersServiceSpec extends Specification {
         setup:
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
 
-        expect:
+        when:
         Map<Integer, Long> groups = BestSellersService."$method"(lists)
-        assert (groups && groups.size() == 5)
+
+        then:
+        (groups && groups.size() == 5)
         groups.each { assert it.value == 43 }
 
         where:
@@ -68,7 +68,7 @@ class BestSellersServiceSpec extends Specification {
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
 
         expect:
-        assert rankWithMaxNumBooks(lists) == 5
+        rankWithMaxNumBooks(lists) == 5
     }
 
     def "rank with max number of books using custom collector"() {
@@ -76,6 +76,6 @@ class BestSellersServiceSpec extends Specification {
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
 
         expect:
-        assert rankWithMaxNumBooks2(lists) == 5
+        rankWithMaxNumBooks2(lists) == 5
     }
 }

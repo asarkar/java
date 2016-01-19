@@ -1,5 +1,6 @@
-package name.abhijitsarkar.java.service
+package name.abhijitsarkar.java.concurrent
 
+import name.abhijitsarkar.java.concurrent.TickerSpliterator
 import name.abhijitsarkar.java.repository.YahooApiClient
 import name.abhijitsarkar.java.repository.YahooApiStubClient
 import spock.lang.Specification
@@ -9,7 +10,6 @@ import java.util.stream.StreamSupport
 
 import static java.util.stream.Collectors.toMap
 import static spock.util.matcher.HamcrestMatchers.closeTo
-
 /**
  * @author Abhijit Sarkar
  */
@@ -37,7 +37,7 @@ class TickerSpliteratorSpec extends Specification {
 
         then:
         actualPrices.size() == expectedPrices.size()
-        expectedPrices.each { assert it.value, closeTo(actualPrices[it.key], 0.1d) }
+        expectedPrices.each { assert closeTo(actualPrices[it.key], 0.1d).matches(it.value) }
 
         where:
         tickersSubsetSize | _

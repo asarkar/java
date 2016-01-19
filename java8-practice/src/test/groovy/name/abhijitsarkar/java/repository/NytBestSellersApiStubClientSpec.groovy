@@ -12,7 +12,7 @@ class NytBestSellersApiStubClientSpec extends Specification {
     NytBestSellersApiClient nytApiClient;
 
     def setupSpec() {
-        nytApiClient = NytBestSellersApiClientFactory.getInstance(false)
+        nytApiClient = new NytBestSellersApiStubClient()
     }
 
     def cleanupSpec() {
@@ -24,7 +24,7 @@ class NytBestSellersApiStubClientSpec extends Specification {
         Collection<String> lists = nytApiClient.bestSellersListsNames()
 
         then:
-        assert lists
+        lists
     }
 
     def "retrieves best sellers lists overview"() {
@@ -32,6 +32,6 @@ class NytBestSellersApiStubClientSpec extends Specification {
         Collection<NytBestSellersList> lists = nytApiClient.bestSellersListsOverview()
 
         then:
-        assert lists
+        lists
     }
 }

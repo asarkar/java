@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.service;
+package name.abhijitsarkar.java.concurrent;
 
 import lombok.extern.slf4j.Slf4j;
 import name.abhijitsarkar.java.domain.UrlNode;

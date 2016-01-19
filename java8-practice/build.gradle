@@ -1,6 +1,7 @@
 plugins {
     id 'groovy'
     id 'net.franz-becker.gradle-lombok' version '1.5'
+    id 'scala'
 }
 
 repositories {
@@ -21,10 +22,14 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations:${project['jackson.version']}"
     compile "org.jsoup:jsoup:${project['jsoup.version']}"
     compile "io.reactivex:rxjava:${project['rxjava.version']}"
+    compile "com.typesafe.akka:akka-actor_2.11:${project['akka.version']}"
+    compile "com.typesafe.akka:akka-slf4j_2.11:${project['akka.version']}"
+    compile "org.scala-lang:scala-library:${project['scala.version']}"
 
     testCompile "org.hamcrest:hamcrest-all:${project['hamcrest.version']}"
     testCompile "org.spockframework:spock-core:${project['spock.version']}"
     testCompile "org.codehaus.groovy:groovy-all:${project['groovy.version']}"
+    testCompile "com.typesafe.akka:akka-testkit_2.11:${project['akka.version']}"
 
     compile "org.slf4j:slf4j-api:${project['slf4j.version']}"
     runtime "ch.qos.logback:logback-core:${project['logback.version']}"

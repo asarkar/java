@@ -1,5 +1,6 @@
-package name.abhijitsarkar.java.service
+package name.abhijitsarkar.java.concurrent
 
+import name.abhijitsarkar.java.concurrent.UrlNodeMapper
 import name.abhijitsarkar.java.domain.UrlNode
 import spock.lang.Specification
 
@@ -20,6 +21,6 @@ class UrlNodeMapperSpec extends Specification {
         List<? extends UrlNode> nodes = stream.collect(toList())
 
         then:
-        assert nodes
+        nodes
     }
 }

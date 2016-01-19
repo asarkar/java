@@ -1,6 +1,5 @@
 package name.abhijitsarkar.java.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import name.abhijitsarkar.java.domain.NytBestSellersList;
 
@@ -12,19 +11,28 @@ import java.io.UncheckedIOException;
 import java.util.Collection;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
+import static name.abhijitsarkar.java.repository.AbstractClientFactory.liveClient;
 
 /**
  * @author Abhijit Sarkar
  */
 @RequiredArgsConstructor
 public class NytBestSellersApiLiveClient extends AbstractNytBestSellersApiClient {
-    private final WebTarget target;
+    private static final String BASE_URI = "http://api.nytimes.com";
+    private static final String API_KEY = "d63f2e638211e5293f4abfd08d96054d:6:73851692";
+
     private final Client client;
-    private final ObjectMapper objectMapper = new ObjectMapperProvider().getContext(null);
+    WebTarget nytWebTarget;
+
+    public NytBestSellersApiLiveClient() {
+        client = liveClient();
+
+        nytWebTarget = client.target(BASE_URI).queryParam("api-key", API_KEY);
+    }
 
     @Override
     public Collection<String> bestSellersListsNames() {
-        try (InputStream body = target.path("/svc/books/v2/lists/names.json")
+        try (InputStream body = nytWebTarget.path("/svc/books/v2/lists/names.json")
                 .request()
                 .accept(APPLICATION_JSON_TYPE)
                 .<InputStream>get(InputStream.class)) {
@@ -36,7 +44,7 @@ public class NytBestSellersApiLiveClient extends AbstractNytBestSellersApiClient
 
     @Override
     public Collection<NytBestSellersList> bestSellersListsOverview() {
-        try (InputStream body = target.path("/svc/books/v2/lists/overview.json")
+        try (InputStream body = nytWebTarget.path("/svc/books/v2/lists/overview.json")
                 .request()
                 .accept(APPLICATION_JSON_TYPE)
                 .<InputStream>get(InputStream.class)) {

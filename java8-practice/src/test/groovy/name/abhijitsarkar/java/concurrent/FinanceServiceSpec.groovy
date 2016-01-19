@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.service
+package name.abhijitsarkar.java.concurrent
 
 import name.abhijitsarkar.java.repository.YahooApiClient
 import name.abhijitsarkar.java.repository.YahooApiLiveClient
@@ -14,7 +14,6 @@ import static java.nio.file.Files.lines
 import static java.nio.file.Paths.get
 import static java.util.stream.Collectors.toMap
 import static spock.util.matcher.HamcrestMatchers.closeTo
-
 /**
  * @author Abhijit Sarkar
  */
@@ -27,13 +26,13 @@ class FinanceServiceSpec extends Specification {
         Map<String, Integer> stocks = ['YHOO': 1, 'AAPL': 2, 'GOOG': 5, 'MSFT': 1]
 
         when:
-        double netAsset = service."$method"(stocks)
-        double expectedNetAsset = 29.35d + 97.17d * 2 + 695.99d * 5 + 51.09d
+        double actualNetAsset = service."$method"(stocks)
+        double expectedNetAsset = 29.35d + 97.17d * 2 + 695.99d * 5 + 51.09d // 3754.73d
 
-        println("Net assert: $netAsset")
+        println("Net assert: $actualNetAsset")
 
         then:
-        assert netAsset, closeTo(expectedNetAsset, 0.1d)
+        actualNetAsset closeTo(expectedNetAsset, 0.1d)
 
         where:
         method      | _
@@ -53,7 +52,7 @@ class FinanceServiceSpec extends Specification {
         double netAsset = service.netAsset(stocks)
 
         then:
-        assert netAsset > 0
+        netAsset > 0
     }
 
     @Ignore

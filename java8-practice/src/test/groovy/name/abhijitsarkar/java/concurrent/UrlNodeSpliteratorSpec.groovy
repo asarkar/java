@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.service
+package name.abhijitsarkar.java.concurrent
 
 import name.abhijitsarkar.java.domain.UrlNode
 import spock.lang.Ignore
@@ -9,8 +9,7 @@ import java.util.function.Function
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
-import static name.abhijitsarkar.java.service.UrlNodeSpliterator.MAX_DEPTH
-
+import static name.abhijitsarkar.java.concurrent.UrlNodeSpliterator.MAX_DEPTH
 /**
  * @author Abhijit Sarkar
  */
@@ -42,8 +41,8 @@ class UrlNodeSpliteratorSpec extends Specification {
         Queue<UrlNode> nodes = split?.nodes
 
         then:
-        assert split
-        assert nodes?.size() == 2
+        split
+        nodes?.size() == 2
 
         nodes.each {
             assert it.depth == 1
@@ -60,7 +59,7 @@ class UrlNodeSpliteratorSpec extends Specification {
         Spliterator<UrlNode> split = (1..MAX_DEPTH).inject(spliterator.trySplit()) { acc, val -> acc.trySplit() }
 
         then:
-        assert !split
+        !split
     }
 
     def "tryAdvance accepts nodes from non-empty queue"() {
@@ -72,10 +71,11 @@ class UrlNodeSpliteratorSpec extends Specification {
         boolean tryAdvance = spliterator.tryAdvance(testConsumer)
 
         then:
-        assert tryAdvance
+        tryAdvance
 
         UrlNode node = testConsumer.nodes?.getAt(0)
-        assert node == new UrlNode(0, 'rootUrl', null)
+
+        node == new UrlNode(0, 'rootUrl', null)
     }
 
     def "tryAdvance returns false when queue is empty"() {
@@ -88,7 +88,7 @@ class UrlNodeSpliteratorSpec extends Specification {
         tryAdvance = spliterator.tryAdvance(testConsumer)
 
         then:
-        assert !tryAdvance
+        !tryAdvance
     }
 
     def "gets urls for real"() {
@@ -99,6 +99,6 @@ class UrlNodeSpliteratorSpec extends Specification {
         StreamSupport.stream(spliterator, true).map({ node -> node.getUrl() }).forEach({ println(it) })
 
         then:
-        assert true
+        true
     }
 }

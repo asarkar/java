@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.service;
+package name.abhijitsarkar.java.stream;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
