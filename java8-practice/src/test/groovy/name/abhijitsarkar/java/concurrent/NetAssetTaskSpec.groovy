@@ -10,7 +10,7 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * @author Abhijit Sarkar
  */
-class NetAssetSpec extends Specification {
+class NetAssetTaskSpec extends Specification {
     @Unroll
     def "calculates net asset using RecursiveTask with threshold #threshold"() {
         setup:
@@ -20,7 +20,7 @@ class NetAssetSpec extends Specification {
         /* Makes a copy so that any changes to it doesn't affect the backing map. */
         Set<String> remaining = stocks.keySet().collect()
 
-        NetAsset netAsset = NetAsset.builder()
+        NetAssetTask netAsset = NetAssetTask.builder()
                 .client(client)
                 .stocks(stocks)
                 .remaining(remaining)

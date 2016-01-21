@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.summingDouble;
 @Slf4j
 @ToString(exclude = "client")
 @Builder(toBuilder = true)
-public class NetAsset extends RecursiveTask<Double> {
+public class NetAssetTask extends RecursiveTask<Double> {
     @NonNull
     private final Map<String, Integer> stocks;
     @NonNull
@@ -46,11 +46,11 @@ public class NetAsset extends RecursiveTask<Double> {
             it.remove();
         });
 
-        NetAsset netAsset = toBuilder().remaining(remaining).build();
+        NetAssetTask netAssetTask = toBuilder().remaining(remaining).build();
 
-        netAsset.fork();
+        netAssetTask.fork();
 
-        return computeInternal(myJob) + netAsset.join();
+        return computeInternal(myJob) + netAssetTask.join();
     }
 
     private double computeInternal(Set<String> myJob) {

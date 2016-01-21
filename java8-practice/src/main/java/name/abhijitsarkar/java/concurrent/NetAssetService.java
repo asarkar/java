@@ -27,7 +27,7 @@ import static java.util.stream.Collectors.toMap;
  */
 @RequiredArgsConstructor
 @Slf4j
-public class FinanceService {
+public class NetAssetService {
     private static final int TICKER_SUBSET_SIZE = 2;
 
     private final YahooApiClient client;

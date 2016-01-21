@@ -17,12 +17,12 @@ import static spock.util.matcher.HamcrestMatchers.closeTo
 /**
  * @author Abhijit Sarkar
  */
-class FinanceServiceSpec extends Specification {
+class NetAssetServiceSpec extends Specification {
     @Unroll
     def "calculates net asset for stub client using #method"() {
         setup:
         YahooApiClient client = new YahooApiStubClient()
-        FinanceService service = new FinanceService(client)
+        NetAssetService service = new NetAssetService(client)
         Map<String, Integer> stocks = ['YHOO': 1, 'AAPL': 2, 'GOOG': 5, 'MSFT': 1]
 
         when:
@@ -44,7 +44,7 @@ class FinanceServiceSpec extends Specification {
     def "calculates net asset for live client using Spliterator"() {
         setup:
         YahooApiClient client = new YahooApiLiveClient()
-        FinanceService service = new FinanceService(client)
+        NetAssetService service = new NetAssetService(client)
 
         Map<String, Integer> stocks = getStocks()
 
