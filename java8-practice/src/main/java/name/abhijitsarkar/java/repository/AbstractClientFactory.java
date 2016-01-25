@@ -1,5 +1,6 @@
 package name.abhijitsarkar.java.repository;
 
+import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
@@ -21,11 +22,17 @@ public abstract class AbstractClientFactory {
                     "%1$tF %1$tT [%4$.1s] %3$s - %5$s%6$s%n");
         }
 
-        return ClientBuilder.newBuilder().
-                register(ObjectMapperProvider.class).
-                register(JacksonFeature.class).
-                register(new LoggingFilter(consoleLogger(), true)).
-                build();
+        Client client = ClientBuilder.newBuilder()
+                .register(ObjectMapperProvider.class)
+                .register(JacksonFeature.class)
+                .register(new LoggingFilter(consoleLogger(), true))
+                .build();
+
+        /* Set timeouts in ms. */
+        client.property(ClientProperties.CONNECT_TIMEOUT, 1000);
+        client.property(ClientProperties.READ_TIMEOUT, 1000);
+
+        return client;
     }
 
     private static Logger consoleLogger() {
