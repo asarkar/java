@@ -9,13 +9,22 @@ import java.util.concurrent.TimeUnit
  * @author Abhijit Sarkar
  */
 class ChuckNorrisJokesServiceSpec extends Specification {
+    Map<String, List<String>> threads
+
+    def setup() {
+        threads = Mock(Map)
+    }
+
     def "succeeds on 1st attempt"() {
         setup:
         CountDownLatch latch = new CountDownLatch(2)
-        Map<String, List<String>> threads = Mock(Map)
+        RetryWithDelay retryWithDelay = RetryWithDelay.builder()
+                .retryDelayStrategy(RetryDelayStrategy.RETRY_COUNT)
+                .build()
         ChuckNorrisJokesService service = ChuckNorrisJokesService.builder()
                 .latch(latch)
                 .threads(threads)
+                .retryWithDelay(retryWithDelay)
                 .build()
 
         when:
@@ -50,13 +59,16 @@ class ChuckNorrisJokesServiceSpec extends Specification {
             callRealMethod()
         }
 
-        Map<String, List<String>> threads = Mock(Map)
         CountDownLatch latch = new CountDownLatch(4)
+        RetryWithDelay retryWithDelay = RetryWithDelay.builder()
+                .retryDelayStrategy(RetryDelayStrategy.RETRY_COUNT)
+                .maxRetries(3)
+                .build()
         ChuckNorrisJokesService service = ChuckNorrisJokesService.builder()
                 .latch(latch)
-                .numRetries(3)
-                .jokesRepository(jokesRepository)
                 .threads(threads)
+                .retryWithDelay(retryWithDelay)
+                .jokesRepository(jokesRepository)
                 .build()
 
         when:
@@ -71,7 +83,6 @@ class ChuckNorrisJokesServiceSpec extends Specification {
 
         1 * threads.merge('getRandomJokes', *_)
         3 * threads.merge('fromCallable', *_)
-        1 * threads.merge('retryWhen', *_)
         1 * threads.merge('onNext', *_)
         0 * threads.merge('onError', *_)
         1 * threads.merge('onCompleted', *_)
@@ -96,16 +107,20 @@ class ChuckNorrisJokesServiceSpec extends Specification {
 
         Map<String, List<String>> threads = Mock(Map)
         CountDownLatch latch = new CountDownLatch(5)
+        RetryWithDelay retryWithDelay = RetryWithDelay.builder()
+                .retryDelayStrategy(RetryDelayStrategy.RETRY_COUNT)
+                .maxRetries(3)
+                .build()
         ChuckNorrisJokesService service = ChuckNorrisJokesService.builder()
                 .latch(latch)
-                .numRetries(3)
-                .jokesRepository(jokesRepository)
                 .threads(threads)
+                .retryWithDelay(retryWithDelay)
+                .jokesRepository(jokesRepository)
                 .build()
 
         when:
         service.setRandomJokes(3)
-        latch.await(5, TimeUnit.SECONDS)
+        latch.await(10, TimeUnit.SECONDS)
 
         Jokes jokes = service.jokes.get()
 
@@ -115,7 +130,6 @@ class ChuckNorrisJokesServiceSpec extends Specification {
 
         1 * threads.merge('getRandomJokes', *_)
         4 * threads.merge('fromCallable', *_)
-        1 * threads.merge('retryWhen', *_)
         1 * threads.merge('onNext', *_)
         0 * threads.merge('onError', *_)
         1 * threads.merge('onCompleted', *_)
@@ -134,11 +148,15 @@ class ChuckNorrisJokesServiceSpec extends Specification {
 
         Map<String, List<String>> threads = Mock(Map)
         CountDownLatch latch = new CountDownLatch(3)
+        RetryWithDelay retryWithDelay = RetryWithDelay.builder()
+                .retryDelayStrategy(RetryDelayStrategy.RETRY_COUNT)
+                .maxRetries(1)
+                .build()
         ChuckNorrisJokesService service = ChuckNorrisJokesService.builder()
                 .latch(latch)
-                .numRetries(1)
-                .jokesRepository(jokesRepository)
                 .threads(threads)
+                .retryWithDelay(retryWithDelay)
+                .jokesRepository(jokesRepository)
                 .build()
 
         when:
@@ -148,14 +166,13 @@ class ChuckNorrisJokesServiceSpec extends Specification {
         Jokes jokes = service.jokes.get()
 
         then:
-        jokes.status == 'success'
+        jokes.status == 'unknown'
         jokes.count() == 0
 
         1 * threads.merge('getRandomJokes', *_)
         2 * threads.merge('fromCallable', *_)
-        1 * threads.merge('retryWhen', *_)
         0 * threads.merge('onNext', *_)
-        0 * threads.merge('onError', *_)
-        1 * threads.merge('onCompleted', *_)
+        1 * threads.merge('onError', *_)
+        0 * threads.merge('onCompleted', *_)
     }
 }

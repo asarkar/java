@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
@@ -30,7 +29,7 @@ public class ChuckNorrisJokesService {
     private final Scheduler scheduler;
     private final ChuckNorrisJokesRepository jokesRepository;
     private final CountDownLatch latch;
-    private final int numRetries;
+    private final RetryWithDelay retryWithDelay;
     private final Map<String, List<String>> threads;
 
     public static class ChuckNorrisJokesServiceBuilder {
@@ -48,8 +47,9 @@ public class ChuckNorrisJokesService {
             }
 
             requireNonNull(latch, "CountDownLatch must not be null.");
+            requireNonNull(retryWithDelay, "RetryWithDelay must not be null.");
 
-            return new ChuckNorrisJokesService(scheduler, jokesRepository, latch, numRetries, threads);
+            return new ChuckNorrisJokesService(scheduler, jokesRepository, latch, retryWithDelay, threads);
         }
     }
 
@@ -65,15 +65,13 @@ public class ChuckNorrisJokesService {
             log.debug("fromCallable - after call. Latch: {}.", latch.getCount());
 
             return randomJokes;
-        }).retryWhen(errors ->
-                errors.zipWith(Observable.range(1, numRetries), (n, i) -> i).flatMap(retryCount -> {
-                    log.debug("retryWhen. retryCount: {}.", retryCount);
-                    mergeThreadNames("retryWhen");
-
-                    return Observable.timer(retryCount, TimeUnit.SECONDS);
-                }))
+            /* retryWhen is a complicated, perhaps even buggy, operator. See the discussion below for details:
+            * https://github.com/ReactiveX/RxJava/issues/4207
+            */
+        }).retryWhen(retryWithDelay)
                 .subscribeOn(scheduler)
                 .subscribe(j -> {
+                            /* Called for a successful emission, either from original attempt or from a retry attempt. */
                             log.debug("onNext. Latch: {}.", latch.getCount());
                             mergeThreadNames("onNext");
 
@@ -81,14 +79,15 @@ public class ChuckNorrisJokesService {
                             latch.countDown();
                         },
                         ex -> {
+                            /* Called for a error emission, either from original attempt or from a retry attempt. */
                             log.error("onError. Latch: {}.", latch.getCount(), ex);
                             mergeThreadNames("onError");
+                            latch.countDown();
                         },
                         () -> {
+                            /* Called in the end of successful emission(s). Not called for error emission. */
                             log.debug("onCompleted. Latch: {}.", latch.getCount());
                             mergeThreadNames("onCompleted");
-
-                            latch.countDown();
                         }
                 );
     }

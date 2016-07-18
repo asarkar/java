@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -44,9 +44,8 @@ public class ChuckNorrisJokesRepository {
             throw new IllegalArgumentException("Cannot get negative number of jokes.");
         }
 
-        Random r = new Random();
         return IntStream.range(0, numJokes)
-                .map(i -> i + r.nextInt(allJokesCount - i))
+                .map(i -> ThreadLocalRandom.current().nextInt(i, allJokesCount))
                 .mapToObj(jokes::get)
                 .collect(toList());
     }
