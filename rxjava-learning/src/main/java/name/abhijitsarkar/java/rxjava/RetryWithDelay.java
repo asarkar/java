@@ -16,16 +16,16 @@ public class RetryWithDelay implements
         Func1<Observable<? extends Throwable>, Observable<?>> {
 
     private final int maxRetries;
-    private final long retryDelayMillis;
+    private final long retryDelaySeconds;
     private final RetryDelayStrategy retryDelayStrategy;
 
     private int retryCount;
 
     /* Use Builder on constructor to avoid field retryCount being included. */
     @Builder
-    private RetryWithDelay(int maxRetries, long retryDelayMillis, RetryDelayStrategy retryDelayStrategy) {
+    private RetryWithDelay(int maxRetries, long retryDelaySeconds, RetryDelayStrategy retryDelayStrategy) {
         this.maxRetries = maxRetries;
-        this.retryDelayMillis = retryDelayMillis;
+        this.retryDelaySeconds = retryDelaySeconds;
         this.retryDelayStrategy = retryDelayStrategy;
     }
 
@@ -39,10 +39,10 @@ public class RetryWithDelay implements
                             /* When this Observable calls onNext, the original
                              * Observable will be retried (i.e. resubscribed).
                              */
-                            long delayMillis = delayMillis();
+                            long delaySeconds = delaySeconds();
 
-                            log.debug("Retrying...attempt #{} in {} second(s).", retryCount, delayMillis);
-                            return Observable.timer(delayMillis, SECONDS);
+                            log.debug("Retrying...attempt #{} in {} second(s).", retryCount, delaySeconds);
+                            return Observable.timer(delaySeconds, SECONDS);
                         }
 
                         /* Max retries hit. Just pass the error along. */
@@ -52,16 +52,18 @@ public class RetryWithDelay implements
                 });
     }
 
-    private long delayMillis() {
+    private long delaySeconds() {
         requireNonNull(retryDelayStrategy, "RetryDelayStrategy must not be null.");
 
         switch (retryDelayStrategy) {
+            case CONSTANT_DELAY:
+                return retryDelaySeconds;
             case RETRY_COUNT:
                 return retryCount;
-            case RETRY_DELAY_TIMES_RETRY_COUNT:
-                return retryDelayMillis * retryCount;
-            case RETRY_DELAY_RAISED_TO_RETRY_COUNT:
-                return (long) Math.pow(retryDelayMillis, retryCount);
+            case CONSTANT_DELAY_TIMES_RETRY_COUNT:
+                return retryDelaySeconds * retryCount;
+            case CONSTANT_DELAY_RAISED_TO_RETRY_COUNT:
+                return (long) Math.pow(retryDelaySeconds, retryCount);
             default:
                 return 0;
         }
