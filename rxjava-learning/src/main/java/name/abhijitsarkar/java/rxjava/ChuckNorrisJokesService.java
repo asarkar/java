@@ -3,8 +3,8 @@ package name.abhijitsarkar.java.rxjava;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import rx.Observable;
 import rx.Scheduler;
+import rx.Single;
 import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class ChuckNorrisJokesService {
     public void setRandomJokes(int numJokes) {
         mergeThreadNames("getRandomJokes");
 
-        Observable.fromCallable(() -> {
+        Single.fromCallable(() -> {
             log.debug("fromCallable - before call. Latch: {}.", latch.getCount());
             mergeThreadNames("fromCallable");
             latch.countDown();
@@ -83,11 +83,6 @@ public class ChuckNorrisJokesService {
                             log.error("onError. Latch: {}.", latch.getCount(), ex);
                             mergeThreadNames("onError");
                             latch.countDown();
-                        },
-                        () -> {
-                            /* Called in the end of successful emission(s). Not called for error emission. */
-                            log.debug("onCompleted. Latch: {}.", latch.getCount());
-                            mergeThreadNames("onCompleted");
                         }
                 );
     }

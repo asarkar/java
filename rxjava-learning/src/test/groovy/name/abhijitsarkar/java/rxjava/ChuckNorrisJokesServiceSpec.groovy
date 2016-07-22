@@ -42,7 +42,6 @@ class ChuckNorrisJokesServiceSpec extends Specification {
         0 * threads.merge('retryWhen', *_)
         1 * threads.merge('onNext', *_)
         0 * threads.merge('onError', *_)
-        1 * threads.merge('onCompleted', *_)
     }
 
     def "attempts to retry 3 times but succeeds on 2nd hence doesn't retry 3rd time"() {
@@ -85,7 +84,6 @@ class ChuckNorrisJokesServiceSpec extends Specification {
         3 * threads.merge('fromCallable', *_)
         1 * threads.merge('onNext', *_)
         0 * threads.merge('onError', *_)
-        1 * threads.merge('onCompleted', *_)
     }
 
     def "succeeds on 3rd retry"() {
@@ -132,7 +130,6 @@ class ChuckNorrisJokesServiceSpec extends Specification {
         4 * threads.merge('fromCallable', *_)
         1 * threads.merge('onNext', *_)
         0 * threads.merge('onError', *_)
-        1 * threads.merge('onCompleted', *_)
     }
 
     def "fails after 1 retry"() {
@@ -173,6 +170,5 @@ class ChuckNorrisJokesServiceSpec extends Specification {
         2 * threads.merge('fromCallable', *_)
         0 * threads.merge('onNext', *_)
         1 * threads.merge('onError', *_)
-        0 * threads.merge('onCompleted', *_)
     }
 }
