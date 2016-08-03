@@ -34,23 +34,15 @@ public class YahooFinanceService {
     }
 
     public double netAsset2(SimpleImmutableEntry<String, Long> stock1, SimpleImmutableEntry<String, Long> stock2) {
-        DoubleAdder adder = new DoubleAdder();
-
-        Observable.combineLatest(buildObservable(stock1.getKey()), buildObservable(stock2.getKey()),
+        return Observable.combineLatest(buildObservable(stock1.getKey()), buildObservable(stock2.getKey()),
                 /* Executes only when both prices come back */
                 (p1, p2) -> {
                     log.info("[netAsset2] Calculating net asset on thread: {}.", Thread.currentThread().getName());
-                    adder.add(p1 + p2);
-                    /* Doesn't matter */
-                    return true;
-                })
-                /* Without blocking, method exits before onNext is called
-                   With blocking, onNext is called when there's a combined item emitted
-                 */
-                .toBlocking()
-                .subscribe(bool -> log.info("[netAsset2] Subscribing on thread: {}.", Thread.currentThread().getName()));
 
-        return adder.doubleValue();
+                    return p1 + p2;
+                })
+                .toBlocking()
+                .first();
     }
 
     private Observable<Double> buildObservable(String stock) {
