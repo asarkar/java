@@ -24,6 +24,6 @@ class YahooFinanceServiceSpec extends Specification {
         netAsset > 0
 
         where:
-        method << ['netAsset1', 'netAsset2']
+        method << ['netAsset1', 'netAsset2', 'netAsset3']
     }
 }

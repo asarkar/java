@@ -45,6 +45,18 @@ public class YahooFinanceService {
                 .first();
     }
 
+    public double netAsset3(SimpleImmutableEntry<String, Long> stock1, SimpleImmutableEntry<String, Long> stock2) {
+        return Observable.zip(buildObservable(stock1.getKey()), buildObservable(stock2.getKey()),
+                /* Executes only when both prices come back */
+                (p1, p2) -> {
+                    log.info("[netAsset3] Calculating net asset on thread: {}.", Thread.currentThread().getName());
+
+                    return p1 + p2;
+                })
+                .toBlocking()
+                .first();
+    }
+
     private Observable<Double> buildObservable(String stock) {
         return Observable.just(stock)
                 .subscribeOn(Schedulers.computation())
