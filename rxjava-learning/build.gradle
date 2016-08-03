@@ -20,7 +20,8 @@ dependencies {
     )
     compile(
             "io.reactivex:rxjava:$rxjavaVersion",
-            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+            "org.slf4j:slf4j-api:$slf4jVersion"
     )
     runtime(
             "ch.qos.logback:logback-core:$logbackVersion",
