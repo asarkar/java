@@ -23,7 +23,6 @@ public class YahooFinanceService {
                    With blocking, onNext is called as soon as any price comes back
                  */
                 .toBlocking()
-                /* Executes concurrently */
                 .forEach(p -> {
                     log.info("[netAsset1] Calculating net asset on thread: {}.", Thread.currentThread().getName());
 
