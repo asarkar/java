@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.concurrent
+package name.abhijitsarkar.java.stream
 
 import name.abhijitsarkar.java.repository.YahooApiClient
 import name.abhijitsarkar.java.repository.YahooApiStubClient

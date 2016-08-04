@@ -1,6 +1,6 @@
-package name.abhijitsarkar.java.concurrent
+package name.abhijitsarkar.java.stream
 
-import name.abhijitsarkar.java.concurrent.UrlNodeMapper
+import name.abhijitsarkar.java.stream.UrlNodeMapper
 import name.abhijitsarkar.java.domain.UrlNode
 import spock.lang.Specification
 

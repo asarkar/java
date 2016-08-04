@@ -1,6 +1,7 @@
-package name.abhijitsarkar.java.concurrent
+package name.abhijitsarkar.java.stream
 
 import name.abhijitsarkar.java.domain.UrlNode
+import name.abhijitsarkar.java.stream.UrlNodeSpliterator
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -9,7 +10,7 @@ import java.util.function.Function
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
-import static name.abhijitsarkar.java.concurrent.UrlNodeSpliterator.MAX_DEPTH
+import static name.abhijitsarkar.java.stream.UrlNodeSpliterator.MAX_DEPTH
 /**
  * @author Abhijit Sarkar
  */

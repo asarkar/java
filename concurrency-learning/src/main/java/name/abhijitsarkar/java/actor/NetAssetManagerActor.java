@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.concurrent;
+package name.abhijitsarkar.java.actor;
 
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import name.abhijitsarkar.java.concurrent.NetAssetActor.Stocks;
 import name.abhijitsarkar.java.repository.YahooApiClient;
 
 import java.util.concurrent.atomic.DoubleAdder;
@@ -42,7 +41,7 @@ public class NetAssetManagerActor extends UntypedActor {
             }
 
             log.debug("Current net asset: {}.", netAsset.doubleValue());
-        } else if (message instanceof Stocks) {
+        } else if (message instanceof NetAssetActor.Stocks) {
             ActorRef child = getContext().actorOf(NetAssetActor.props(client, threshold));
             child.tell(message, getSelf());
         } else {

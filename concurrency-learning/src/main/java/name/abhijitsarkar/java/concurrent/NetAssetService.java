@@ -3,6 +3,7 @@ package name.abhijitsarkar.java.concurrent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import name.abhijitsarkar.java.repository.YahooApiClient;
+import name.abhijitsarkar.java.stream.TickerSpliterator;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

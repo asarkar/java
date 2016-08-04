@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.concurrent;
+package name.abhijitsarkar.java.actor;
 
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import name.abhijitsarkar.java.concurrent.NetAssetManagerActor.Asset;
 import name.abhijitsarkar.java.repository.YahooApiClient;
 
 import java.util.HashMap;
@@ -42,7 +41,7 @@ public class NetAssetActor extends UntypedActor {
             if (stocks.size() <= threshold) {
                 double asset = computeInternal(stocks);
 
-                getSender().tell(new Asset(asset), getSelf());
+                getSender().tell(new NetAssetManagerActor.Asset(asset), getSelf());
             } else {
                 Map<String, Integer> myJob = new HashMap<>();
                 Map<String, Integer> notMyJob = new HashMap<>();
@@ -67,7 +66,7 @@ public class NetAssetActor extends UntypedActor {
                 child.tell(new Stocks(notMyJob), getSender());
 
                 double asset = computeInternal(myJob);
-                getSender().tell(new Asset(asset), getSelf());
+                getSender().tell(new NetAssetManagerActor.Asset(asset), getSelf());
             }
         } else {
             unhandled(message);

@@ -1,10 +1,10 @@
-package name.abhijitsarkar.java.concurrent;
+package name.abhijitsarkar.java.actor;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.JavaTestKit;
-import name.abhijitsarkar.java.concurrent.NetAssetManagerActor.Asset;
+import name.abhijitsarkar.java.actor.NetAssetManagerActor.Asset;
 import name.abhijitsarkar.java.repository.YahooApiClient;
 import name.abhijitsarkar.java.repository.YahooApiStubClient;
 import org.junit.AfterClass;

@@ -1,4 +1,4 @@
-package name.abhijitsarkar.java.concurrent;
+package name.abhijitsarkar.java.stream;
 
 import lombok.Builder;
 import lombok.NonNull;
