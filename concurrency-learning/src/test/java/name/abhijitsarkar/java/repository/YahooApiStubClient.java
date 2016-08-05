@@ -1,7 +1,6 @@
 package name.abhijitsarkar.java.repository;
 
 
-import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +10,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
-
-import static java.util.Collections.emptyMap;
 
 /**
  * @author Abhijit Sarkar
@@ -27,33 +24,20 @@ public class YahooApiStubClient extends AbstractYahooApiClient {
     }
 
     @Override
-    @SneakyThrows(IOException.class)
+    @SneakyThrows({IOException.class, InterruptedException.class})
     public Map<String, Double> getPrice(Collection<String> tickers) {
-        @Cleanup
-        InputStream is = null;
-
         log.debug("Tickers: {}.", tickers);
 
-        long threadId = Thread.currentThread().getId();
-        log.debug("Thread {} going to sleep.", threadId);
+        int sleepTime = sleepRandom ? new Random().nextInt(10) : 1;
 
-        Map<String, Double> prices = emptyMap();
+        String threadName = Thread.currentThread().getName();
+        log.debug("Thread {} going to sleep for {} sec.", threadName, sleepTime);
 
-        try {
-            if (sleepRandom) {
-                int sleepTime = new Random().nextInt(10);
-                Thread.sleep(1000 * sleepTime);
-            } else {
-                Thread.currentThread().sleep(1000);
-            }
+        Thread.sleep(1000 * sleepTime);
 
-            is = getClass().getResourceAsStream("/stocks-prices.json");
-            prices = super.extractPrices(is, tickers);
-        } catch (InterruptedException e) {
-            log.warn("Thread {} could not sleep.", threadId);
+        try (InputStream is = getClass().getResourceAsStream("/stocks-prices.json")) {
+            return super.extractPrices(is, tickers);
         }
-
-        return prices;
     }
 
     @Override

@@ -19,10 +19,9 @@ class YahooFinanceServiceSpec extends Specification {
 
         when:
         double netAsset = service."$method"(stock1, stock2)
-        println netAsset
 
         then:
-        netAsset > 0
+        netAsset == 97.17d + 695.99d
 
         where:
         method << ['netAsset1', 'netAsset2', 'netAsset3']
