@@ -58,7 +58,7 @@ public class NetAssetManagerActorTest {
                 Props props = NetAssetManagerActor.testProps(client, 2, probe.getRef());
                 ActorRef netAssetManagerActor = system.actorOf(props, "netAssetManagerActor");
 
-                final FiniteDuration duration = duration("3 seconds");
+                final FiniteDuration duration = duration("5 seconds");
                 netAssetManagerActor.tell(new NetAssetActor.Stocks(stocks), getRef());
 
                 new Within(duration) {
