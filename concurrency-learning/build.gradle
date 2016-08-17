@@ -30,7 +30,9 @@ dependencies {
             "com.typesafe.akka:akka-actor_2.11:$akkaVersion",
             "com.typesafe.akka:akka-slf4j_2.11:$akkaVersion",
             "org.scala-lang:scala-library:$scalaVersion",
-            "org.slf4j:slf4j-api:$slf4jVersion"
+            "org.slf4j:slf4j-api:$slf4jVersion",
+            "io.javaslang:javaslang:$javaslangVersion",
+            "org.apache.commons:commons-compress:$commonsCompressVersion"
     )
 
     testCompile("org.hamcrest:hamcrest-all:$hamcrestVersion",
