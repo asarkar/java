@@ -1,5 +1,8 @@
 package name.abhijitsarkar.java.rx;
 
+import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -7,9 +10,6 @@ import name.abhijitsarkar.java.domain.Joke;
 import name.abhijitsarkar.java.domain.Jokes;
 import name.abhijitsarkar.java.domain.RetryWithDelay;
 import name.abhijitsarkar.java.repository.ChuckNorrisJokesClient;
-import rx.Scheduler;
-import rx.Single;
-import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.Arrays;

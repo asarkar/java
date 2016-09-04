@@ -1,13 +1,13 @@
 package name.abhijitsarkar.java.rx;
 
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import name.abhijitsarkar.java.repository.YahooApiClient;
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map;
@@ -24,19 +24,18 @@ public class YahooFinanceService {
     private final YahooApiClient client;
 
     public double netAsset1(SimpleImmutableEntry<String, Long> stock1, SimpleImmutableEntry<String, Long> stock2) {
-        Consumer consumer = new Consumer(stock1, stock2, "netAsset1");
+        MyConsumer consumer = new MyConsumer(stock1, stock2, "netAsset1");
 
-        Observable.just(stock1.getKey(), stock2.getKey())
-                .flatMap(this::buildObservable)
+        Flowable.just(stock1.getKey(), stock2.getKey())
+                .flatMap(this::buildFlowable)
                 /* onNext is called as soon as any price comes back */
-                .toBlocking()
-                .forEach(consumer);
+                .blockingForEach(consumer);
 
         return consumer.netAsset;
     }
 
     @RequiredArgsConstructor
-    private static final class Consumer implements Action1<Map.Entry<String, Double>> {
+    private static final class MyConsumer implements Consumer<Map.Entry<String, Double>> {
         private double netAsset;
 
         private final SimpleImmutableEntry<String, Long> stock1;
@@ -44,7 +43,7 @@ public class YahooFinanceService {
         private final String caller;
 
         @Override
-        public void call(Map.Entry<String, Double> e) {
+        public void accept(Map.Entry<String, Double> e) {
             log.info("[{}] Calculating net asset on thread: {}.", caller, Thread.currentThread().getName());
 
             String key = e.getKey();
@@ -57,31 +56,29 @@ public class YahooFinanceService {
     }
 
     public double netAsset2(SimpleImmutableEntry<String, Long> stock1, SimpleImmutableEntry<String, Long> stock2) {
-        return Observable.combineLatest(buildObservable(stock1.getKey()), buildObservable(stock2.getKey()),
+        return Flowable.combineLatest(buildFlowable(stock1.getKey()), buildFlowable(stock2.getKey()),
                 /* Executes only when both prices come back */
                 (e1, e2) -> {
                     log.info("[netAsset2] Calculating net asset on thread: {}.", Thread.currentThread().getName());
 
                     return e1.getValue() * stock1.getValue() + e2.getValue() * stock2.getValue();
                 })
-                .toBlocking()
-                .single();
+                .blockingSingle();
     }
 
     public double netAsset3(SimpleImmutableEntry<String, Long> stock1, SimpleImmutableEntry<String, Long> stock2) {
-        return Observable.zip(buildObservable(stock1.getKey()), buildObservable(stock2.getKey()),
+        return Flowable.zip(buildFlowable(stock1.getKey()), buildFlowable(stock2.getKey()),
                 /* Executes only when both prices come back */
                 (e1, e2) -> {
                     log.info("[netAsset3] Calculating net asset on thread: {}.", Thread.currentThread().getName());
 
                     return e1.getValue() * stock1.getValue() + e2.getValue() * stock2.getValue();
                 })
-                .toBlocking()
-                .single();
+                .blockingSingle();
     }
 
     public double netAsset4(SimpleImmutableEntry<String, Long> stock1, SimpleImmutableEntry<String, Long> stock2) {
-        return Observable.merge(buildObservable(stock1.getKey()), buildObservable(stock2.getKey()))
+        return Flowable.merge(buildFlowable(stock1.getKey()), buildFlowable(stock2.getKey()))
                 /* reduce is called as soon as any price comes back */
                 .<Double>reduce(0.0d, (acc, e) -> {
                     log.info("[netAsset4] Calculating net asset on thread: {}.", Thread.currentThread().getName());
@@ -93,23 +90,21 @@ public class YahooFinanceService {
 
                     return acc + asset;
                 })
-                .toBlocking()
-                .single();
+                .blockingSingle();
     }
 
     public double netAsset5(SimpleImmutableEntry<String, Long> stock1, SimpleImmutableEntry<String, Long> stock2) {
-        Consumer consumer = new Consumer(stock1, stock2, "netAsset5");
+        MyConsumer consumer = new MyConsumer(stock1, stock2, "netAsset5");
 
-        Observable.just(stock1.getKey(), stock2.getKey())
-                .flatMap(this::buildObservable2)
-                .toBlocking()
-                .forEach(consumer);
+        Flowable.just(stock1.getKey(), stock2.getKey())
+                .flatMap(this::buildFlowable2)
+                .blockingForEach(consumer);
 
         return consumer.netAsset;
     }
 
-    private Observable<Map.Entry<String, Double>> buildObservable(String stock) {
-        return Observable.just(stock)
+    private Flowable<Map.Entry<String, Double>> buildFlowable(String stock) {
+        return Flowable.just(stock)
                 .subscribeOn(Schedulers.computation())
                 .map(s -> {
                     sleepRandom();
@@ -117,15 +112,14 @@ public class YahooFinanceService {
                 });
     }
 
-    private Observable<Map.Entry<String, Double>> buildObservable2(String stock) {
-        return Observable.create((Subscriber<? super Map.Entry<String, Double>> s) -> {
-            /* Simulate latency */
+    private Flowable<Map.Entry<String, Double>> buildFlowable2(String stock) {
+        return Flowable.<Map.Entry<String, Double>>create(emitter -> {
             sleepRandom();
             Map.Entry<String, Double> next = client.getPrice(singleton(stock)).entrySet().iterator().next();
-            s.onNext(next);
+            emitter.onNext(next);
 
-            s.onCompleted();
-        }).subscribeOn(Schedulers.computation());
+            emitter.onComplete();
+        }, FlowableEmitter.BackpressureMode.ERROR).subscribeOn(Schedulers.computation());
     }
 
     @SneakyThrows

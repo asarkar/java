@@ -14,6 +14,11 @@ version = '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+// RxJava 2.x SNAPSHOT
+repositories {
+    maven { url 'https://oss.jfrog.org/libs-snapshot' }
+}
+
 dependencies {
     compileOnly(
             "org.projectlombok:lombok:$lombokVersion"
@@ -26,7 +31,7 @@ dependencies {
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
             "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
             "org.jsoup:jsoup:$jsoupVersion",
-            "io.reactivex:rxjava:$rxjavaVersion",
+            "io.reactivex.rxjava2:rxjava:$rxjavaVersion",
             "com.typesafe.akka:akka-actor_2.11:$akkaVersion",
             "com.typesafe.akka:akka-slf4j_2.11:$akkaVersion",
             "org.scala-lang:scala-library:$scalaVersion",

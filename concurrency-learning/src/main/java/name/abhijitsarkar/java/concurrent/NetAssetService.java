@@ -1,12 +1,11 @@
 package name.abhijitsarkar.java.concurrent;
 
+import io.reactivex.Flowable;
+import io.reactivex.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import name.abhijitsarkar.java.repository.YahooApiClient;
 import name.abhijitsarkar.java.stream.TickerSpliterator;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -130,7 +129,8 @@ public class NetAssetService {
 
 
     @RequiredArgsConstructor
-    private static class NetAssetComputer implements Consumer<Map<String, Double>>, Action1<Map<String, Double>> {
+    private static class NetAssetComputer implements Consumer<Map<String, Double>>,
+            io.reactivex.functions.Consumer<Map<String, Double>> {
         private final DoubleAdder adder;
         private final Map<String, Integer> stocks;
 
@@ -144,23 +144,18 @@ public class NetAssetService {
                         adder.add(numShares * price);
                     });
         }
-
-        @Override
-        public void call(Map<String, Double> prices) {
-            accept(prices);
-        }
     }
 
     public double netAsset3(Map<String, Integer> stocks) {
         Iterator<String> tickers = stocks.keySet().iterator();
 
         /* Splits the stocks into TICKER_SUBSET_SIZE sized chunks and assigns each chunk to a new task. */
-        ArrayList<Observable<Map<String, Double>>> observables = IntStream.range(0, stocks.size())
+        ArrayList<Flowable<Map<String, Double>>> Flowables = IntStream.range(0, stocks.size())
                 .collect(ArrayList::new, (acc, i) -> {
                             if (isTickersSubsetBoundary(i)) {
-                                acc.add(toAsyncObservable(tickersSubset(true, tickers)));
+                                acc.add(toAsyncFlowable(tickersSubset(true, tickers)));
                             } else if (isLast(i, stocks)) {
-                                acc.add(toAsyncObservable(tickersSubset(false, tickers)));
+                                acc.add(toAsyncFlowable(tickersSubset(false, tickers)));
                             }
                         }, (v1, v2) -> {
                             // Not called. Not sure why.
@@ -170,17 +165,16 @@ public class NetAssetService {
         DoubleAdder adder = new DoubleAdder();
         NetAssetComputer compute = new NetAssetComputer(adder, stocks);
 
-        /* As long as the Observables being merged are async, they will all be executed concurrently.
+        /* As long as the Flowables being merged are async, they will all be executed concurrently.
          * 'flatMap' could be used too.
          */
-        Observable.merge(observables)
-                .toBlocking()
-                .forEach(compute);
+        Flowable.merge(Flowables)
+                .blockingForEach(compute);
 
         return adder.doubleValue();
     }
 
-    private Observable<Map<String, Double>> toAsyncObservable(Collection<String> tickersSubset) {
-        return Observable.just(tickersSubset).map(client::getPrice).subscribeOn(Schedulers.io());
+    private Flowable<Map<String, Double>> toAsyncFlowable(Collection<String> tickersSubset) {
+        return Flowable.just(tickersSubset).map(client::getPrice).subscribeOn(Schedulers.io());
     }
 }

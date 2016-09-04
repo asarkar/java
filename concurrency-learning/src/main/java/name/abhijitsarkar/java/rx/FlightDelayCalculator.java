@@ -1,12 +1,12 @@
 package name.abhijitsarkar.java.rx;
 
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.schedulers.Schedulers;
 import javaslang.Tuple3;
 import javaslang.control.Try;
 import name.abhijitsarkar.java.domain.FlightDelayRecord;
 import name.abhijitsarkar.java.domain.FlightEvent;
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 import java.io.File;
 import java.io.UncheckedIOException;
@@ -23,9 +23,9 @@ import static java.lang.Integer.parseInt;
 import static java.util.stream.Collectors.toList;
 
 /**
- * In this example we use RxJava Observable to ingest a CSV file which contains records of all flight data in the US
- * for a single year, process the flight data, and emit an ordered list of average flight delays per carrier
- * in a single year. The code first downloads the CSV file from here and saves to /tmp/flight-data.
+ * In this example we use RxJava Flowable to ingest a CSV file that contains records of all flight data in the US
+ * for a single year, process the flight data, and emit a list of average flight delays per carrier.
+ * The code first downloads the CSV file from here and saves to /tmp/flight-data.
  * <p>
  * Concept from: https://medium.com/@kvnwbbr/diving-into-akka-streams-2770b3aeabb0#.fba5qsw4m.
  *
@@ -58,20 +58,21 @@ public class FlightDelayCalculator {
                 .map(listToFlightEvent)
                 .get();
 
-        Observable<FlightEvent> csvToFlightEvent = Observable.create((Subscriber<? super FlightEvent> s) -> {
+        Flowable<FlightEvent> csvToFlightEvent = Flowable.create(emitter -> {
             try {
                 String out = downloader.extract(downloader.download(URL, OUTFILE));
 
                 Files.lines(Paths.get(out))
                         .map(lineToFlightEvent)
-                        .forEach(s::onNext);
-                s.onCompleted();
+                        .forEach(emitter::onNext);
+                emitter.onComplete();
             } catch (Exception e) {
-                s.onError(e);
+                emitter.onError(e);
             }
-        });
 
-        Observable<FlightDelayRecord> filterAndConvert =
+        }, FlowableEmitter.BackpressureMode.ERROR);
+
+        Flowable<FlightDelayRecord> filterAndConvert =
                 csvToFlightEvent.filter(e -> Try.of(() -> parseInt(e.getArrDelayMins())).getOrElse(-1) > 0)
                         .map(e -> FlightDelayRecord.builder()
                                 .year(e.getYear())
@@ -83,7 +84,7 @@ public class FlightDelayCalculator {
                                 .build()
                         );
 
-        Observable<Tuple3<String, Integer, Integer>> averageCarrierDelay =
+        Flowable<Tuple3<String, Integer, Integer>> averageCarrierDelay =
                 filterAndConvert.groupBy(FlightDelayRecord::getUniqueCarrier)
                         .flatMap(go -> go
                                 .doOnNext(rec -> System.out.println(String.format("Group %s running on thread: %s.",
@@ -96,12 +97,12 @@ public class FlightDelayCalculator {
                                 })
                                 .subscribeOn(Schedulers.newThread()));
 
-        Observable<Tuple3<String, Integer, Integer>> averageSink =
+        Flowable<Tuple3<String, Integer, Integer>> averageSink =
                 averageCarrierDelay.doOnNext(t -> {
                     System.out.println(String.format("Delays for carrier %s: " +
                             "%d average mins, %d delayed flights.", t._1, Try.of(() -> t._3 / t._2).getOrElse(0), t._2));
                 });
 
-        averageSink.toBlocking().subscribe();
+        averageSink.blockingSubscribe();
     }
 }

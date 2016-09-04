@@ -1,9 +1,10 @@
 package name.abhijitsarkar.java.domain;
 
+import io.reactivex.Flowable;
+import io.reactivex.functions.Function;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import rx.Observable;
-import rx.functions.Func1;
+import org.reactivestreams.Publisher;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -13,7 +14,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 @Slf4j
 public class RetryWithDelay implements
-        Func1<Observable<? extends Throwable>, Observable<?>> {
+        Function<Flowable<? extends Throwable>, Publisher<Object>> {
 
     private final int maxRetries;
     private final long retryDelaySeconds;
@@ -30,11 +31,11 @@ public class RetryWithDelay implements
     }
 
     @Override
-    public Observable<?> call(Observable<? extends Throwable> attempts) {
+    public Publisher<Object> apply(Flowable<? extends Throwable> attempts) throws Exception {
         return attempts
-                .concatMap(new Func1<Throwable, Observable<?>>() {
+                .concatMap(new Function<Throwable, Flowable<?>>() {
                     @Override
-                    public Observable<?> call(Throwable throwable) {
+                    public Flowable<?> apply(Throwable throwable) {
                         if (++retryCount <= maxRetries) {
                             /* When this Observable calls onNext, the original
                              * Observable will be retried (i.e. resubscribed).
@@ -42,12 +43,12 @@ public class RetryWithDelay implements
                             long delaySeconds = delaySeconds();
 
                             log.debug("Retrying...attempt #{} in {} second(s).", retryCount, delaySeconds);
-                            return Observable.timer(delaySeconds, SECONDS);
+                            return Flowable.timer(delaySeconds, SECONDS);
                         }
 
                         /* Max retries hit. Just pass the error along. */
                         log.warn("Exhausted all retries: {}.", maxRetries);
-                        return Observable.error(throwable);
+                        return Flowable.error(throwable);
                     }
                 });
     }
