@@ -8,7 +8,7 @@ repositories {
 
 apply from: "$gradleCommonUrl"
 
-group = 'name.abhijitsarkar.java'
+group = 'org.abhijitsarkar'
 version = '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -32,6 +32,7 @@ dependencies {
             "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
             "org.jsoup:jsoup:$jsoupVersion",
             "io.reactivex.rxjava2:rxjava:$rxjavaVersion",
+            "io.projectreactor:reactor-core:$reactorVersion",
             "com.typesafe.akka:akka-actor_2.11:$akkaVersion",
             "com.typesafe.akka:akka-slf4j_2.11:$akkaVersion",
             "org.scala-lang:scala-library:$scalaVersion",
@@ -50,7 +51,7 @@ dependencies {
             "cglib:cglib-nodep:$cglibVersion"
     )
 
-    runtime("ch.qos.logback:logback-core:$logbackVersion",
+    compile("ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion"
     )
 }
