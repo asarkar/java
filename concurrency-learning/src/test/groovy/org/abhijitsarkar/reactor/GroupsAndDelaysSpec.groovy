@@ -11,7 +11,6 @@ import java.util.function.Function
  */
 class GroupsAndDelaysSpec extends Specification {
     final int groupMemberDelaySeconds = 3
-    final int remoteCallTimeoutSeconds = 3
     final int maxRetryCount = 2
     final int retryDelaySeconds = 2
     Function<Integer, Integer> groupByFn
@@ -30,27 +29,14 @@ class GroupsAndDelaysSpec extends Specification {
     def setup() {
         groupsAndDelays = new GroupsAndDelays()
         groupsAndDelays.groupMemberDelaySeconds = groupMemberDelaySeconds
-        groupsAndDelays.remoteCallTimeoutSeconds = remoteCallTimeoutSeconds
-        groupsAndDelays.maxRetryCount = maxRetryCount
+        groupsAndDelays.maxRetries = maxRetryCount
         groupsAndDelays.retryDelaySeconds = retryDelaySeconds
-        groupsAndDelays.threadMap = new ConcurrentHashMap<Long, List<Integer>>()
-        groupsAndDelays.resultThreadMap = new ConcurrentHashMap<Long, List<Integer>>()
 
         groupByFn = { i -> i % 10 }
         responseMapper = { i -> i }
     }
 
-    def cleanup() {
-        println("Thread map: ${groupsAndDelays.threadMap}")
-        println("Result thread map: ${groupsAndDelays.resultThreadMap}")
-    }
-
-    def "retries remote call"() {
-        setup:
-        def remoteClient = Mock(Function)
-        remoteClient.apply(_) >> { args -> throw new RuntimeException("boom!") } >> { args -> args[0] }
-        groupsAndDelays.remoteClient = remoteClient
-
+    def "test each group runs on a separate thread"() {
         when:
         groupsAndDelays.doStuff(src, groupByFn, responseMapper)
                 .collectList()
