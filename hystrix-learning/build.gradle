@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
+    }
+}
+
+group 'org.abhijitsarkar'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+repositories {
+    mavenCentral()
+}
+
+junitPlatform {
+    filters {
+        engines {
+            exclude 'junit-vintage'
+        }
+    }
+}
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:1.16.16"
+    compile "com.netflix.hystrix:hystrix-core:1.5.11"
+    compile "org.slf4j:slf4j-api:1.7.25"
+    runtime "ch.qos.logback:logback-classic:1.2.2"
+    runtime "ch.qos.logback:logback-core:1.2.2"
+    testCompile "org.junit.jupiter:junit-jupiter-api:5.0.0-M4"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:5.0.0-M4"
+}
