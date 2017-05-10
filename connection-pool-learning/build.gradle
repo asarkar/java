@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath(
+                "io.spring.gradle:dependency-management-plugin:1.0.2.RELEASE",
+                "org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4"
+        )
+    }
+}
+
+group "org.abhijitsarkar"
+version "1.0-SNAPSHOT"
+
+apply plugin: "java"
+apply plugin: "idea"
+
+apply plugin: "org.junit.platform.gradle.plugin"
+apply plugin: "io.spring.dependency-management"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.projectreactor:reactor-bom:Aluminium-SR1"
+    }
+}
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.16.16")
+    compile(
+            "org.apache.httpcomponents:httpclient:4.5.3",
+            "org.slf4j:slf4j-api:1.7.25"
+    )
+    runtime(
+            "ch.qos.logback:logback-classic:1.2.2",
+            "ch.qos.logback:logback-core:1.2.2",
+            "org.slf4j:log4j-over-slf4j:1.7.25"
+    )
+    testCompile(
+            "org.projectlombok:lombok:1.16.16",
+            "org.junit.jupiter:junit-jupiter-api:5.0.0-M4",
+            "io.projectreactor:reactor-core",
+            "io.projectreactor.addons:reactor-test",
+            "org.assertj:assertj-core:3.7.0"
+    )
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0-M4")
+}
