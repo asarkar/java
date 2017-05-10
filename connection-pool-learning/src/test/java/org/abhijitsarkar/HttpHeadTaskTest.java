@@ -41,7 +41,7 @@ class HttpHeadTaskTest {
     }
 
     @Test
-    @DisplayName("Keep alive doesn't prevent a connection to be used for a different route")
+    @DisplayName("Keep alive doesn't prevent a connection from being used for a different route")
     public void test1() throws IOException, InterruptedException {
         connMgr.setDefaultMaxPerRoute(5);
         connMgr.setMaxTotal(5);
@@ -49,7 +49,7 @@ class HttpHeadTaskTest {
         CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(connMgr)
                 .setDefaultRequestConfig(requestConfig)
-                .setKeepAliveStrategy((response, context) -> 10l)
+                .setKeepAliveStrategy((response, context) -> 10000l)
                 .build();
 
         StepVerifier.create(Flux.range(1, 5)
