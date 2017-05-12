@@ -15,6 +15,7 @@ import reactor.core.scheduler.Schedulers;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,7 +57,8 @@ class HttpHeadTaskTest {
                 .parallel(10)
                 .runOn(Schedulers.parallel())
                 .map(i -> "https://www.google.com")
-                .flatMap(uri -> Mono.fromCallable(new HttpHeadTask(httpClient, uri))))
+                .flatMap(uri -> Mono.fromCallable(new HttpHeadTask(httpClient, uri))
+                        .delayElement(Duration.ofMillis(3000l))))
 //                .recordWith(ArrayList::new)
                 // Fails with Expected size:<5> but was:<1>
                 // https://github.com/reactor/reactor-core/issues/598
