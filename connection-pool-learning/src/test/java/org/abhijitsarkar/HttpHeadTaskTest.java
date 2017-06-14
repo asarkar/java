@@ -16,6 +16,7 @@ import reactor.test.StepVerifier;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,15 +60,12 @@ class HttpHeadTaskTest {
                 .map(i -> "https://www.google.com")
                 .flatMap(uri -> Mono.fromCallable(new HttpHeadTask(httpClient, uri))
                         .delayElement(Duration.ofMillis(3000l))))
-//                .recordWith(ArrayList::new)
-                // Fails with Expected size:<5> but was:<1>
                 // https://github.com/reactor/reactor-core/issues/598
-//                .consumeRecordedWith(results -> assertThat(results).hasSize(5))
-                .consumeNextWith(verifier)
-                .consumeNextWith(verifier)
-                .consumeNextWith(verifier)
-                .consumeNextWith(verifier)
-                .consumeNextWith(verifier)
+                .recordWith(ArrayList::new)
+                .expectNextCount(5)
+                .consumeRecordedWith(results -> assertThat(results)
+                        .hasSize(5)
+                        .allSatisfy(verifier))
                 .verifyComplete();
 
         HttpHeadTask headFromYahooTask = new HttpHeadTask(httpClient, "https://www.yahoo.com");
