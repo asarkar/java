@@ -30,7 +30,7 @@ public class MathTutor {
                     System.out.println(result);
 
                     System.out.printf("Try another? 'y' to continue, 'n' to terminate.");
-                    boolean keepPlaying = input.next() == "y";
+                    boolean keepPlaying = "y".equalsIgnoreCase(input.next());
 
                     play(keepPlaying);
                 }, () -> System.out.println("No problem providers found."));
