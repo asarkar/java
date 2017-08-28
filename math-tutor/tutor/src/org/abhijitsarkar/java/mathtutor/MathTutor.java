@@ -14,11 +14,11 @@ public class MathTutor {
     private static final Scanner input = new Scanner(System.in);
 
     public static void main(String... args) {
-        new MathTutor().play();
+        new MathTutor().play(true);
     }
 
-    private void play(boolean... play) {
-        Optional.of(play.length == 0 || play[0])
+    private void play(boolean play) {
+        Optional.of(play)
                 .filter(Boolean::booleanValue)
                 .flatMap(p -> this.newProblem())
                 .ifPresentOrElse(p -> {
@@ -26,7 +26,7 @@ public class MathTutor {
 
                     int answer = input.nextInt();
 
-                    String result = answer == p.getResult() ? "Correct." : "Incorrect.";
+                    String result = answer == p.getResult() ? "Correct!" : "Incorrect!";
                     System.out.println(result);
 
                     System.out.printf("Try another? 'y' to continue, 'n' to terminate: ");
@@ -34,11 +34,8 @@ public class MathTutor {
 
                     play(keepPlaying);
                 }, () -> {
-                  if (play.length > 0 && !play[0]) {
-                    System.out.println("Goodbye.");
-                  } else {
-                    System.out.println("No problem providers found.");
-                  }
+                  String msg = play ? "No providers found." : "Goodbye.";
+                  System.out.println(msg);
                 });
     }
 
