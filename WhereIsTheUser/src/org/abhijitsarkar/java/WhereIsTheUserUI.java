@@ -1,4 +1,4 @@
-package com.nationwide.nss.fusion.ui;
+package org.abhijitsarkar.java;
 
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
@@ -8,7 +8,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- * 
+ *
  * @author SARKARA1
  */
 public class WhereIsTheUserUI extends javax.swing.JFrame {
