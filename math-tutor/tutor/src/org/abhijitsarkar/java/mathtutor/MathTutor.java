@@ -18,7 +18,7 @@ public class MathTutor {
     }
 
     private void play(boolean... play) {
-        Optional.of(play.length > 0 && play[0])
+        Optional.of(play.length == 0 || play[0])
                 .filter(Boolean::booleanValue)
                 .flatMap(p -> this.newProblem())
                 .ifPresentOrElse(p -> {
@@ -29,11 +29,17 @@ public class MathTutor {
                     String result = answer == p.getResult() ? "Correct." : "Incorrect.";
                     System.out.println(result);
 
-                    System.out.printf("Try another? 'y' to continue, 'n' to terminate.");
+                    System.out.printf("Try another? 'y' to continue, 'n' to terminate: ");
                     boolean keepPlaying = "y".equalsIgnoreCase(input.next());
 
                     play(keepPlaying);
-                }, () -> System.out.println("No problem providers found."));
+                }, () -> {
+                  if (play.length > 0 && !play[0]) {
+                    System.out.println("Goodbye.");
+                  } else {
+                    System.out.println("No problem providers found.");
+                  }
+                });
     }
 
     private Optional<Problem> newProblem() {
