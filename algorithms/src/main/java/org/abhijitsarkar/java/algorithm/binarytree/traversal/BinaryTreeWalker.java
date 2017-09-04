@@ -1,6 +1,6 @@
-package org.abhijitsarkar.binarytree.traversal;
+package org.abhijitsarkar.java.algorithm.binarytree.traversal;
 
-import org.abhijitsarkar.binarytree.IntegerNode;
+import org.abhijitsarkar.java.algorithm.binarytree.IntegerNode;
 
 import java.util.ArrayList;
 import java.util.List;

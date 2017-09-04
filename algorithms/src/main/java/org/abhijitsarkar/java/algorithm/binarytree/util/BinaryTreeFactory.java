@@ -1,7 +1,7 @@
-package org.abhijitsarkar.binarytree.util;
+package org.abhijitsarkar.java.algorithm.binarytree.util;
 
-import org.abhijitsarkar.binarytree.BinarySearchTree;
-import org.abhijitsarkar.binarytree.IntegerNode;
+import org.abhijitsarkar.java.algorithm.binarytree.BinarySearchTree;
+import org.abhijitsarkar.java.algorithm.binarytree.IntegerNode;
 
 /**
  * @author Abhijit Sarkar

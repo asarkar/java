@@ -1,4 +1,4 @@
-package org.abhijitsarkar.binarytree.traversal;
+package org.abhijitsarkar.java.algorithm.binarytree.traversal;
 
 /**
  * @author Abhijit Sarkar

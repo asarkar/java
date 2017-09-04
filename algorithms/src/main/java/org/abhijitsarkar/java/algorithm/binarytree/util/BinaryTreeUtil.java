@@ -1,6 +1,7 @@
-package org.abhijitsarkar.binarytree.util;
+package org.abhijitsarkar.java.algorithm.binarytree.util;
 
-import org.abhijitsarkar.binarytree.IntegerNode;
+import org.abhijitsarkar.java.algorithm.binarytree.IntegerNode;
+import org.abhijitsarkar.java.algorithm.binarytree.ParentAwareIntegerNode;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
@@ -20,11 +21,11 @@ public final class BinaryTreeUtil {
     }
 
     // https://www.youtube.com/watch?v=MILxfAbIhrE&list=PLrmLmBdmIlpv_jNDXtJGYTPNQ2L1gdHxu&index=8
-    public static boolean isBST(IntegerNode root) {
+    public static boolean isBST(ParentAwareIntegerNode root) {
         return isBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-    private static boolean isBST(IntegerNode root, int lowerBound, int upperBound) {
+    private static boolean isBST(ParentAwareIntegerNode root, int lowerBound, int upperBound) {
         if (root == null) {
             return true;
         }

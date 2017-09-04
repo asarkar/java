@@ -1,6 +1,6 @@
-package org.abhijitsarkar.binarytree.util;
+package org.abhijitsarkar.java.algorithm.binarytree.util;
 
-import org.abhijitsarkar.binarytree.PrintableNode;
+import org.abhijitsarkar.java.algorithm.binarytree.PrintableNode;
 
 import java.util.ArrayList;
 import java.util.List;

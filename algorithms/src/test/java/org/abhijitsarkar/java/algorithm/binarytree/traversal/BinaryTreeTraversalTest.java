@@ -1,6 +1,6 @@
-package org.abhijitsarkar.binarytree.traversal;
+package org.abhijitsarkar.java.algorithm.binarytree.traversal;
 
-import org.abhijitsarkar.binarytree.IntegerNode;
+import org.abhijitsarkar.java.algorithm.binarytree.IntegerNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,13 +14,13 @@ import java.util.stream.Stream;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static org.abhijitsarkar.binarytree.traversal.BinaryTreeWalkerFactory.newBinaryTreeWalker;
-import static org.abhijitsarkar.binarytree.traversal.TreeTraversalStrategy.IN_ORDER;
-import static org.abhijitsarkar.binarytree.traversal.TreeTraversalStrategy.LEVEL_ORDER;
-import static org.abhijitsarkar.binarytree.traversal.TreeTraversalStrategy.POST_ORDER;
-import static org.abhijitsarkar.binarytree.traversal.TreeTraversalStrategy.PRE_ORDER;
-import static org.abhijitsarkar.binarytree.util.BinaryTreeFactory.newBinaryTree;
-import static org.abhijitsarkar.binarytree.util.BinaryTreePrinter.print;
+import static org.abhijitsarkar.java.algorithm.binarytree.traversal.BinaryTreeWalkerFactory.newBinaryTreeWalker;
+import static org.abhijitsarkar.java.algorithm.binarytree.traversal.TreeTraversalStrategy.IN_ORDER;
+import static org.abhijitsarkar.java.algorithm.binarytree.traversal.TreeTraversalStrategy.LEVEL_ORDER;
+import static org.abhijitsarkar.java.algorithm.binarytree.traversal.TreeTraversalStrategy.POST_ORDER;
+import static org.abhijitsarkar.java.algorithm.binarytree.traversal.TreeTraversalStrategy.PRE_ORDER;
+import static org.abhijitsarkar.java.algorithm.binarytree.util.BinaryTreeFactory.newBinaryTree;
+import static org.abhijitsarkar.java.algorithm.binarytree.util.BinaryTreePrinter.print;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

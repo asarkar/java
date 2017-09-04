@@ -1,13 +1,13 @@
-package org.abhijitsarkar.binarytree.util;
+package org.abhijitsarkar.java.algorithm.binarytree.util;
 
-import org.abhijitsarkar.binarytree.IntegerNode;
+import org.abhijitsarkar.java.algorithm.binarytree.IntegerNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.abhijitsarkar.binarytree.util.BinaryTreeFactory.newBinaryTree;
-import static org.abhijitsarkar.binarytree.util.BinaryTreePrinter.print;
-import static org.abhijitsarkar.binarytree.util.BinaryTreeUtil.isSame;
-import static org.abhijitsarkar.binarytree.util.BinaryTreeUtil.lowestCommonAncestor;
+import static org.abhijitsarkar.java.algorithm.binarytree.util.BinaryTreeFactory.newBinaryTree;
+import static org.abhijitsarkar.java.algorithm.binarytree.util.BinaryTreePrinter.print;
+import static org.abhijitsarkar.java.algorithm.binarytree.util.BinaryTreeUtil.isSame;
+import static org.abhijitsarkar.java.algorithm.binarytree.util.BinaryTreeUtil.lowestCommonAncestor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

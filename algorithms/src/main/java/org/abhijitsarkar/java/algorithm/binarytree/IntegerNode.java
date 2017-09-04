@@ -1,4 +1,4 @@
-package org.abhijitsarkar.binarytree;
+package org.abhijitsarkar.java.algorithm.binarytree;
 
 import lombok.AccessLevel;
 import lombok.Builder;
