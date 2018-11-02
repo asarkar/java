@@ -1,0 +1,92 @@
+import java.util.regex.Matcher
+
+subprojects { subproject ->
+    repositories {
+        jcenter()
+    }
+    apply plugin: "java-library"
+
+    group = "org.asarkar"
+    version = "0.0.1"
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    ext.junitVersion = "5.3.1"
+
+    dependencies {
+        testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    }
+
+    afterEvaluate {
+        def moduleName = subproject.name
+
+        compileJava {
+            doFirst {
+                options.compilerArgs = ["--module-path", configurations.compileClasspath.asPath]
+                classpath = files()
+            }
+        }
+
+        compileTestJava {
+            doFirst {
+                options.compilerArgs = [
+                        // JUnit5 is not modularized yet, but they specify Automatic-Module-Name in the JAR manifests
+                        "--add-reads", "$moduleName=org.junit.jupiter.api",
+                        "--module-path", classpath.asPath,
+                        "--add-modules", "org.junit.jupiter.api",
+                        "--patch-module", "$moduleName=${files(sourceSets.test.java.srcDirs).asPath}"
+                ]
+                classpath = files()
+            }
+        }
+
+        test {
+            doFirst {
+                jvmArgs = [
+                        "--module-path", classpath.asPath,
+                        "--add-modules", "ALL-MODULE-PATH",
+                        "--patch-module", "$moduleName=${sourceSets.test.java.outputDir.absolutePath}"
+                ]
+                classpath = files()
+            }
+            useJUnitPlatform()
+        }
+    }
+}
+
+project(":com.greetings") {
+    apply plugin: "application"
+
+    mainClassName = "${project.name}/com.greetings.Main"
+
+    dependencies {
+        implementation(project(":org.astro"))
+    }
+
+    run {
+        doFirst {
+            jvmArgs = [
+                    "--module-path", classpath.asPath, "--module", mainClassName
+            ]
+            classpath = files()
+        }
+    }
+    startScripts {
+        doFirst {
+            defaultJvmOpts = [
+                    "--module-path", "APP_HOME_LIB",
+                    "--module", mainClassName
+            ]
+            classpath = files()
+        }
+
+        ["$applicationName": '$APP_HOME/lib', "${applicationName}.bat": '%APP_HOME%\\lib']
+                .collectEntries { k, v -> [new File(outputDir, k), v] }
+                .forEach { execFile, lib ->
+            doLast {
+                execFile.text = execFile.text.replaceFirst("APP_HOME_LIB", Matcher.quoteReplacement("$lib"))
+            }
+        }
+    }
+}

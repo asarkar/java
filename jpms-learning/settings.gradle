@@ -1,0 +1,4 @@
+rootProject.name = "jpms-learning"
+
+include "org.astro"
+include "com.greetings"
