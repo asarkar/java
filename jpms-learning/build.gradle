@@ -46,7 +46,8 @@ subprojects { subproject ->
                 jvmArgs = [
                         "--module-path", classpath.asPath,
                         "--add-modules", "ALL-MODULE-PATH",
-                        "--patch-module", "$moduleName=${sourceSets.test.java.outputDir.absolutePath}"
+                        "--patch-module", "$moduleName=${sourceSets.test.java.outputDir.absolutePath}",
+                        "--add-exports", "$moduleName/$moduleName=org.junit.platform.commons"
                 ]
                 classpath = files()
             }
@@ -67,7 +68,8 @@ project(":com.greetings") {
     run {
         doFirst {
             jvmArgs = [
-                    "--module-path", classpath.asPath, "--module", mainClassName
+                    "--module-path", classpath.asPath,
+                    "--module", mainClassName
             ]
             classpath = files()
         }

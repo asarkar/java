@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 
-@Disabled("JPMS disallows illegal reflection")
-public class ModularityTest {
+class ModularityTest {
     @Test
+    @Disabled("JPMS disallows illegal reflection")
     void shouldStopIllegalReflection() throws ReflectiveOperationException {
         Class<?> aClass = ModularityTest
                 .class.getClassLoader()

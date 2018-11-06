@@ -49,6 +49,8 @@ those modules even though `$module` has no `requires` clauses mentioning them. I
 * The compiler and runtime option `--patch-module $module=$artifact` merges all classes from `$artifact` into `$module`.
 * The compiler and runtime option `--add-modules $modules`, allows explicitly defining a comma-separated
 list of root modules beyond the initial module.
+* The compiler and runtime option `--add-exports $module/$package=$readingmodule` exports `$package` of `$module` to
+`$readingmodule`. Code in `$readingmodule` can hence access all public types in `$package` but other modules can not.
 
 ## References
 * https://openjdk.java.net/projects/jigsaw/quick-start
