@@ -1,4 +1,6 @@
 rootProject.name = "jpms-learning"
 
-include "org.astro"
-include "com.greetings"
+include "native:org.astro"
+include "native:com.greetings"
+include "plugin:org.astro"
+include "plugin:com.greetings"

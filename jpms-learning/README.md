@@ -1,4 +1,4 @@
-Experimenting with JPMS
+Experimental JPMS project
 ===
 
 ### Create output dir
